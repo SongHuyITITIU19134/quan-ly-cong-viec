@@ -1,6 +1,15 @@
 # CHANGELOG — Nâng cấp UI/UX Nhịp việc
 
-Ngày hoàn tất: 23/10/2026
+Ngày cập nhật: 08/11/2026
+
+## Phase 6a — kiểm chứng và hoàn thiện
+
+- Sửa vòng render vô hạn khi tạo sổ/ghi chú mới và giữ input quick-add qua ranh giới `await`.
+- Vitest có timeout rõ ràng; 49 file, 265 test đạt trong 17,56 giây. Coverage lines đạt 71,85% toàn src, 96,33% lib, 97,22% tags và 81,48% data.
+- Firestore Emulator dùng JDK 21: 14/14 rules test đạt. CI tách `verify`, `coverage`, `e2e`, `rules` trên Node 24/pnpm frozen lockfile.
+- Playwright 5.000 task: Dashboard 71,3 ms, Calendar 40,6 ms, Tasks 3.330,7 ms; JS gzip lần đầu route `/` là 103,8 kB.
+- PWA đã xác minh offline reload, toast cập nhật, thay cache cũ và không cache Firebase/Auth; sửa cache match với `Vary` và race cleanup khi worker đổi phiên bản.
+- Thêm năm flow E2E chạy trên ba viewport và axe 10 route × light/dark × ba viewport, 0 lỗi serious/critical.
 
 ## Nhãn nhiệm vụ
 
@@ -16,7 +25,7 @@ Ngày hoàn tất: 23/10/2026
 - Drawer/Sheet dùng chung cho nhiệm vụ, dự án, chuyến đi và danh bạ; guard thay đổi chưa lưu, VisualViewport và footer cố định.
 - Project CRUD, migration localStorage/Firestore, màu/trạng thái/người phụ trách, detail bookmark, bulk move, lưu trữ và xóa an toàn có hoàn tác.
 - Animation chỉ dùng transform/opacity; count-up không re-render mỗi frame; TaskCard memo; tìm kiếm debounce.
-- Ma trận sau sửa: 160 ảnh, 0 overflow/giao nhau/dock che/nút Lưu khuất; 27/27 unit, 33/33 E2E.
+- Ma trận responsive kiểm tra các trạng thái drawer, dock và nội dung dài tại 360/768/1280.
 - Lighthouse production preview: mobile 98 Performance / 100 Accessibility; desktop 100 / 100; CLS 0.
 
 ## Tổng quan
@@ -88,19 +97,18 @@ Palette nhãn/dự án gồm tám cặp `--label-1…8` và `--label-1-ink…8`:
 - Memo hóa nhóm/lọc chính ở Dashboard và Tasks.
 - Giảm font từ bốn xuống ba weight.
 - Thay hai biểu đồ Recharts bằng HTML/CSS semantic nhẹ trong `src/pages/Dashboard.jsx`, `src/styles/charts.css`.
-- Bundle khởi động local còn **61,38 kB min / 20,49 kB gzip**; CSS **66,59 kB / 13,26 kB gzip**; build không có chunk trên 500 kB.
+- JS gzip tải lần đầu route `/` là **103,8 kB**; CSS **22,58 kB gzip**. Firebase vẫn dynamic import; Firestore chunk **142,40 kB gzip**.
 
 ## Kiểm chứng
 
 - ESLint: đạt, 0 lỗi và 0 cảnh báo.
-- Unit/component: 24/24 đạt.
-- E2E: 27/27 đạt trên viewport 360×800, 768×1024 và 1280×800.
-- Axe: 0 lỗi critical/serious trên 5 route + đăng nhập, light/dark, ba viewport; keyboard flow đạt.
-- Build production: đạt; chunk lớn nhất là React vendor 178,23 kB min / 58,90 kB gzip ở bản local.
+- Unit/component: 49 file, 265/265 test đạt.
+- Năm flow Phase 6: 15/15 đạt trên viewport 360×800, 768×1024 và 1280×800.
+- Axe: 0 lỗi critical/serious trên 10 route, light/dark, ba viewport; keyboard flow đạt.
+- Build production: đạt; các route chunk dưới 12 kB gzip, React vendor 59,13 kB gzip; Firebase/Firestore là vendor động.
 - Persistence: E2E tạo dữ liệu rồi reload vẫn còn; theme reload vẫn giữ.
 - Contrast semantic: 12/12 đạt WCAG AA; thấp nhất 6,85:1 ở light và dark.
 - Lighthouse production preview: mobile 99 Performance / 100 Accessibility; desktop 100 / 100; CLS đều bằng 0.
-- Visual QA: 36 ảnh sau nâng cấp đối xứng với baseline tại 360/768/1280, light/dark.
 
 ## Chưa làm / đề xuất vòng tiếp theo
 
@@ -109,5 +117,5 @@ Các mục dưới đây đều là nâng cấp 🟢, không chặn phát hành:
 1. Đưa axe-core/Lighthouse đang chạy cục bộ vào CI và biến 36 ảnh after thành visual regression có ngưỡng pixel diff.
 2. Thêm virtualization cho bảng/Kanban khi dữ liệu đạt hàng nghìn nhiệm vụ.
 3. Thêm trình chọn palette 8 màu cho người dùng; hiện dự án được ánh xạ tự động vào palette, màu chuyến đi cũ vẫn được giữ để tương thích dữ liệu.
-4. Kiểm thử Firebase Rules, offline queue và xung đột đa thiết bị bằng Emulator Suite/tài khoản staging thật.
+4. Kiểm thử offline queue và xung đột đa thiết bị bằng tài khoản staging thật; rules đã có 14 test Emulator.
 5. Chuẩn hóa thêm spacing scale thành token; hiện radius và motion đã có token, spacing vẫn dùng thang giá trị nhất quán trong CSS.

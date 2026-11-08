@@ -34,10 +34,15 @@ Production: [https://quan-ly-cong-viec-sable.vercel.app](https://quan-ly-cong-vi
 - Tìm kiếm tiếng Việt không dấu; lọc đồng thời nhiều trạng thái, mức ưu tiên và nhãn.
 - Sắp xếp theo thứ tự mặc định, hạn gần nhất hoặc ưu tiên cao nhất.
 - Checklist, tiến độ tự động/thủ công, người giao, người phụ trách, dự án và chuyến công tác liên quan.
+- Việc lặp ngày/tuần/tháng, nhắc việc khi app đang mở, quick-add tiếng Việt và báo cáo tuần có thể sao chép.
+- Kéo-thả Kanban kèm menu “Chuyển sang…” cho bàn phím/di động; hoàn tác giữ đúng snapshot và task lặp sinh lần kế tiếp idempotent.
 - Lịch ngày/tuần/tháng kết hợp nhiệm vụ và chuyến công tác.
 - Quản lý chuyến đi, phát hiện lịch trùng và chia việc theo trước/trong/sau chuyến đi.
 - Quản lý danh bạ và hiển thị các nhiệm vụ liên quan theo vai trò.
+- Sổ tay/ghi chú có nhãn và backlinks tới dự án, chuyến đi, liên hệ; quản lý nhãn task + note trong một batch.
+- Command palette `Ctrl/Cmd+K`, trang Cài đặt, xuất JSON/CSV/ICS, nhập JSON có preview và xóa local xác nhận hai bước.
 - Lưu dữ liệu bền vững bằng localStorage hoặc Firebase/Firestore.
+- PWA precache app shell, chạy lại offline sau lần tải đầu và thông báo khi có phiên bản mới; không cache request Firebase/Auth.
 
 ### UI/UX
 
@@ -308,10 +313,12 @@ src/
 │   ├── task/            # TaskCard, TaskForm
 │   └── ui/              # Button, Modal, Badge, Toast, trạng thái dùng chung
 ├── data/                # localStorage repo, Firebase repo, seed
-├── hooks/               # Data, toast, theme, motion, count-up, transition
+├── contexts/            # Data, Actions, Auth và Toast context tách biệt
+├── hooks/               # Facade useData và hook theme, PWA, motion, transition
 ├── i18n/                # Chuỗi giao diện tiếng Việt
 ├── lib/                 # Logic lọc, tiến độ, ngày, chuyến đi
-├── pages/               # Dashboard, các phân hệ nghiệp vụ và đăng nhập
+├── pages/               # Dashboard, các phân hệ nghiệp vụ, cài đặt và đăng nhập
+│   └── tasks/           # TasksPage, Kanban/List/Projects, filter và actions
 ├── tags/                # Chuẩn hóa nhãn, màu nhãn và mutation hàng loạt
 └── styles/              # Tokens, layout, animation, biểu đồ CSS
 
@@ -359,6 +366,8 @@ VITE_FIREBASE_PROJECT_ID=...
 VITE_FIREBASE_STORAGE_BUCKET=...
 VITE_FIREBASE_MESSAGING_SENDER_ID=...
 VITE_FIREBASE_APP_ID=...
+VITE_RECAPTCHA_SITE_KEY=...
+VITE_APPCHECK_DEBUG=...
 ```
 
 Không commit `.env.local` hoặc thông tin nhạy cảm.
@@ -368,19 +377,24 @@ Không commit `.env.local` hoặc thông tin nhạy cảm.
 ```bash
 pnpm lint
 pnpm test
+pnpm test:coverage
 pnpm build
 pnpm e2e
+pnpm test:pwa
+JAVA_HOME="$HOME/.local/jdk21/Contents/Home" pnpm test:rules
 ```
 
 Kết quả gần nhất:
 
 - ESLint: đạt, không có lỗi/cảnh báo.
-- Unit/component test: 17 file, 91/91 test đạt (kiểm tra ngày 26/10/2026).
+- Unit/component test: 49 file, 265/265 test đạt; thời gian gần nhất 17,56 giây không coverage.
+- Coverage V8 theo lines: toàn `src` 71,85%; `src/lib` 96,33%; `src/tags` 97,22%; `src/data` 81,48%.
+- Firestore Emulator: 14/14 rules test đạt; `firebase-tools` 15 cần JDK 21.
 - Production build: đạt với Node.js 24 và Vite 8.3.5.
 - E2E có sẵn cho Project CRUD, responsive, smoke, reduced-motion, axe và keyboard; chỉ chạy khi cần kiểm tra trình duyệt đầy đủ.
 - Viewport E2E: 360×800, 768×1024 và 1280×800.
 - Production build hiện không có chunk vượt 500 kB.
-- Axe: 0 lỗi critical/serious trên 5 route + đăng nhập, light/dark, 3 viewport.
+- Năm flow Phase 6 chạy 15/15 trên ba viewport; axe 0 lỗi critical/serious trên 10 route, light/dark, 3 viewport.
 - Lighthouse production preview: mobile 98/100 Performance/Accessibility; desktop 100/100; CLS đều 0.
 - Contrast token: 12/12 cặp đạt WCAG AA, thấp nhất 6,85:1.
 
