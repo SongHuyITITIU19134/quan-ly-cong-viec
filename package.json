@@ -16,6 +16,7 @@
     "test:watch": "vitest",
     "test:contrast": "node scripts/check-contrast.mjs",
     "test:motion": "node scripts/check-motion.mjs",
+    "lh": "VITE_DATA_MODE=local vite build && node scripts/lighthouse.mjs",
     "e2e": "playwright test"
   },
   "dependencies": {

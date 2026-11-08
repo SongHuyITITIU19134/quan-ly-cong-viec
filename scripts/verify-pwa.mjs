@@ -16,6 +16,16 @@ page.on('requestfailed',request=>browserErrors.push(`${request.failure()?.errorT
 
 try{
   await page.goto(baseUrl,{waitUntil:'networkidle'})
+  const installability=await page.evaluate(async()=>{
+    const response=await fetch('/manifest.webmanifest'),manifest=await response.json()
+    const icons=await Promise.all((manifest.icons||[]).map(async icon=>({
+      ...icon,ok:(await fetch(icon.src)).ok
+    })))
+    return{manifest,icons}
+  })
+  if(installability.manifest.display!=='standalone')throw new Error('Manifest thiếu display standalone')
+  if(!installability.icons.some(icon=>icon.ok&&icon.sizes==='192x192'&&icon.purpose.includes('maskable')))throw new Error('Thiếu icon 192 maskable')
+  if(!installability.icons.some(icon=>icon.ok&&icon.sizes==='512x512'&&icon.purpose.includes('maskable')))throw new Error('Thiếu icon 512 maskable')
   await page.waitForFunction(async()=>{await navigator.serviceWorker.ready;return Boolean(navigator.serviceWorker.controller)})
   await page.reload({waitUntil:'networkidle'})
   await page.locator('.page h1').waitFor()
