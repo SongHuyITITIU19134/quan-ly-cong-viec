@@ -61,7 +61,7 @@ export function useTaskActions({
         }
       }])
     if (!result) return
-    toast('Đã lưu nhiệm vụ thành công.')
+    toast(vi.generated.useTaskActions_64_0)
     closeEditor()
   }
   const changeStatus = async (task, nextStatus, targetIndex) => {
@@ -75,7 +75,7 @@ export function useTaskActions({
         data: data.tasks.find(item => item.id === op.id)
       })
     if (!(await batch(ops))) return
-    const message = `Đã chuyển ${task.title} sang ${vi.status[nextStatus]}.`
+    const message = vi.generated.useTaskActions_78_1(task.title,vi.status[nextStatus])
     setAnnouncement(message)
     toast(message, {
       label: vi.action.undo,
@@ -95,7 +95,7 @@ export function useTaskActions({
     if (!(await batch(ops))) return
     setConfirm(null)
     closeEditor()
-    toast('Đã xóa nhiệm vụ.', {
+    toast(vi.generated.useTaskActions_98_2, {
       label: vi.action.undo,
       onClick: () => batch(undo)
     })
@@ -103,11 +103,11 @@ export function useTaskActions({
   const saveProject = async form => {
     const result = projectEditing?.id ? await update('projects', projectEditing.id, form) : await create('projects', form)
     if (!result) return
-    toast('Đã lưu dự án.')
+    toast(vi.generated.useTaskActions_106_3)
     setProjectEditing(null)
   }
   const quickProject = async () => {
-    const name = window.prompt('Tên dự án mới')
+    const name = window.prompt(vi.generated.useTaskActions_110_4)
     if (!name?.trim()) return null
     const result = await create('projects', {
       name: name.trim(),
@@ -119,7 +119,7 @@ export function useTaskActions({
       dueDate: '',
       archived: false
     })
-    if (result) toast('Đã tạo và chọn dự án mới.')
+    if (result) toast(vi.generated.useTaskActions_122_5)
     return result
   }
   const archiveProject = async project => {
@@ -128,7 +128,7 @@ export function useTaskActions({
       status: archived ? 'archived' : 'running',
       archived
     })
-    toast(archived ? 'Đã lưu trữ dự án.' : 'Đã khôi phục dự án.')
+    toast(archived ? vi.generated.useTaskActions_131_6 : vi.generated.useTaskActions_131_7)
   }
   const deleteProject = async () => {
     const project = projectConfirm,
@@ -147,17 +147,17 @@ export function useTaskActions({
     const next = new URLSearchParams(params)
     next.delete('project')
     setParams(next)
-    toast('Đã xóa dự án và cập nhật nhiệm vụ.', {
-      label: 'Hoàn tác',
+    toast(vi.generated.useTaskActions_150_8, {
+      label: vi.generated.useTaskActions_151_9,
       onClick: () => batch(undo)
     })
   }
   const moveProjectTasks = async selectedProject => {
     if (!selectedProject || !moveTarget) return
     const ops = projectDeleteOps(selectedProject.id, data.tasks, moveTarget)
-    if (!ops.length) return toast('Dự án chưa có nhiệm vụ để chuyển.')
+    if (!ops.length) return toast(vi.generated.useTaskActions_158_10)
     if (await batch(ops)) {
-      toast(`Đã chuyển ${ops.length} nhiệm vụ.`)
+      toast(vi.generated.useTaskActions_160_11(ops.length))
       setMoveTarget('')
     }
   }
@@ -194,7 +194,7 @@ export function useTaskActions({
       }])
     if (saved) {
       setQuickText('')
-      toast('Đã thêm nhanh nhiệm vụ.')
+      toast(vi.generated.useTaskActions_197_12)
     }
   }
   const taskProps = task => {

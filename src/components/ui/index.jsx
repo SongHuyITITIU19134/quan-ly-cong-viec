@@ -13,7 +13,7 @@ export function Badge({ children, kind = '', icon: Icon }) { return <span classN
 export function StatusBadge({ value }) { const Icon=statusIcons[value]||Circle;return <Badge kind={`status-${value}`} icon={Icon}>{vi.status[value]}</Badge> }
 export function PriorityBadge({ value }) { const Icon=priorityIcons[value]||Circle;return <Badge kind={`priority-${value}`} icon={Icon}>{vi.priority[value]}</Badge> }
 export function ProgressBar({ value = 0, label = true }) { const safe=Math.min(100,Math.max(0,value));return <div className="progress-wrap" role="progressbar" aria-label={`${vi.common.progress}: ${safe}%`} aria-valuemin="0" aria-valuemax="100" aria-valuenow={safe}>{label&&<div className="progress-label"><span>{vi.common.progress}</span><strong>{safe}%</strong></div>}<div className="progress"><span style={{'--progress-scale':safe/100}} /></div></div> }
-export function EmptyState({ title = vi.common.empty, description = 'Hãy tạo mục đầu tiên để bắt đầu.', action }) { return <div className="empty"><div><span className="empty-icon"><Inbox size={30}/></span><h3>{title}</h3><p>{description}</p>{action}</div></div> }
+export function EmptyState({ title = vi.common.empty, description = vi.generated.index_16_0, action }) { return <div className="empty"><div><span className="empty-icon"><Inbox size={30}/></span><h3>{title}</h3><p>{description}</p>{action}</div></div> }
 export function LoadingState() { return <div className="empty" role="status" aria-busy="true"><div className="loading-stack"><span className="sr-only">{vi.common.loading}</span><span className="skeleton"/><span className="skeleton"/><span className="skeleton"/></div></div> }
 export function ErrorState({ retry }) { return <div className="empty" role="alert"><div><span className="empty-icon"><AlertCircle size={30}/></span><h3>{vi.common.error}</h3><Button onClick={retry}>{vi.action.retry}</Button></div></div> }
 
@@ -84,7 +84,7 @@ export function Drawer({title,children,onClose,actions}){
   return createPortal(<div className={`drawer-layer ${closing?'is-closing':''}`} role="presentation" onMouseDown={event=>event.target===event.currentTarget&&requestClose()}>
     <div ref={dialogRef} tabIndex="-1" className="drawer" role="dialog" aria-modal="true" aria-labelledby={titleId} onInput={()=>setDirty(true)} onChange={()=>setDirty(true)}>
       <div className="drawer-handle" aria-hidden="true"/><header className="drawer-head"><h2 id={titleId}>{title}</h2><IconButton label={vi.action.close} onClick={requestClose}><X size={20}/></IconButton></header>
-      {guard&&<div className="drawer-guard" role="alert"><span>Bạn có thay đổi chưa lưu.</span><button type="button" onClick={()=>setGuard(false)}>Tiếp tục chỉnh sửa</button><button type="button" onClick={finishClose}>Bỏ thay đổi</button></div>}
+      {guard&&<div className="drawer-guard" role="alert"><span>{vi.generated.index_87_1}</span><button type="button" onClick={()=>setGuard(false)}>{vi.generated.index_87_2}</button><button type="button" onClick={finishClose}>{vi.generated.index_87_3}</button></div>}
       <div className="drawer-body">{children}</div>{actions&&<footer className="drawer-actions">{actions}</footer>}
     </div>
   </div>,document.body)

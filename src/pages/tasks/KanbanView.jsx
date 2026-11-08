@@ -18,15 +18,15 @@ export default function KanbanView({
   const[limits,setLimits]=useState(()=>Object.fromEntries(STATUS_KEYS.map(key=>[key,KANBAN_PAGE_SIZE])))
   useEffect(()=>setLimits(Object.fromEntries(STATUS_KEYS.map(key=>[key,KANBAN_PAGE_SIZE]))),[filtered])
   if(!data.tasks.length)return <EmptyState
-    title="Chưa có nhiệm vụ"
-    description="Tạo nhiệm vụ đầu tiên để bắt đầu bảng Kanban."
-    action={<Button onClick={()=>setEditing({})}>Tạo nhiệm vụ</Button>}
+    title={vi.generated.KanbanView_21_0}
+    description={vi.generated.KanbanView_22_1}
+    action={<Button onClick={()=>setEditing({})}>{vi.generated.KanbanView_23_2}</Button>}
   />
   if(!filtered.length&&hasFilters)return <EmptyState
-    title="Không có nhiệm vụ khớp bộ lọc"
-    action={<Button variant="secondary" onClick={()=>setParams({})}>Đặt lại</Button>}
+    title={vi.generated.KanbanView_26_3}
+    action={<Button variant="secondary" onClick={()=>setParams({})}>{vi.generated.KanbanView_27_4}</Button>}
   />
-  return <div className="kanban" aria-label="Bảng Kanban">{STATUS_KEYS.map(key=><section
+  return <div className="kanban" aria-label={vi.generated.KanbanView_29_5}>{STATUS_KEYS.map(key=><section
     className="kanban-column"
     key={key}
     onDragOver={event=>event.preventDefault()}
@@ -45,11 +45,11 @@ export default function KanbanView({
           dropTask(event, key, index)
         }} key={task.id}>
 <TaskCard {...taskProps(task)} />
-<label className="sr-only" htmlFor={`move-task-${task.id}`}>Chuyển sang… {task.title}</label>
-<select id={`move-task-${task.id}`} aria-label={`Chuyển sang… ${task.title}`} value="" onChange={event => {
+<label className="sr-only" htmlFor={`move-task-${task.id}`}>{vi.generated.KanbanView_48_6}{task.title}</label>
+<select id={`move-task-${task.id}`} aria-label={vi.generated.KanbanView_49_7(task.title)} value="" onChange={event => {
             if (event.target.value) changeStatus(task, event.target.value)
           }}>
-<option value="">Chuyển sang…</option>
+<option value="">{vi.generated.KanbanView_52_8}</option>
 {STATUS_KEYS.filter(status=>status!==task.status).map(status=><option key={status} value={status}>
   {vi.status[status]}
 </option>)}</select>
@@ -57,7 +57,7 @@ export default function KanbanView({
 {grouped[key].length>limits[key]&&<Button
   variant="secondary"
   onClick={()=>setLimits(current=>({...current,[key]:current[key]+KANBAN_PAGE_SIZE}))}
->Xem thêm (còn {grouped[key].length-limits[key]})</Button>}
-{!grouped[key].length && <p className="column-empty">Chưa có nhiệm vụ</p>}</div>
+>{vi.generated.KanbanView_60_9}{grouped[key].length-limits[key]})</Button>}
+{!grouped[key].length && <p className="column-empty">{vi.generated.KanbanView_61_10}</p>}</div>
 </section>)}</div>
 }

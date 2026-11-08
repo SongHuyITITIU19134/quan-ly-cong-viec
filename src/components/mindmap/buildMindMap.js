@@ -13,6 +13,6 @@ export function buildMindMap(data,{projectId='',statuses=STATUS_KEYS}={}){
   })
   const linkedTripIds=new Set((data.tasks||[]).filter(task=>task.projectId&&task.tripId).map(task=>task.tripId))
   const unlinked=(data.trips||[]).filter(trip=>!trip.projectId&&!linkedTripIds.has(trip.id))
-  if(unlinked.length&&!projectId)projects.push({id:'__unlinked__',name:'Công tác chưa gắn dự án',taskCount:0,totalTaskCount:0,progress:0,statusGroups:[],trips:limited(unlinked),unlinked:true})
-  return{name:'Nhịp việc',projects}
+  if(unlinked.length&&!projectId)projects.push({id:'__unlinked__',name:vi.generated.buildMindMap_16_0,taskCount:0,totalTaskCount:0,progress:0,statusGroups:[],trips:limited(unlinked),unlinked:true})
+  return{name:vi.generated.buildMindMap_17_1,projects}
 }

@@ -42,7 +42,7 @@ export default function Calendar() {
       startDate = toISODate(addDays(parseISO(date), -span))
     }
     if (!await update('tasks', task.id, { dueDate: date, startDate })) return
-    toast(`Đã chuyển “${task.title}” sang ${formatDate(date)}.`, { label: 'Hoàn tác', onClick: () => update('tasks', task.id, { dueDate: old, startDate: task.startDate }) })
+    toast(vi.generated.Calendar_45_0(task.title,formatDate(date)), { label: vi.generated.Calendar_45_1, onClick: () => update('tasks', task.id, { dueDate: old, startDate: task.startDate }) })
   }
   const save = async form => {
     const result = editing.id
@@ -50,29 +50,29 @@ export default function Calendar() {
       : await create('tasks', { ...form, order: data.tasks.length + 1 })
     if (!result) return false
     setEditing(null)
-    toast('Đã lưu nhiệm vụ.')
+    toast(vi.generated.Calendar_53_2)
     return true
   }
 
   return <Page>
-    <Header title={vi.nav.calendar} description="Nhiệm vụ và chuyến công tác trên cùng một lịch"/>
-    {!data.tasks.length&&!data.trips.length?<Card><EmptyState title="Chưa có lịch công việc" description="Tạo nhiệm vụ đầu tiên để hiển thị trên lịch." action={<Button onClick={()=>setEditing({dueDate:selectedDay,startDate:selectedDay})}>Tạo nhiệm vụ</Button>}/></Card>:<><div className="calendar-toolbar">
-      <div className="segmented" aria-label="Kiểu lịch"><button className={mode === 'day' ? 'active' : ''} onClick={() => setMode('day')}>Ngày</button><button className={mode === 'week' ? 'active' : ''} onClick={() => setMode('week')}>Tuần</button><button className={mode === 'month' ? 'active' : ''} onClick={() => setMode('month')}>Tháng</button></div>
-      <div className="calendar-nav"><Button variant="secondary" onClick={() => {setDirection('today');setCursor(parseISO(todayISO()))}}>Hôm nay</Button><button aria-label="Trước" onClick={() => shift(-1)}><ChevronLeft/></button><strong>{format(cursor, mode === 'month' ? 'MM / yyyy' : 'dd / MM / yyyy')}</strong><button aria-label="Sau" onClick={() => shift(1)}><ChevronRight/></button></div>
+    <Header title={vi.nav.calendar} description={vi.generated.Calendar_58_3}/>
+    {!data.tasks.length&&!data.trips.length?<Card><EmptyState title={vi.generated.Calendar_59_4} description={vi.generated.Calendar_59_5} action={<Button onClick={()=>setEditing({dueDate:selectedDay,startDate:selectedDay})}>{vi.generated.Calendar_59_6}</Button>}/></Card>:<><div className="calendar-toolbar">
+      <div className="segmented" aria-label={vi.generated.Calendar_60_7}><button className={mode === 'day' ? 'active' : ''} onClick={() => setMode('day')}>{vi.generated.Calendar_60_8}</button><button className={mode === 'week' ? 'active' : ''} onClick={() => setMode('week')}>{vi.generated.Calendar_60_9}</button><button className={mode === 'month' ? 'active' : ''} onClick={() => setMode('month')}>{vi.generated.Calendar_60_10}</button></div>
+      <div className="calendar-nav"><Button variant="secondary" onClick={() => {setDirection('today');setCursor(parseISO(todayISO()))}}>{vi.generated.Calendar_61_11}</Button><button aria-label={vi.generated.Calendar_61_12} onClick={() => shift(-1)}><ChevronLeft/></button><strong>{format(cursor, mode === 'month' ? 'MM / yyyy' : 'dd / MM / yyyy')}</strong><button aria-label="Sau" onClick={() => shift(1)}><ChevronRight/></button></div>
     </div>
     <div className={`calendar-grid mode-${mode}`}>
       <div className="weekdays">{['T2', 'T3', 'T4', 'T5', 'T6', 'T7', 'CN'].map(day => <span key={day}>{day}</span>)}</div>
       <div className={`calendar-days slide-${direction}`} key={`${mode}-${toISODate(range.start)}`}>{days.map(day => {
         const date = toISODate(day), outside = mode === 'month' && day.getMonth() !== cursor.getMonth(), tasks = dayTasks(date), trips = dayTrips(date), overlap = findTripOverlaps(trips,date).length > 0
         return <button className={`calendar-day ${outside ? 'outside' : ''} ${date === todayISO() ? 'today' : ''} ${selectedDay === date ? 'selected' : ''} ${overlap ? 'overlap' : ''}`} key={date} onClick={() => setSelectedDay(date)} onDoubleClick={() => setEditing({ dueDate: date, startDate: date })}>
-          <span className="sr-only">{formatDate(date)}, {tasks.length} nhiệm vụ, {trips.length} chuyến công tác{overlap?', có lịch trùng':''}. </span><span className="day-number">{format(day, 'd')}</span>{overlap&&<AlertTriangle className="day-overlap-icon" size={15} aria-hidden="true"/>}
+          <span className="sr-only">{formatDate(date)}, {tasks.length}{vi.generated.Calendar_68_13}{trips.length}{vi.generated.Calendar_68_14}{overlap?vi.generated.Calendar_68_15:''}. </span><span className="day-number">{format(day, 'd')}</span>{overlap&&<AlertTriangle className="day-overlap-icon" size={15} aria-hidden="true"/>}
           {trips.map(trip => <span className={`trip-strip label-theme-${data.trips.indexOf(trip) % 8 + 1}`} key={trip.id}><Plane size={11}/>{trip.location}{tripDaySession(trip,date)&&` · ${tripDaySession(trip,date)}`}</span>)}
           {tasks.slice(0, mode === 'month' ? 3 : 10).map(task => <span className={`calendar-task status-${task.status}`} key={task.id} onClick={event => { event.stopPropagation(); setEditing(task) }}>{task.title}</span>)}
-          {tasks.length > 3 && mode === 'month' && <small>+{tasks.length - 3} việc</small>}
+          {tasks.length > 3 && mode === 'month' && <small>+{tasks.length - 3}{vi.generated.Calendar_71_16}</small>}
         </button>
       })}</div>
     </div>
-    <section className="day-agenda"><div className="section-row"><div><span className="eyebrow">Ngày đã chọn</span><h2>{formatDate(selectedDay)}</h2></div><Button onClick={() => setEditing({ dueDate: selectedDay, startDate: selectedDay })}>Tạo nhiệm vụ</Button></div>{dayTrips(selectedDay).map(trip=><div className="agenda-row" key={trip.id}><span><Plane size={15}/> {trip.name} · {formatTripRange(trip)}</span></div>)}{dayTasks(selectedDay).map(task => <div className="agenda-row" key={task.id}><button onClick={() => setEditing(task)}>{task.title}</button><StatusBadge value={task.status}/><label>Đổi ngày <input type="date" value={task.dueDate} onChange={event => move(task, event.target.value)}/></label></div>)}{!dayTasks(selectedDay).length && <p className="muted">Chưa có nhiệm vụ trong ngày này. Bấm đúp vào ô ngày để tạo nhanh.</p>}</section></>}
-    {editing && <Drawer title={editing.id ? 'Chi tiết nhiệm vụ' : 'Tạo nhiệm vụ'} onClose={() => setEditing(null)} actions={<><Button variant="secondary" onClick={()=>setEditing(null)}>Hủy</Button><Button type="submit" form={taskFormId}>Lưu thay đổi</Button></>}><TaskForm formId={taskFormId} showActions={false} task={editing} projects={data.projects} contacts={data.contacts} trips={data.trips} onCancel={() => setEditing(null)} onSave={save}/></Drawer>}
+    <section className="day-agenda"><div className="section-row"><div><span className="eyebrow">{vi.generated.Calendar_75_17}</span><h2>{formatDate(selectedDay)}</h2></div><Button onClick={() => setEditing({ dueDate: selectedDay, startDate: selectedDay })}>{vi.generated.Calendar_75_18}</Button></div>{dayTrips(selectedDay).map(trip=><div className="agenda-row" key={trip.id}><span><Plane size={15}/> {trip.name} · {formatTripRange(trip)}</span></div>)}{dayTasks(selectedDay).map(task => <div className="agenda-row" key={task.id}><button onClick={() => setEditing(task)}>{task.title}</button><StatusBadge value={task.status}/><label>{vi.generated.Calendar_75_19}<input type="date" value={task.dueDate} onChange={event => move(task, event.target.value)}/></label></div>)}{!dayTasks(selectedDay).length && <p className="muted">{vi.generated.Calendar_75_20}</p>}</section></>}
+    {editing && <Drawer title={editing.id ? vi.generated.Calendar_76_21 : vi.generated.Calendar_76_22} onClose={() => setEditing(null)} actions={<><Button variant="secondary" onClick={()=>setEditing(null)}>{vi.generated.Calendar_76_23}</Button><Button type="submit" form={taskFormId}>{vi.generated.Calendar_76_24}</Button></>}><TaskForm formId={taskFormId} showActions={false} task={editing} projects={data.projects} contacts={data.contacts} trips={data.trips} onCancel={() => setEditing(null)} onSave={save}/></Drawer>}
   </Page>
 }

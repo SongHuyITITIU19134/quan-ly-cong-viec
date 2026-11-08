@@ -25,15 +25,15 @@ export default function ListView({
   return <Card className="table-wrap">{filtered.length ? <table>
 <thead>
 <tr>
-<th>Nhiệm vụ</th>
-<th className="tags-column">Nhãn</th>
-<th>Trạng thái</th>
-<th>Ưu tiên</th>
-<th>Hạn</th>
-<th>Tiến độ</th>
-<th>Phụ trách</th>
+<th>{vi.generated.ListView_28_0}</th>
+<th className="tags-column">{vi.generated.ListView_29_1}</th>
+<th>{vi.generated.ListView_30_2}</th>
+<th>{vi.generated.ListView_31_3}</th>
+<th>{vi.generated.ListView_32_4}</th>
+<th>{vi.generated.ListView_33_5}</th>
+<th>{vi.generated.ListView_34_6}</th>
 <th>
-<span className="sr-only">Thao tác</span>
+<span className="sr-only">{vi.generated.ListView_36_7}</span>
 </th>
 </tr>
 </thead>
@@ -50,7 +50,7 @@ export default function ListView({
 </td>
 <td>
 <select
-  aria-label={`Trạng thái ${task.title}`}
+  aria-label={vi.generated.ListView_53_8(task.title)}
   value={task.status}
   onChange={event=>changeStatus(task,event.target.value)}
 >{STATUS_KEYS.map(key=><option value={key} key={key}>{vi.status[key]}</option>)}</select>
@@ -65,19 +65,19 @@ export default function ListView({
 </td>
 <td>{data.contacts.find(contact => contact.id === task.assigneeId)?.fullName}</td>
 <td>
-<button className="text-danger icon-hit" aria-label={`Xóa ${task.title}`} onClick={() => setConfirm(task)}>
+<button className="text-danger icon-hit" aria-label={vi.generated.ListView_68_9(task.title)} onClick={() => setConfirm(task)}>
 <Trash2 size={16} />
 </button>
 </td>
 </tr>)}</tbody>
 </table>:<EmptyState
-  title={data.tasks.length?'Không có nhiệm vụ khớp bộ lọc':'Chưa có nhiệm vụ'}
-  description={data.tasks.length?'Hãy thay đổi hoặc đặt lại bộ lọc.':'Tạo nhiệm vụ đầu tiên để bắt đầu.'}
+  title={data.tasks.length?vi.generated.ListView_74_10:vi.generated.ListView_74_11}
+  description={data.tasks.length?vi.generated.ListView_75_12:vi.generated.ListView_75_13}
   action={data.tasks.length
-    ?<Button variant="secondary" onClick={()=>setParams({})}>Đặt lại</Button>
-    :<Button onClick={()=>setEditing({})}>Tạo nhiệm vụ</Button>}
-/>}{filtered.length>LIST_PAGE_SIZE&&<nav className="list-pagination" aria-label="Phân trang nhiệm vụ">
-<Button variant="secondary" disabled={page===1} onClick={()=>setPage(value=>Math.max(1,value-1))}>Trang trước</Button>
+    ?<Button variant="secondary" onClick={()=>setParams({})}>{vi.generated.ListView_77_14}</Button>
+    :<Button onClick={()=>setEditing({})}>{vi.generated.ListView_78_15}</Button>}
+/>}{filtered.length>LIST_PAGE_SIZE&&<nav className="list-pagination" aria-label={vi.generated.ListView_79_16}>
+<Button variant="secondary" disabled={page===1} onClick={()=>setPage(value=>Math.max(1,value-1))}>{vi.generated.ListView_80_17}</Button>
 <span>Trang {page}/{pageCount}</span>
 <Button variant="secondary" disabled={page===pageCount} onClick={()=>setPage(value=>Math.min(pageCount,value+1))}>Trang sau</Button>
 </nav>}</Card>
