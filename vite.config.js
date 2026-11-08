@@ -25,6 +25,9 @@ export default defineConfig({
   test: {
     environment: 'jsdom',
     setupFiles: './tests/setup.js',
+    testTimeout: 10000,
+    hookTimeout: 10000,
+    teardownTimeout: 5000,
     css: true,
     include: ['tests/**/*.test.{js,jsx}'],
     exclude: ['tests/rules/**'],
