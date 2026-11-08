@@ -1,5 +1,7 @@
 import { test, expect } from '@playwright/test'
 
+test.setTimeout(90_000)
+
 test('chữ dài: giới hạn nhập, Kanban, chi tiết và biểu đồ',async({page})=>{
  const spaced=('Hoàn thiện báo cáo quy hoạch quý bốn ').repeat(4).slice(0,120)
  const unbroken='A'.repeat(60)

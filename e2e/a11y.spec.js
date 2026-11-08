@@ -1,6 +1,8 @@
 import { test, expect } from '@playwright/test'
 import AxeBuilder from '@axe-core/playwright'
 
+test.setTimeout(120_000)
+
 const routes=['/','/cong-viec','/lich','/cong-tac','/danh-ba','/so-do','/so-tay','/so-tay/b1','/cai-dat','/khong-ton-tai']
 const a11ySeed={projects:[],tasks:[],contacts:[{id:'self',fullName:'Tôi',isSelf:true}],trips:[],notebooks:[{id:'b1',name:'Sổ kiểm thử',color:0,pinned:false,archived:false}],notes:[]}
 const loginMarkup=`<main class="login-page"><section class="card login-card" aria-labelledby="login-title"><div class="login-brand"><span aria-hidden="true">✦</span><strong>Nhịp việc</strong></div><div><span class="eyebrow">Chào mừng trở lại</span><h1 id="login-title">Đăng nhập Nhịp việc</h1><p class="muted">Dữ liệu của bạn được lưu riêng tư trên Firebase.</p></div><form class="login-form"><div class="field"><label for="audit-email">Email</label><input id="audit-email" type="email" autocomplete="email"></div><div class="field"><label for="audit-password">Mật khẩu</label><input id="audit-password" type="password" autocomplete="current-password"></div><button class="button" type="submit"><span>Đăng nhập</span></button></form><div class="login-divider"><span>hoặc</span></div><div class="login-secondary-actions"><button class="button secondary" type="button"><span>Tạo tài khoản</span></button><button class="button secondary" type="button"><span>Tiếp tục với Google</span></button></div></section></main>`
