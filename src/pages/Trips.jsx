@@ -133,7 +133,7 @@ export default function Trips() {
             </div>
           </Card>
         })}
-        {!list.length && <Card><EmptyState title={vi.generated.Trips_136_25}/></Card>}
+        {!list.length && <Card><EmptyState title={vi.generated.Trips_136_25} action={<Button icon={Plus} onClick={()=>setEditing(blank)}>{vi.generated.Trips_117_19}</Button>}/></Card>}
       </div>
     </section>)}
     {editing && <Drawer title={editing.id ? vi.generated.Trips_139_26 : vi.generated.Trips_139_27} onClose={() => setEditing(null)} actions={<><Button variant="secondary" onClick={()=>setEditing(null)}>{vi.generated.Trips_139_28}</Button><Button type="submit" form={tripFormId}>{vi.generated.Trips_139_29}</Button></>}><TripForm formId={tripFormId} showActions={false} trip={editing} contacts={data.contacts} projects={data.projects} onSave={save} onCancel={() => setEditing(null)}/></Drawer>}

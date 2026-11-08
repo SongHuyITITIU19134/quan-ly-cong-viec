@@ -15,6 +15,14 @@ export const vi = {
   },
   empty: { welcome: 'Chào mừng! Hãy tạo dự án đầu tiên', tasks: 'Chưa có nhiệm vụ', projects: 'Chưa có dự án', trips: 'Chưa có chuyến công tác', contacts: 'Chưa có liên hệ' },
   auth: { welcome: 'Chào mừng trở lại', title: 'Tài khoản Nhịp việc', description: 'Đăng nhập để đồng bộ dữ liệu riêng của bạn trên các thiết bị.', loginTab: 'Đăng nhập', registerTab: 'Đăng ký', forgot: 'Quên mật khẩu', google: 'Đăng nhập Google', processing: 'Đang xử lý…', cooldown: 'Vui lòng chờ 3 giây…', signOut: 'Đăng xuất', verifyTitle: 'Xác minh email', verifyDescription: 'Tài khoản đang ở chế độ chỉ đọc. Hãy mở email xác minh để bật quyền thay đổi dữ liệu.', resend: 'Gửi lại', verified: 'Tôi đã xác minh', importTitle: 'Nhập dữ liệu trên máy này lên tài khoản', importDescription: 'Giữ nguyên dữ liệu trên máy; các mục đã có trên tài khoản sẽ được bỏ qua.', import: 'Nhập', importing: 'Đang nhập…', skip: 'Bỏ qua' },
+  onboarding: {
+    title:'Làm quen với Nhịp việc',step:(current,total)=>`Bước ${current}/${total}`,
+    taskTitle:'Tạo việc rõ ràng',taskDescription:'Ghi tiêu đề, hạn, mức ưu tiên và người phụ trách để biết việc tiếp theo.',
+    calendarTitle:'Xem lịch tập trung',calendarDescription:'Mọi công việc có hạn và chuyến công tác cùng xuất hiện trên lịch.',
+    noteTitle:'Ghi chú có liên kết',noteDescription:'Lưu ý tưởng rồi liên kết với dự án, chuyến đi hoặc liên hệ.',
+    next:'Tiếp tục',skip:'Bỏ qua',useSample:'Dùng dữ liệu mẫu',startEmpty:'Bắt đầu trống',
+    reopen:'Mở lại hướng dẫn',removeSample:'Xóa dữ liệu mẫu',sampleAdded:'Đã thêm dữ liệu mẫu.',sampleRemoved:'Đã xóa dữ liệu mẫu.'
+  },
 }
 
 export const STATUS_KEYS = ['todo', 'doing', 'waiting', 'done', 'paused']

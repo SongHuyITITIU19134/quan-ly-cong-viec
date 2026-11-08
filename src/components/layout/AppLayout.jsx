@@ -13,6 +13,7 @@ import { pendingReminders, pruneReminderIds, rememberReminder, reminderId } from
 import CommandPalette from '@/components/layout/CommandPalette'
 import { shouldOpenPalette } from '@/lib/palette'
 import { usePwa } from '@/hooks/usePwa'
+import OnboardingTour from '@/components/layout/OnboardingTour'
 
 const links = [
   ['/', vi.nav.dashboard, LayoutDashboard],
@@ -35,7 +36,10 @@ export default function AppLayout(){
   const navigate=useTransitionNavigate()
   const location=useLocation()
   const{resolved}=useTheme()
-  const{data,error,setError,mode,user,logout,emailNeedsVerification,resendEmail,confirmEmail,importOffer,importBusy,importLocal,skipImport,toast,settings,saveSettings}=useData()
+  const{
+    data,loading,error,setError,mode,user,logout,readOnly,emailNeedsVerification,resendEmail,confirmEmail,
+    importOffer,importBusy,importLocal,skipImport,toast,settings,saveSettings,batch
+  }=useData()
   const{canInstall,install}=usePwa(toast)
   const[query,setQuery]=useState('')
   const[paletteOpen,setPaletteOpen]=useState(false)
@@ -99,6 +103,16 @@ export default function AppLayout(){
     if(mode==='trip')navigate('/cong-tac?new=trip')
     else setCreateMode(mode)
   }
+  const finishOnboarding=()=>saveSettings({...settings,onboardingSeen:true})
+  const useSample=async()=>{
+    const[{onboardingSample},{stringifyJsonExport,parseJsonImport,buildImportOps}]=await Promise.all([
+      import('@/data/onboardingSample'),import('@/lib/dataTransfer')
+    ])
+    const imported=parseJsonImport(stringifyJsonExport(onboardingSample())).data
+    const ops=buildImportOps(imported,data,'skip')
+    if(ops.length&&!await batch(ops))return
+    if(await finishOnboarding())toast(vi.onboarding.sampleAdded)
+  }
   const menuKeys=event=>{
     if(!['ArrowDown','ArrowUp','Home','End'].includes(event.key))return
     event.preventDefault()
@@ -131,6 +145,7 @@ export default function AppLayout(){
       <div className="dock-create-group"><button className="dock-create" type="button" aria-label={vi.generated.AppLayout_125_25} onClick={()=>setCreateMode('combo')}><Plus size={20}/><span>{vi.generated.AppLayout_125_26}</span></button><Popover className="dock-create-more" panelClassName="create-menu" align="end" accessibleLabel={vi.generated.AppLayout_125_27} label={<ChevronDown size={17}/>}>{[['combo',vi.generated.AppLayout_125_28],['task',vi.generated.AppLayout_125_29],['project',vi.generated.AppLayout_125_30],['trip',vi.generated.AppLayout_125_31]].map(([mode,label])=><button type="button" role="menuitem" key={mode} onKeyDown={menuKeys} onClick={()=>chooseCreate(mode)}>{label}</button>)}</Popover></div>
     </footer>
     <CreateCombo open={Boolean(createMode)} mode={createMode||'combo'} preselectedProjectId={new URLSearchParams(location.search).get('project')||new URLSearchParams(location.search).get('projectId')||''} onClose={()=>setCreateMode(null)}/>
+    {!loading&&!readOnly&&settings.onboardingSeen!==true&&<OnboardingTour onFinish={finishOnboarding} onSample={useSample}/>} 
     <CommandPalette open={paletteOpen} data={data} initialQuery={paletteInitial} onClose={closePalette} onChoose={choosePalette}/>
   </div>
 }

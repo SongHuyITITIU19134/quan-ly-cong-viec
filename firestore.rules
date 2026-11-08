@@ -14,10 +14,11 @@ service cloud.firestore {
     function userKeys() { return ['displayName','email','photoURL','provider','createdAt','lastLoginAt','locale','settings']; }
     function validSettings() {
       return !('settings' in request.resource.data) || (request.resource.data.settings is map
-        && request.resource.data.settings.keys().hasOnly(['theme','defaultView','reportPeriod'])
+        && request.resource.data.settings.keys().hasOnly(['theme','defaultView','reportPeriod','onboardingSeen'])
         && request.resource.data.settings.theme in ['system','light','dark']
         && request.resource.data.settings.defaultView in ['dashboard','tasks','calendar','trips','contacts','notebooks']
-        && request.resource.data.settings.reportPeriod in ['today','week','month']);
+        && request.resource.data.settings.reportPeriod in ['today','week','month']
+        && (!('onboardingSeen' in request.resource.data.settings) || request.resource.data.settings.onboardingSeen is bool));
     }
     function taskKeys() { return ['id','createdAt','updatedAt','completedAt','title','description','projectId','projectName','status','priority','startDate','dueDate','assignerId','assigneeId','collaboratorIds','notes','checklist','progress','progressMode','tripId','tripPhase','order','tags','repeat','remindBefore','seriesId']; }
     function projectKeys() { return ['id','createdAt','updatedAt','completedAt','name','description','colorIndex','color','status','ownerId','startDate','dueDate','archived']; }

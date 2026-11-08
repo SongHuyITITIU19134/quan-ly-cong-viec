@@ -24,3 +24,4 @@ export const EXPORT_SCHEMA_VERSION=2
 export const IMPORT_FILE_MAX_BYTES=5*1024*1024
 export const IMPORT_ITEM_MAX=5000
 export const IMPORT_BATCH_MAX=450
+export const SETTINGS_KEYS=['theme','defaultView','reportPeriod','onboardingSeen']

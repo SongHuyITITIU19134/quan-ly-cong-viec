@@ -1,0 +1,24 @@
+import AxeBuilder from '@axe-core/playwright'
+import { expect, test } from '@playwright/test'
+
+test('onboarding lần đầu, dữ liệu mẫu, mở lại và xóa nhanh',async({page})=>{
+  await page.goto('/')
+  const tour=page.getByRole('dialog',{name:'Làm quen với Nhịp việc'})
+  await expect(tour.getByRole('heading',{name:'Tạo việc rõ ràng'})).toBeVisible()
+  const results=await new AxeBuilder({page}).analyze()
+  expect(results.violations.filter(item=>['serious','critical'].includes(item.impact))).toEqual([])
+  await tour.getByRole('button',{name:'Tiếp tục'}).click()
+  await expect(tour.getByRole('heading',{name:'Xem lịch tập trung'})).toBeVisible()
+  await tour.getByRole('button',{name:'Tiếp tục'}).click()
+  await expect(tour.getByRole('heading',{name:'Ghi chú có liên kết'})).toBeVisible()
+  await tour.getByRole('button',{name:'Dùng dữ liệu mẫu'}).click()
+  await expect(tour).not.toBeVisible()
+  await page.goto('/cong-viec')
+  await expect(page.getByRole('button',{name:'Lập kế hoạch mỗi tuần',exact:true})).toBeVisible()
+  await page.goto('/cai-dat')
+  await page.getByRole('button',{name:'Mở lại hướng dẫn'}).click()
+  await expect(tour).toBeVisible()
+  await tour.getByRole('button',{name:'Bỏ qua'}).click()
+  await page.getByRole('button',{name:'Xóa dữ liệu mẫu'}).click()
+  await expect.poll(()=>page.evaluate(()=>JSON.parse(localStorage.getItem('nhip-viec-v1')).tasks.some(item=>item.id.startsWith('sample-')))).toBe(false)
+})

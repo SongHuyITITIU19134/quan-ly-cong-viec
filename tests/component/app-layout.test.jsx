@@ -6,7 +6,7 @@ import { beforeEach, describe, expect, it, vi } from 'vitest'
 const mocks=vi.hoisted(()=>({navigate:vi.fn(),saveSettings:vi.fn(),install:vi.fn(),toast:vi.fn()}))
 const data={tasks:[{id:'t1',title:'Họp khách hàng',status:'todo',dueDate:'2020-01-01'}],projects:[{id:'p1',name:'Dự án Mới'}],trips:[],notes:[]}
 
-vi.mock('@/hooks/useData',()=>({useData:()=>({data,error:null,setError:vi.fn(),mode:'local',user:null,logout:vi.fn(),emailNeedsVerification:false,resendEmail:vi.fn(),confirmEmail:vi.fn(),importOffer:false,importBusy:false,importLocal:vi.fn(),skipImport:vi.fn(),toast:mocks.toast,settings:{theme:'system',defaultView:'dashboard'},saveSettings:mocks.saveSettings})}))
+vi.mock('@/hooks/useData',()=>({useData:()=>({data,loading:false,error:null,setError:vi.fn(),mode:'local',user:null,logout:vi.fn(),readOnly:false,emailNeedsVerification:false,resendEmail:vi.fn(),confirmEmail:vi.fn(),importOffer:false,importBusy:false,importLocal:vi.fn(),skipImport:vi.fn(),toast:mocks.toast,settings:{theme:'system',defaultView:'dashboard',onboardingSeen:true},saveSettings:mocks.saveSettings,batch:vi.fn()})}))
 vi.mock('@/hooks/useTheme',()=>({useTheme:()=>({resolved:'light'})}))
 vi.mock('@/hooks/useTransitionNavigate',()=>({useTransitionNavigate:()=>mocks.navigate}))
 vi.mock('@/hooks/usePwa',()=>({usePwa:()=>({canInstall:true,install:mocks.install})}))
@@ -27,7 +27,7 @@ describe('bố cục và bảng lệnh',()=>{
     await userEvent.click(screen.getByRole('button',{name:'Cài ứng dụng'}))
     await userEvent.click(screen.getByRole('link',{name:'Công việc'}))
     expect(mocks.navigate.mock.calls.map(call=>call[0])).toEqual(['/lich','/cong-viec'])
-    expect(mocks.saveSettings).toHaveBeenCalledWith({theme:'dark',defaultView:'dashboard'})
+    expect(mocks.saveSettings).toHaveBeenCalledWith(expect.objectContaining({theme:'dark',defaultView:'dashboard'}))
     expect(mocks.install).toHaveBeenCalledOnce()
   })
 

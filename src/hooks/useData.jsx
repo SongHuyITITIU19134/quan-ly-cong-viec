@@ -19,7 +19,8 @@ const initialData = {
 const initialSettings = {
   theme: 'system',
   defaultView: 'dashboard',
-  reportPeriod: 'week'
+  reportPeriod: 'week',
+  onboardingSeen: false
 }
 function CoreDataProvider({
   children
