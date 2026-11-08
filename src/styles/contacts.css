@@ -1,0 +1,16 @@
+.contacts-grid { grid-template-columns: repeat(auto-fill,minmax(320px,1fr)); gap: 18px; }
+.contact-card { min-height: 132px; border: 1px solid var(--color-border-subtle); border-radius: var(--radius-md); padding: 18px; }
+.contact-card:hover { border-color: var(--color-border); box-shadow: none; transform: translateY(-2px); }
+.contact-main { min-width: 0; flex: 1; gap: 15px; }
+.contact-main>span:last-child { min-width: 0; }
+.contact-main strong { font-size: 16px; }
+.contact-main small { max-width: 220px; }
+.contact-card .avatar-lg { width: 64px; height: 64px; flex: 0 0 64px; border: var(--border-ink); background: var(--label-bg); color: var(--color-ink-fixed); font-size: 24px; box-shadow: var(--shadow-hard); }
+.contact-actions a { width: 44px; height: 44px; border: var(--border-ink); border-radius: 50%; background: var(--color-paper); color: var(--color-text); box-shadow: var(--shadow-hard); transition: transform var(--motion-fast) var(--ease-out-expo); }
+.contact-actions a:hover { background: var(--color-paper); transform: translateY(-1px); }
+.profile-head { margin: -4px -4px 22px; border: var(--border-ink); border-radius: var(--radius-md); padding: 20px; background: var(--label-bg); color: var(--color-ink-fixed); }
+.profile-head p { color: var(--color-ink-fixed); opacity: .75; }
+.profile-head .avatar-xl { border: var(--border-ink); background: rgb(255 255 255 / 60%); color: var(--color-ink-fixed); box-shadow: var(--shadow-hard); }
+.related-row { min-height: 48px; border-bottom-color: var(--color-border-subtle); }
+
+@media(max-width:767px){.contacts-grid{grid-template-columns:1fr}.contact-card{min-height:112px;padding:14px}.contact-card .avatar-lg{width:54px;height:54px;flex-basis:54px}.contact-main small{max-width:155px}.contact-card:hover{transform:none}}

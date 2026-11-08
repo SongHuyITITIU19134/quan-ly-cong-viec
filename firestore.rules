@@ -1,0 +1,155 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Keep synchronized with src/lib/limits.js:
+    // TASK_TITLE_MAX=120, TASK_DESCRIPTION_MAX=2000, TASK_NOTES_MAX=3000, TASK_SERIES_ID_MAX=200, REPEAT_INTERVAL_MAX=30,
+    // REMIND_BEFORE_VALUES=[0,15,60,1440],
+    // PROJECT_NAME_MAX=60, NOTEBOOK_NAME_MAX=60, NOTE_TITLE_MAX=120,
+    // NOTE_BODY_MAX=5000, TAG_MAX=24, TAGS_PER_ITEM=5,
+    // TRIP_NAME_MAX=160, TRIP_LOCATION_MAX=160, TRIP_PURPOSE_MAX=1000,
+    // TRIP_NOTES_MAX=2000, CONTACT_NAME_MAX=120, CONTACT_TITLE_MAX=100,
+    // CONTACT_ORGANIZATION_MAX=120, CONTACT_NOTES_MAX=1000.
+    function signedIn(uid) { return request.auth != null && request.auth.uid == uid; }
+    function canWrite(uid) { return signedIn(uid) && request.auth.token.email_verified == true; }
+    function userKeys() { return ['displayName','email','photoURL','provider','createdAt','lastLoginAt','locale','settings']; }
+    function validSettings() {
+      return !('settings' in request.resource.data) || (request.resource.data.settings is map
+        && request.resource.data.settings.keys().hasOnly(['theme','defaultView','reportPeriod'])
+        && request.resource.data.settings.theme in ['system','light','dark']
+        && request.resource.data.settings.defaultView in ['dashboard','tasks','calendar','trips','contacts','notebooks']
+        && request.resource.data.settings.reportPeriod in ['today','week','month']);
+    }
+    function taskKeys() { return ['id','createdAt','updatedAt','completedAt','title','description','projectId','projectName','status','priority','startDate','dueDate','assignerId','assigneeId','collaboratorIds','notes','checklist','progress','progressMode','tripId','tripPhase','order','tags','repeat','remindBefore','seriesId']; }
+    function projectKeys() { return ['id','createdAt','updatedAt','completedAt','name','description','colorIndex','color','status','ownerId','startDate','dueDate','archived']; }
+    function notebookKeys() { return ['id','createdAt','updatedAt','completedAt','name','color','pinned','archived']; }
+    function noteKeys() { return ['id','createdAt','updatedAt','completedAt','notebookId','title','body','tags','pinned','links']; }
+    function contactKeys() { return ['id','createdAt','updatedAt','completedAt','fullName','organization','title','phone','email','notes','isSelf']; }
+    function tripKeys() { return ['id','createdAt','updatedAt','completedAt','name','location','startDate','endDate','startSession','endSession','purpose','contactIds','projectId','notes','color','completed']; }
+    function metaKeys() { return ['id','createdAt','updatedAt','completedAt','c']; }
+    function validTask() {
+      return request.resource.data.title is string
+        && request.resource.data.title.size() > 0 && request.resource.data.title.size() <= 120
+        && (!('description' in request.resource.data) || (request.resource.data.description is string && request.resource.data.description.size() <= 2000))
+        && (!('notes' in request.resource.data) || (request.resource.data.notes is string && request.resource.data.notes.size() <= 3000))
+        && (!('projectId' in request.resource.data) || request.resource.data.projectId == null || request.resource.data.projectId is string)
+        && (!('tripId' in request.resource.data) || request.resource.data.tripId == null || request.resource.data.tripId is string)
+        && (!('assignerId' in request.resource.data) || request.resource.data.assignerId == null || request.resource.data.assignerId is string)
+        && (!('assigneeId' in request.resource.data) || request.resource.data.assigneeId == null || request.resource.data.assigneeId is string)
+        && (!('status' in request.resource.data) || request.resource.data.status in ['todo','doing','waiting','done','paused'])
+        && (!('priority' in request.resource.data) || request.resource.data.priority in ['low','medium','high','urgent'])
+        && (!('progress' in request.resource.data) || (request.resource.data.progress is number && request.resource.data.progress >= 0 && request.resource.data.progress <= 100))
+        && (!('collaboratorIds' in request.resource.data) || request.resource.data.collaboratorIds is list)
+        && (!('checklist' in request.resource.data) || request.resource.data.checklist is list)
+        && (!('tags' in request.resource.data) || (request.resource.data.tags is list && request.resource.data.tags.size() <= 5))
+        && (!('seriesId' in request.resource.data) || (request.resource.data.seriesId is string && request.resource.data.seriesId.size() <= 200))
+        && (!('repeat' in request.resource.data) || request.resource.data.repeat == null || (request.resource.data.repeat is map
+          && request.resource.data.repeat.keys().hasOnly(['freq','interval','until'])
+          && request.resource.data.repeat.freq in ['daily','weekly','monthly']
+          && request.resource.data.repeat.interval is int && request.resource.data.repeat.interval >= 1 && request.resource.data.repeat.interval <= 30
+          && (!('until' in request.resource.data.repeat) || request.resource.data.repeat.until is string)))
+        && (!('remindBefore' in request.resource.data) || request.resource.data.remindBefore == null || request.resource.data.remindBefore in [0,15,60,1440]);
+    }
+    function validProject() {
+      return request.resource.data.name is string
+        && request.resource.data.name.size() > 0 && request.resource.data.name.size() <= 60
+        && (!('ownerId' in request.resource.data) || request.resource.data.ownerId == null || request.resource.data.ownerId is string)
+        && (!('status' in request.resource.data) || request.resource.data.status in ['running','paused','done','archived'])
+        && (!('colorIndex' in request.resource.data) || (request.resource.data.colorIndex is int && request.resource.data.colorIndex >= 1 && request.resource.data.colorIndex <= 8));
+    }
+    function validNotebook() {
+      return request.resource.data.name is string
+        && request.resource.data.name.size() > 0 && request.resource.data.name.size() <= 60
+        && (!('color' in request.resource.data) || (request.resource.data.color is int && request.resource.data.color >= 0 && request.resource.data.color <= 7))
+        && (!('pinned' in request.resource.data) || request.resource.data.pinned is bool)
+        && (!('archived' in request.resource.data) || request.resource.data.archived is bool);
+    }
+    function validNote() {
+      return request.resource.data.notebookId is string && request.resource.data.notebookId.size() > 0
+        && request.resource.data.title is string
+        && request.resource.data.title.size() > 0 && request.resource.data.title.size() <= 120
+        && request.resource.data.body is string && request.resource.data.body.size() <= 5000
+        && request.resource.data.tags is list && request.resource.data.tags.size() <= 5
+        && request.resource.data.pinned is bool
+        && request.resource.data.links is map;
+    }
+    function validContact() {
+      return request.resource.data.fullName is string
+        && request.resource.data.fullName.size() > 0 && request.resource.data.fullName.size() <= 120
+        && (!('organization' in request.resource.data) || (request.resource.data.organization is string && request.resource.data.organization.size() <= 120))
+        && (!('title' in request.resource.data) || (request.resource.data.title is string && request.resource.data.title.size() <= 100))
+        && (!('notes' in request.resource.data) || (request.resource.data.notes is string && request.resource.data.notes.size() <= 1000))
+        && (!('phone' in request.resource.data) || request.resource.data.phone is string)
+        && (!('email' in request.resource.data) || request.resource.data.email is string)
+        && (!('isSelf' in request.resource.data) || request.resource.data.isSelf is bool);
+    }
+    function validTrip() {
+      return request.resource.data.name is string
+        && request.resource.data.name.size() > 0 && request.resource.data.name.size() <= 160
+        && request.resource.data.location is string
+        && request.resource.data.location.size() > 0 && request.resource.data.location.size() <= 160
+        && (!('purpose' in request.resource.data) || (request.resource.data.purpose is string && request.resource.data.purpose.size() <= 1000))
+        && (!('notes' in request.resource.data) || (request.resource.data.notes is string && request.resource.data.notes.size() <= 2000))
+        && (!('projectId' in request.resource.data) || request.resource.data.projectId == null || request.resource.data.projectId is string)
+        && (!('contactIds' in request.resource.data) || request.resource.data.contactIds is list)
+        && (!('completed' in request.resource.data) || request.resource.data.completed is bool);
+    }
+    function validMeta() {
+      return request.resource.data.c is map
+        && request.resource.data.c.values().hasOnly([0,1,2,3,4,5,6,7,8,9,10,11]);
+    }
+    match /users/{uid} {
+      allow read: if signedIn(uid);
+      allow create: if canWrite(uid) && request.resource.data.keys().hasOnly(userKeys()) && validSettings();
+      allow update: if canWrite(uid)
+        && request.resource.data.createdAt == resource.data.createdAt
+        && request.resource.data.diff(resource.data).affectedKeys().hasOnly(userKeys()) && validSettings();
+      allow delete: if false;
+    }
+    match /users/{uid}/tasks/{id} {
+      allow read: if signedIn(uid);
+      allow create: if canWrite(uid) && request.resource.data.keys().hasOnly(taskKeys()) && validTask();
+      allow update: if canWrite(uid) && request.resource.data.diff(resource.data).affectedKeys().hasOnly(taskKeys()) && validTask();
+      allow delete: if canWrite(uid);
+    }
+    match /users/{uid}/projects/{id} {
+      allow read: if signedIn(uid);
+      allow create: if canWrite(uid) && request.resource.data.keys().hasOnly(projectKeys()) && validProject();
+      allow update: if canWrite(uid) && request.resource.data.diff(resource.data).affectedKeys().hasOnly(projectKeys()) && validProject();
+      allow delete: if canWrite(uid);
+    }
+    match /users/{uid}/notebooks/{id} {
+      allow read: if signedIn(uid);
+      allow create: if canWrite(uid) && request.resource.data.keys().hasOnly(notebookKeys()) && validNotebook();
+      allow update: if canWrite(uid) && request.resource.data.diff(resource.data).affectedKeys().hasOnly(notebookKeys()) && validNotebook();
+      allow delete: if canWrite(uid);
+    }
+    match /users/{uid}/notes/{id} {
+      allow read: if signedIn(uid);
+      allow create: if canWrite(uid) && request.resource.data.keys().hasOnly(noteKeys()) && validNote();
+      allow update: if canWrite(uid) && request.resource.data.diff(resource.data).affectedKeys().hasOnly(noteKeys()) && validNote();
+      allow delete: if canWrite(uid);
+    }
+    match /users/{uid}/contacts/{id} {
+      allow read: if signedIn(uid);
+      allow create: if canWrite(uid) && request.resource.data.keys().hasOnly(contactKeys()) && validContact()
+        && ((id == 'self' && request.resource.data.isSelf == true)
+          || (id != 'self' && (!('isSelf' in request.resource.data) || request.resource.data.isSelf == false)));
+      allow update: if canWrite(uid) && request.resource.data.diff(resource.data).affectedKeys().hasOnly(contactKeys()) && validContact()
+        && ((id == 'self' && request.resource.data.isSelf == true)
+          || (id != 'self' && (!('isSelf' in request.resource.data) || request.resource.data.isSelf == false)));
+      allow delete: if canWrite(uid) && id != 'self';
+    }
+    match /users/{uid}/trips/{id} {
+      allow read: if signedIn(uid);
+      allow create: if canWrite(uid) && request.resource.data.keys().hasOnly(tripKeys()) && validTrip();
+      allow update: if canWrite(uid) && request.resource.data.diff(resource.data).affectedKeys().hasOnly(tripKeys()) && validTrip();
+      allow delete: if canWrite(uid);
+    }
+    match /users/{uid}/meta/{id} {
+      allow read: if signedIn(uid);
+      allow create: if canWrite(uid) && id == 'tagColors' && request.resource.data.keys().hasOnly(metaKeys()) && validMeta();
+      allow update: if canWrite(uid) && id == 'tagColors' && request.resource.data.diff(resource.data).affectedKeys().hasOnly(metaKeys()) && validMeta();
+      allow delete: if canWrite(uid) && id == 'tagColors';
+    }
+  }
+}

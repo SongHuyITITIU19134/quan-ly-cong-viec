@@ -1,0 +1,20 @@
+.chart-centered { display: grid; place-items: center; }
+.donut-chart { width: 152px; aspect-ratio: 1; border-radius: 50%; display: grid; place-items: center; position: relative; }
+.donut-chart::after { content: ''; position: absolute; inset: 26%; border-radius: 50%; background: var(--surface); }
+.donut-chart span { position: relative; z-index: var(--z-content); font-size: 22px; font-weight: 700; color: var(--text); }
+.mini-bars { display:grid; align-content:center; gap:12px; padding:18px 8px 0; min-width:0; max-width:100%; }
+.mini-bar-item { min-width:0; max-width:100%; display:grid; grid-template-columns:minmax(0,35%) minmax(0,1fr) auto; align-items:center; gap:8px; text-align:left; }
+.mini-bar { grid-column:2; grid-row:1; height:20px; max-width:100%; min-width:0; border:1px solid var(--color-ink-fixed); border-radius:2px 6px 6px 2px; background:var(--label-bg); }
+.mini-bar-item small { grid-column:1; grid-row:1; min-width:0; display:-webkit-box; -webkit-box-orient:vertical; -webkit-line-clamp:2; overflow:hidden; overflow-wrap:anywhere; text-overflow:ellipsis; line-height:1.5; color:var(--muted); font-size:11px; }
+.mini-bar-item strong { grid-column:3; grid-row:1; color:var(--text); font-size:12px; }
+.popover-anchor { position: relative; display: inline-flex; }
+.popover-trigger { min-height: 44px; min-width: 130px; padding: 0 12px; border: 1px solid var(--border); border-radius: 9px; background: var(--surface); color: var(--text); display: flex; align-items: center; gap: 8px; cursor: pointer; }
+.filter-menu .popover-trigger::after { content: '▾'; margin-left: auto; color: var(--muted); }
+.popover-trigger[aria-expanded='true'] { border-color: var(--primary); outline: 3px solid color-mix(in srgb,var(--focus) 24%,transparent); }
+.popover-panel { position: fixed; z-index: var(--z-popover); overflow: auto; overscroll-behavior: contain; background: var(--surface-raised); color: var(--text); }
+.filter-panel { min-width: 210px; padding: 8px; border: 1px solid var(--border); border-radius: 10px; box-shadow: var(--shadow); }
+.filter-panel fieldset { display: grid; gap: 3px; margin: 0; padding: 0; border: 0; }
+.filter-panel label { min-height: 44px; padding: 5px 7px; border-radius: 7px; display: flex; align-items: center; gap: 8px; cursor: pointer; }
+.filter-panel label:hover { background: var(--surface-hover); }
+.filter-panel input { width: 18px; height: 18px; accent-color: var(--primary); }
+@media(max-width:767px){.filter-menu{width:100%}.filter-menu .popover-trigger{width:100%}.page-head .button{width:auto;min-width:44px;padding:0 10px}.page-head .button span{position:static;width:auto;height:auto;overflow:visible;clip:auto;white-space:nowrap;font-size:12px}}

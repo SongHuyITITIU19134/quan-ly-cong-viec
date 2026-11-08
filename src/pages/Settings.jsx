@@ -1,0 +1,29 @@
+import { useRef, useState } from 'react'
+import { Header, Page } from '@/app/App'
+import { Button, Card, Modal } from '@/components/ui'
+import { useData } from '@/hooks/useData'
+import { buildImportOps, dataToIcs, importPreview, parseJsonImport, runImportBatches, stringifyJsonExport, tasksToCsv } from '@/lib/dataTransfer'
+import { IMPORT_FILE_MAX_BYTES } from '@/lib/limits'
+
+const labels={projects:'dự án',tasks:'nhiệm vụ',contacts:'liên hệ',trips:'chuyến đi',notebooks:'sổ tay',notes:'ghi chú'}
+const download=(name,text,type)=>{const blob=new Blob([text],{type}),url=URL.createObjectURL(blob),link=document.createElement('a');link.href=url;link.download=name;link.click();URL.revokeObjectURL(url)}
+
+export default function Settings(){
+  const{data,mode,settings,saveSettings,batch,reset,toast}=useData()
+  const[fileState,setFileState]=useState(null),[conflict,setConflict]=useState('skip'),[deleting,setDeleting]=useState(false),[confirmText,setConfirmText]=useState(''),fileRef=useRef(null)
+  const change=async(key,value)=>{const next={...settings,[key]:value};if(await saveSettings(next))toast('Đã lưu cài đặt.')}
+  const json=()=>stringifyJsonExport(data)
+  const exportJson=()=>download('nhip-viec-backup.json',json(),'application/json;charset=utf-8')
+  const readFile=async event=>{const file=event.target.files?.[0];if(!file)return;try{if(file.size>IMPORT_FILE_MAX_BYTES)throw new Error('Tệp vượt quá giới hạn cho phép');const parsed=parseJsonImport(await file.text(),{size:file.size}),preview=importPreview(parsed.data,data);setFileState({...parsed,preview,name:file.name})}catch(error){toast(error.message);setFileState(null)}finally{event.target.value=''}}
+  const applyImport=async()=>{const ops=buildImportOps(fileState.data,data,conflict);try{const result=mode==='firebase'?await runImportBatches(ops,batch):{written:await batch(ops)?ops.length:0,batches:ops.length?1:0};if(result.written===ops.length){toast(mode==='firebase'&&result.batches>1?`Đã nhập ${result.written} mục, ghi theo ${result.batches} đợt.`:`Đã nhập ${result.written} mục trong một batch.`);setFileState(null)}}catch(error){toast(error.message)}}
+  const deleteLocal=async()=>{exportJson();const ok=await reset();if(ok){setDeleting(false);setConfirmText('');toast('Đã xóa dữ liệu local sau khi tải bản sao lưu.')}}
+  return <Page><Header title="Cài đặt" description="Tùy chỉnh giao diện và quản lý dữ liệu."/><div className="settings-grid">
+    <Card><h2>Giao diện và báo cáo</h2><div className="field"><label htmlFor="setting-theme">Giao diện</label><select id="setting-theme" value={settings.theme} onChange={event=>change('theme',event.target.value)}><option value="system">Theo hệ thống</option><option value="light">Sáng</option><option value="dark">Tối</option></select></div><div className="field"><label htmlFor="setting-view">Trang mặc định</label><select id="setting-view" value={settings.defaultView} onChange={event=>change('defaultView',event.target.value)}><option value="dashboard">Tổng quan</option><option value="tasks">Công việc</option><option value="calendar">Lịch</option><option value="trips">Công tác</option><option value="contacts">Danh bạ</option><option value="notebooks">Sổ tay</option></select></div><div className="field"><label htmlFor="setting-period">Kỳ báo cáo</label><select id="setting-period" value={settings.reportPeriod} onChange={event=>change('reportPeriod',event.target.value)}><option value="today">Hôm nay</option><option value="week">Tuần</option><option value="month">Tháng</option></select></div></Card>
+    <Card><h2>Xuất dữ liệu</h2><p className="muted">Bản JSON không chứa UID, token hay email tài khoản.</p><div className="inline-actions"><Button onClick={exportJson}>Tải JSON</Button><Button variant="secondary" onClick={()=>download('nhip-viec-tasks.csv',tasksToCsv(data.tasks),'text/csv;charset=utf-8')}>Tải CSV công việc</Button><Button variant="secondary" onClick={()=>download('nhip-viec-calendar.ics',dataToIcs(data),'text/calendar;charset=utf-8')}>Tải lịch ICS</Button></div></Card>
+    <Card><h2>Nhập dữ liệu JSON</h2><p className="muted">Tối đa {Math.round(IMPORT_FILE_MAX_BYTES/1024/1024)} MB. Dữ liệu được kiểm tra và xem trước trước khi ghi.</p><input ref={fileRef} className="sr-only" type="file" aria-label="Tệp JSON cần nhập" accept="application/json,.json" onChange={readFile}/><Button variant="secondary" onClick={()=>fileRef.current?.click()}>Chọn tệp JSON</Button></Card>
+    {mode==='local'&&<Card><h2>Xóa dữ liệu local</h2><p className="muted">Ứng dụng sẽ tải bản sao lưu JSON trước khi xóa.</p><Button variant="danger" onClick={()=>setDeleting(true)}>Xóa dữ liệu local</Button></Card>}
+  </div>
+  {fileState&&<Modal title="Xem trước dữ liệu nhập" onClose={()=>setFileState(null)}><p><strong>{fileState.name}</strong> · {fileState.preview.total} mục hợp lệ · {fileState.invalid} mục lỗi</p><ul>{Object.entries(fileState.preview.counts).map(([name,count])=><li key={name}>{labels[name]}: {count}</li>)}</ul>{fileState.preview.conflicts.length>0&&<div className="field"><label htmlFor="import-conflict">Có {fileState.preview.conflicts.length} ID trùng</label><select id="import-conflict" value={conflict} onChange={event=>setConflict(event.target.value)}><option value="skip">Bỏ qua mục trùng</option><option value="overwrite">Ghi đè mục trùng</option></select></div>}<div className="inline-actions"><Button onClick={applyImport}>Nhập dữ liệu</Button><Button variant="secondary" onClick={()=>setFileState(null)}>Hủy</Button></div></Modal>}
+  {deleting&&<Modal title="Xác nhận xóa dữ liệu local" onClose={()=>setDeleting(false)}><p>Bước 2/2: nhập <strong>XOA</strong> để xác nhận.</p><div className="field"><label htmlFor="delete-confirm">Mã xác nhận</label><input id="delete-confirm" value={confirmText} onChange={event=>setConfirmText(event.target.value)}/></div><Button variant="danger" disabled={confirmText!=='XOA'} onClick={deleteLocal}>Tải bản sao lưu và xóa</Button></Modal>}
+  </Page>
+}

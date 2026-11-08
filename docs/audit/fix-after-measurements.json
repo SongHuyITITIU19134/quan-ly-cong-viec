@@ -1,0 +1,2656 @@
+{
+  "generatedAt": "2026-10-23T16:08:22.104Z",
+  "phase": "fix-after",
+  "baseURL": "http://127.0.0.1:4174",
+  "viewports": 16,
+  "routes": 5,
+  "findings": [
+    {
+      "viewportName": "laptop-1280x720",
+      "routeName": "dashboard",
+      "theme": "light",
+      "viewport": {
+        "width": 1280,
+        "height": 720
+      },
+      "documentWidth": 1280,
+      "horizontalOverflow": 0,
+      "overlaps": [],
+      "interactiveCount": 39
+    },
+    {
+      "viewportName": "laptop-1280x720",
+      "routeName": "tasks",
+      "theme": "light",
+      "viewport": {
+        "width": 1280,
+        "height": 720
+      },
+      "documentWidth": 1280,
+      "horizontalOverflow": 0,
+      "overlaps": [],
+      "interactiveCount": 61
+    },
+    {
+      "viewportName": "laptop-1280x720",
+      "routeName": "calendar",
+      "theme": "light",
+      "viewport": {
+        "width": 1280,
+        "height": 720
+      },
+      "documentWidth": 1280,
+      "horizontalOverflow": 0,
+      "overlaps": [],
+      "interactiveCount": 56
+    },
+    {
+      "viewportName": "laptop-1280x720",
+      "routeName": "trips",
+      "theme": "light",
+      "viewport": {
+        "width": 1280,
+        "height": 720
+      },
+      "documentWidth": 1280,
+      "horizontalOverflow": 0,
+      "overlaps": [],
+      "interactiveCount": 17
+    },
+    {
+      "viewportName": "laptop-1280x720",
+      "routeName": "contacts",
+      "theme": "light",
+      "viewport": {
+        "width": 1280,
+        "height": 720
+      },
+      "documentWidth": 1280,
+      "horizontalOverflow": 0,
+      "overlaps": [],
+      "interactiveCount": 30
+    },
+    {
+      "viewportName": "laptop-1280x720",
+      "routeName": "dashboard",
+      "theme": "dark",
+      "viewport": {
+        "width": 1280,
+        "height": 720
+      },
+      "documentWidth": 1280,
+      "horizontalOverflow": 0,
+      "overlaps": [],
+      "interactiveCount": 39
+    },
+    {
+      "viewportName": "laptop-1280x720",
+      "routeName": "tasks",
+      "theme": "dark",
+      "viewport": {
+        "width": 1280,
+        "height": 720
+      },
+      "documentWidth": 1280,
+      "horizontalOverflow": 0,
+      "overlaps": [],
+      "interactiveCount": 61
+    },
+    {
+      "viewportName": "laptop-1280x720",
+      "routeName": "calendar",
+      "theme": "dark",
+      "viewport": {
+        "width": 1280,
+        "height": 720
+      },
+      "documentWidth": 1280,
+      "horizontalOverflow": 0,
+      "overlaps": [],
+      "interactiveCount": 56
+    },
+    {
+      "viewportName": "laptop-1280x720",
+      "routeName": "trips",
+      "theme": "dark",
+      "viewport": {
+        "width": 1280,
+        "height": 720
+      },
+      "documentWidth": 1280,
+      "horizontalOverflow": 0,
+      "overlaps": [],
+      "interactiveCount": 17
+    },
+    {
+      "viewportName": "laptop-1280x720",
+      "routeName": "contacts",
+      "theme": "dark",
+      "viewport": {
+        "width": 1280,
+        "height": 720
+      },
+      "documentWidth": 1280,
+      "horizontalOverflow": 0,
+      "overlaps": [],
+      "interactiveCount": 30
+    },
+    {
+      "viewportName": "laptop-1280x720",
+      "scenario": "task-form-save",
+      "saveBox": {
+        "x": 1143.21875,
+        "y": 662,
+        "width": 116.78125,
+        "height": 44
+      },
+      "saveVisible": true
+    },
+    {
+      "viewportName": "laptop-1280x720",
+      "scenario": "filter-menu",
+      "box": {
+        "x": 340.046875,
+        "y": 123.46875,
+        "width": 192,
+        "height": 232
+      },
+      "inViewport": true
+    },
+    {
+      "viewportName": "laptop-1280x720",
+      "scenario": "dock-bottom-obstruction",
+      "covered": false,
+      "dock": {
+        "top": 650,
+        "bottom": 712
+      },
+      "last": {
+        "top": 412.84375,
+        "bottom": 453.140625
+      }
+    },
+    {
+      "viewportName": "laptop-1366x768",
+      "routeName": "dashboard",
+      "theme": "light",
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "documentWidth": 1366,
+      "horizontalOverflow": 0,
+      "overlaps": [],
+      "interactiveCount": 39
+    },
+    {
+      "viewportName": "laptop-1366x768",
+      "routeName": "tasks",
+      "theme": "light",
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "documentWidth": 1366,
+      "horizontalOverflow": 0,
+      "overlaps": [],
+      "interactiveCount": 61
+    },
+    {
+      "viewportName": "laptop-1366x768",
+      "routeName": "calendar",
+      "theme": "light",
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "documentWidth": 1366,
+      "horizontalOverflow": 0,
+      "overlaps": [],
+      "interactiveCount": 56
+    },
+    {
+      "viewportName": "laptop-1366x768",
+      "routeName": "trips",
+      "theme": "light",
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "documentWidth": 1366,
+      "horizontalOverflow": 0,
+      "overlaps": [],
+      "interactiveCount": 17
+    },
+    {
+      "viewportName": "laptop-1366x768",
+      "routeName": "contacts",
+      "theme": "light",
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "documentWidth": 1366,
+      "horizontalOverflow": 0,
+      "overlaps": [],
+      "interactiveCount": 30
+    },
+    {
+      "viewportName": "laptop-1366x768",
+      "routeName": "dashboard",
+      "theme": "dark",
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "documentWidth": 1366,
+      "horizontalOverflow": 0,
+      "overlaps": [],
+      "interactiveCount": 39
+    },
+    {
+      "viewportName": "laptop-1366x768",
+      "routeName": "tasks",
+      "theme": "dark",
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "documentWidth": 1366,
+      "horizontalOverflow": 0,
+      "overlaps": [],
+      "interactiveCount": 61
+    },
+    {
+      "viewportName": "laptop-1366x768",
+      "routeName": "calendar",
+      "theme": "dark",
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "documentWidth": 1366,
+      "horizontalOverflow": 0,
+      "overlaps": [],
+      "interactiveCount": 56
+    },
+    {
+      "viewportName": "laptop-1366x768",
+      "routeName": "trips",
+      "theme": "dark",
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "documentWidth": 1366,
+      "horizontalOverflow": 0,
+      "overlaps": [],
+      "interactiveCount": 17
+    },
+    {
+      "viewportName": "laptop-1366x768",
+      "routeName": "contacts",
+      "theme": "dark",
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "documentWidth": 1366,
+      "horizontalOverflow": 0,
+      "overlaps": [],
+      "interactiveCount": 30
+    },
+    {
+      "viewportName": "laptop-1366x768",
+      "scenario": "task-form-save",
+      "saveBox": {
+        "x": 1229.21875,
+        "y": 710,
+        "width": 116.78125,
+        "height": 44
+      },
+      "saveVisible": true
+    },
+    {
+      "viewportName": "laptop-1366x768",
+      "scenario": "filter-menu",
+      "box": {
+        "x": 423.984375,
+        "y": 123.1875,
+        "width": 192,
+        "height": 232
+      },
+      "inViewport": true
+    },
+    {
+      "viewportName": "laptop-1366x768",
+      "scenario": "dock-bottom-obstruction",
+      "covered": false,
+      "dock": {
+        "top": 698,
+        "bottom": 760
+      },
+      "last": {
+        "top": 460.5625,
+        "bottom": 500.859375
+      }
+    },
+    {
+      "viewportName": "laptop-1440x900",
+      "routeName": "dashboard",
+      "theme": "light",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "documentWidth": 1440,
+      "horizontalOverflow": 0,
+      "overlaps": [],
+      "interactiveCount": 39
+    },
+    {
+      "viewportName": "laptop-1440x900",
+      "routeName": "tasks",
+      "theme": "light",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "documentWidth": 1440,
+      "horizontalOverflow": 0,
+      "overlaps": [],
+      "interactiveCount": 61
+    },
+    {
+      "viewportName": "laptop-1440x900",
+      "routeName": "calendar",
+      "theme": "light",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "documentWidth": 1440,
+      "horizontalOverflow": 0,
+      "overlaps": [],
+      "interactiveCount": 56
+    },
+    {
+      "viewportName": "laptop-1440x900",
+      "routeName": "trips",
+      "theme": "light",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "documentWidth": 1440,
+      "horizontalOverflow": 0,
+      "overlaps": [],
+      "interactiveCount": 17
+    },
+    {
+      "viewportName": "laptop-1440x900",
+      "routeName": "contacts",
+      "theme": "light",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "documentWidth": 1440,
+      "horizontalOverflow": 0,
+      "overlaps": [],
+      "interactiveCount": 30
+    },
+    {
+      "viewportName": "laptop-1440x900",
+      "routeName": "dashboard",
+      "theme": "dark",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "documentWidth": 1440,
+      "horizontalOverflow": 0,
+      "overlaps": [],
+      "interactiveCount": 39
+    },
+    {
+      "viewportName": "laptop-1440x900",
+      "routeName": "tasks",
+      "theme": "dark",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "documentWidth": 1440,
+      "horizontalOverflow": 0,
+      "overlaps": [],
+      "interactiveCount": 61
+    },
+    {
+      "viewportName": "laptop-1440x900",
+      "routeName": "calendar",
+      "theme": "dark",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "documentWidth": 1440,
+      "horizontalOverflow": 0,
+      "overlaps": [],
+      "interactiveCount": 56
+    },
+    {
+      "viewportName": "laptop-1440x900",
+      "routeName": "trips",
+      "theme": "dark",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "documentWidth": 1440,
+      "horizontalOverflow": 0,
+      "overlaps": [],
+      "interactiveCount": 17
+    },
+    {
+      "viewportName": "laptop-1440x900",
+      "routeName": "contacts",
+      "theme": "dark",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "documentWidth": 1440,
+      "horizontalOverflow": 0,
+      "overlaps": [],
+      "interactiveCount": 30
+    },
+    {
+      "viewportName": "laptop-1440x900",
+      "scenario": "task-form-save",
+      "saveBox": {
+        "x": 1303.21875,
+        "y": 842,
+        "width": 116.78125,
+        "height": 44
+      },
+      "saveVisible": true
+    },
+    {
+      "viewportName": "laptop-1440x900",
+      "scenario": "filter-menu",
+      "box": {
+        "x": 496.21875,
+        "y": 138.734375,
+        "width": 192,
+        "height": 232
+      },
+      "inViewport": true
+    },
+    {
+      "viewportName": "laptop-1440x900",
+      "scenario": "dock-bottom-obstruction",
+      "covered": false,
+      "dock": {
+        "top": 822,
+        "bottom": 892
+      },
+      "last": {
+        "top": 558.109375,
+        "bottom": 598.40625
+      }
+    },
+    {
+      "viewportName": "laptop-1512x982",
+      "routeName": "dashboard",
+      "theme": "light",
+      "viewport": {
+        "width": 1512,
+        "height": 982
+      },
+      "documentWidth": 1512,
+      "horizontalOverflow": 0,
+      "overlaps": [],
+      "interactiveCount": 39
+    },
+    {
+      "viewportName": "laptop-1512x982",
+      "routeName": "tasks",
+      "theme": "light",
+      "viewport": {
+        "width": 1512,
+        "height": 982
+      },
+      "documentWidth": 1512,
+      "horizontalOverflow": 0,
+      "overlaps": [],
+      "interactiveCount": 61
+    },
+    {
+      "viewportName": "laptop-1512x982",
+      "routeName": "calendar",
+      "theme": "light",
+      "viewport": {
+        "width": 1512,
+        "height": 982
+      },
+      "documentWidth": 1512,
+      "horizontalOverflow": 0,
+      "overlaps": [],
+      "interactiveCount": 56
+    },
+    {
+      "viewportName": "laptop-1512x982",
+      "routeName": "trips",
+      "theme": "light",
+      "viewport": {
+        "width": 1512,
+        "height": 982
+      },
+      "documentWidth": 1512,
+      "horizontalOverflow": 0,
+      "overlaps": [],
+      "interactiveCount": 17
+    },
+    {
+      "viewportName": "laptop-1512x982",
+      "routeName": "contacts",
+      "theme": "light",
+      "viewport": {
+        "width": 1512,
+        "height": 982
+      },
+      "documentWidth": 1512,
+      "horizontalOverflow": 0,
+      "overlaps": [],
+      "interactiveCount": 30
+    },
+    {
+      "viewportName": "laptop-1512x982",
+      "routeName": "dashboard",
+      "theme": "dark",
+      "viewport": {
+        "width": 1512,
+        "height": 982
+      },
+      "documentWidth": 1512,
+      "horizontalOverflow": 0,
+      "overlaps": [],
+      "interactiveCount": 39
+    },
+    {
+      "viewportName": "laptop-1512x982",
+      "routeName": "tasks",
+      "theme": "dark",
+      "viewport": {
+        "width": 1512,
+        "height": 982
+      },
+      "documentWidth": 1512,
+      "horizontalOverflow": 0,
+      "overlaps": [],
+      "interactiveCount": 61
+    },
+    {
+      "viewportName": "laptop-1512x982",
+      "routeName": "calendar",
+      "theme": "dark",
+      "viewport": {
+        "width": 1512,
+        "height": 982
+      },
+      "documentWidth": 1512,
+      "horizontalOverflow": 0,
+      "overlaps": [],
+      "interactiveCount": 56
+    },
+    {
+      "viewportName": "laptop-1512x982",
+      "routeName": "trips",
+      "theme": "dark",
+      "viewport": {
+        "width": 1512,
+        "height": 982
+      },
+      "documentWidth": 1512,
+      "horizontalOverflow": 0,
+      "overlaps": [],
+      "interactiveCount": 17
+    },
+    {
+      "viewportName": "laptop-1512x982",
+      "routeName": "contacts",
+      "theme": "dark",
+      "viewport": {
+        "width": 1512,
+        "height": 982
+      },
+      "documentWidth": 1512,
+      "horizontalOverflow": 0,
+      "overlaps": [],
+      "interactiveCount": 30
+    },
+    {
+      "viewportName": "laptop-1512x982",
+      "scenario": "task-form-save",
+      "saveBox": {
+        "x": 1375.21875,
+        "y": 924,
+        "width": 116.78125,
+        "height": 44
+      },
+      "saveVisible": true
+    },
+    {
+      "viewportName": "laptop-1512x982",
+      "scenario": "filter-menu",
+      "box": {
+        "x": 566.484375,
+        "y": 139.46875,
+        "width": 192,
+        "height": 232
+      },
+      "inViewport": true
+    },
+    {
+      "viewportName": "laptop-1512x982",
+      "scenario": "dock-bottom-obstruction",
+      "covered": false,
+      "dock": {
+        "top": 904,
+        "bottom": 974
+      },
+      "last": {
+        "top": 638.84375,
+        "bottom": 679.140625
+      }
+    },
+    {
+      "viewportName": "laptop-1536x864",
+      "routeName": "dashboard",
+      "theme": "light",
+      "viewport": {
+        "width": 1536,
+        "height": 864
+      },
+      "documentWidth": 1536,
+      "horizontalOverflow": 0,
+      "overlaps": [],
+      "interactiveCount": 39
+    },
+    {
+      "viewportName": "laptop-1536x864",
+      "routeName": "tasks",
+      "theme": "light",
+      "viewport": {
+        "width": 1536,
+        "height": 864
+      },
+      "documentWidth": 1536,
+      "horizontalOverflow": 0,
+      "overlaps": [],
+      "interactiveCount": 61
+    },
+    {
+      "viewportName": "laptop-1536x864",
+      "routeName": "calendar",
+      "theme": "light",
+      "viewport": {
+        "width": 1536,
+        "height": 864
+      },
+      "documentWidth": 1536,
+      "horizontalOverflow": 0,
+      "overlaps": [],
+      "interactiveCount": 56
+    },
+    {
+      "viewportName": "laptop-1536x864",
+      "routeName": "trips",
+      "theme": "light",
+      "viewport": {
+        "width": 1536,
+        "height": 864
+      },
+      "documentWidth": 1536,
+      "horizontalOverflow": 0,
+      "overlaps": [],
+      "interactiveCount": 17
+    },
+    {
+      "viewportName": "laptop-1536x864",
+      "routeName": "contacts",
+      "theme": "light",
+      "viewport": {
+        "width": 1536,
+        "height": 864
+      },
+      "documentWidth": 1536,
+      "horizontalOverflow": 0,
+      "overlaps": [],
+      "interactiveCount": 30
+    },
+    {
+      "viewportName": "laptop-1536x864",
+      "routeName": "dashboard",
+      "theme": "dark",
+      "viewport": {
+        "width": 1536,
+        "height": 864
+      },
+      "documentWidth": 1536,
+      "horizontalOverflow": 0,
+      "overlaps": [],
+      "interactiveCount": 39
+    },
+    {
+      "viewportName": "laptop-1536x864",
+      "routeName": "tasks",
+      "theme": "dark",
+      "viewport": {
+        "width": 1536,
+        "height": 864
+      },
+      "documentWidth": 1536,
+      "horizontalOverflow": 0,
+      "overlaps": [],
+      "interactiveCount": 61
+    },
+    {
+      "viewportName": "laptop-1536x864",
+      "routeName": "calendar",
+      "theme": "dark",
+      "viewport": {
+        "width": 1536,
+        "height": 864
+      },
+      "documentWidth": 1536,
+      "horizontalOverflow": 0,
+      "overlaps": [],
+      "interactiveCount": 56
+    },
+    {
+      "viewportName": "laptop-1536x864",
+      "routeName": "trips",
+      "theme": "dark",
+      "viewport": {
+        "width": 1536,
+        "height": 864
+      },
+      "documentWidth": 1536,
+      "horizontalOverflow": 0,
+      "overlaps": [],
+      "interactiveCount": 17
+    },
+    {
+      "viewportName": "laptop-1536x864",
+      "routeName": "contacts",
+      "theme": "dark",
+      "viewport": {
+        "width": 1536,
+        "height": 864
+      },
+      "documentWidth": 1536,
+      "horizontalOverflow": 0,
+      "overlaps": [],
+      "interactiveCount": 30
+    },
+    {
+      "viewportName": "laptop-1536x864",
+      "scenario": "task-form-save",
+      "saveBox": {
+        "x": 1399.21875,
+        "y": 806,
+        "width": 116.78125,
+        "height": 44
+      },
+      "saveVisible": true
+    },
+    {
+      "viewportName": "laptop-1536x864",
+      "scenario": "filter-menu",
+      "box": {
+        "x": 589.90625,
+        "y": 139.046875,
+        "width": 192,
+        "height": 232
+      },
+      "inViewport": true
+    },
+    {
+      "viewportName": "laptop-1536x864",
+      "scenario": "dock-bottom-obstruction",
+      "covered": false,
+      "dock": {
+        "top": 786,
+        "bottom": 856
+      },
+      "last": {
+        "top": 519.421875,
+        "bottom": 559.71875
+      }
+    },
+    {
+      "viewportName": "desktop-1920x1080",
+      "routeName": "dashboard",
+      "theme": "light",
+      "viewport": {
+        "width": 1920,
+        "height": 1080
+      },
+      "documentWidth": 1920,
+      "horizontalOverflow": 0,
+      "overlaps": [],
+      "interactiveCount": 39
+    },
+    {
+      "viewportName": "desktop-1920x1080",
+      "routeName": "tasks",
+      "theme": "light",
+      "viewport": {
+        "width": 1920,
+        "height": 1080
+      },
+      "documentWidth": 1920,
+      "horizontalOverflow": 0,
+      "overlaps": [],
+      "interactiveCount": 61
+    },
+    {
+      "viewportName": "desktop-1920x1080",
+      "routeName": "calendar",
+      "theme": "light",
+      "viewport": {
+        "width": 1920,
+        "height": 1080
+      },
+      "documentWidth": 1920,
+      "horizontalOverflow": 0,
+      "overlaps": [],
+      "interactiveCount": 56
+    },
+    {
+      "viewportName": "desktop-1920x1080",
+      "routeName": "trips",
+      "theme": "light",
+      "viewport": {
+        "width": 1920,
+        "height": 1080
+      },
+      "documentWidth": 1920,
+      "horizontalOverflow": 0,
+      "overlaps": [],
+      "interactiveCount": 17
+    },
+    {
+      "viewportName": "desktop-1920x1080",
+      "routeName": "contacts",
+      "theme": "light",
+      "viewport": {
+        "width": 1920,
+        "height": 1080
+      },
+      "documentWidth": 1920,
+      "horizontalOverflow": 0,
+      "overlaps": [],
+      "interactiveCount": 30
+    },
+    {
+      "viewportName": "desktop-1920x1080",
+      "routeName": "dashboard",
+      "theme": "dark",
+      "viewport": {
+        "width": 1920,
+        "height": 1080
+      },
+      "documentWidth": 1920,
+      "horizontalOverflow": 0,
+      "overlaps": [],
+      "interactiveCount": 39
+    },
+    {
+      "viewportName": "desktop-1920x1080",
+      "routeName": "tasks",
+      "theme": "dark",
+      "viewport": {
+        "width": 1920,
+        "height": 1080
+      },
+      "documentWidth": 1920,
+      "horizontalOverflow": 0,
+      "overlaps": [],
+      "interactiveCount": 61
+    },
+    {
+      "viewportName": "desktop-1920x1080",
+      "routeName": "calendar",
+      "theme": "dark",
+      "viewport": {
+        "width": 1920,
+        "height": 1080
+      },
+      "documentWidth": 1920,
+      "horizontalOverflow": 0,
+      "overlaps": [],
+      "interactiveCount": 56
+    },
+    {
+      "viewportName": "desktop-1920x1080",
+      "routeName": "trips",
+      "theme": "dark",
+      "viewport": {
+        "width": 1920,
+        "height": 1080
+      },
+      "documentWidth": 1920,
+      "horizontalOverflow": 0,
+      "overlaps": [],
+      "interactiveCount": 17
+    },
+    {
+      "viewportName": "desktop-1920x1080",
+      "routeName": "contacts",
+      "theme": "dark",
+      "viewport": {
+        "width": 1920,
+        "height": 1080
+      },
+      "documentWidth": 1920,
+      "horizontalOverflow": 0,
+      "overlaps": [],
+      "interactiveCount": 30
+    },
+    {
+      "viewportName": "desktop-1920x1080",
+      "scenario": "task-form-save",
+      "saveBox": {
+        "x": 1783.21875,
+        "y": 1022,
+        "width": 116.78125,
+        "height": 44
+      },
+      "saveVisible": true
+    },
+    {
+      "viewportName": "desktop-1920x1080",
+      "scenario": "filter-menu",
+      "box": {
+        "x": 963.578125,
+        "y": 139.1875,
+        "width": 192,
+        "height": 232
+      },
+      "inViewport": true
+    },
+    {
+      "viewportName": "desktop-1920x1080",
+      "scenario": "dock-bottom-obstruction",
+      "covered": false,
+      "dock": {
+        "top": 1002,
+        "bottom": 1072
+      },
+      "last": {
+        "top": 734.671875,
+        "bottom": 774.96875
+      }
+    },
+    {
+      "viewportName": "desktop-2560x1440",
+      "routeName": "dashboard",
+      "theme": "light",
+      "viewport": {
+        "width": 2560,
+        "height": 1440
+      },
+      "documentWidth": 2560,
+      "horizontalOverflow": 0,
+      "overlaps": [],
+      "interactiveCount": 39
+    },
+    {
+      "viewportName": "desktop-2560x1440",
+      "routeName": "tasks",
+      "theme": "light",
+      "viewport": {
+        "width": 2560,
+        "height": 1440
+      },
+      "documentWidth": 2560,
+      "horizontalOverflow": 0,
+      "overlaps": [],
+      "interactiveCount": 61
+    },
+    {
+      "viewportName": "desktop-2560x1440",
+      "routeName": "calendar",
+      "theme": "light",
+      "viewport": {
+        "width": 2560,
+        "height": 1440
+      },
+      "documentWidth": 2560,
+      "horizontalOverflow": 0,
+      "overlaps": [],
+      "interactiveCount": 56
+    },
+    {
+      "viewportName": "desktop-2560x1440",
+      "routeName": "trips",
+      "theme": "light",
+      "viewport": {
+        "width": 2560,
+        "height": 1440
+      },
+      "documentWidth": 2560,
+      "horizontalOverflow": 0,
+      "overlaps": [],
+      "interactiveCount": 17
+    },
+    {
+      "viewportName": "desktop-2560x1440",
+      "routeName": "contacts",
+      "theme": "light",
+      "viewport": {
+        "width": 2560,
+        "height": 1440
+      },
+      "documentWidth": 2560,
+      "horizontalOverflow": 0,
+      "overlaps": [],
+      "interactiveCount": 30
+    },
+    {
+      "viewportName": "desktop-2560x1440",
+      "routeName": "dashboard",
+      "theme": "dark",
+      "viewport": {
+        "width": 2560,
+        "height": 1440
+      },
+      "documentWidth": 2560,
+      "horizontalOverflow": 0,
+      "overlaps": [],
+      "interactiveCount": 39
+    },
+    {
+      "viewportName": "desktop-2560x1440",
+      "routeName": "tasks",
+      "theme": "dark",
+      "viewport": {
+        "width": 2560,
+        "height": 1440
+      },
+      "documentWidth": 2560,
+      "horizontalOverflow": 0,
+      "overlaps": [],
+      "interactiveCount": 61
+    },
+    {
+      "viewportName": "desktop-2560x1440",
+      "routeName": "calendar",
+      "theme": "dark",
+      "viewport": {
+        "width": 2560,
+        "height": 1440
+      },
+      "documentWidth": 2560,
+      "horizontalOverflow": 0,
+      "overlaps": [],
+      "interactiveCount": 56
+    },
+    {
+      "viewportName": "desktop-2560x1440",
+      "routeName": "trips",
+      "theme": "dark",
+      "viewport": {
+        "width": 2560,
+        "height": 1440
+      },
+      "documentWidth": 2560,
+      "horizontalOverflow": 0,
+      "overlaps": [],
+      "interactiveCount": 17
+    },
+    {
+      "viewportName": "desktop-2560x1440",
+      "routeName": "contacts",
+      "theme": "dark",
+      "viewport": {
+        "width": 2560,
+        "height": 1440
+      },
+      "documentWidth": 2560,
+      "horizontalOverflow": 0,
+      "overlaps": [],
+      "interactiveCount": 30
+    },
+    {
+      "viewportName": "desktop-2560x1440",
+      "scenario": "task-form-save",
+      "saveBox": {
+        "x": 2423.21875,
+        "y": 1382,
+        "width": 116.78125,
+        "height": 44
+      },
+      "saveVisible": true
+    },
+    {
+      "viewportName": "desktop-2560x1440",
+      "scenario": "filter-menu",
+      "box": {
+        "x": 1602.765625,
+        "y": 139.1875,
+        "width": 192,
+        "height": 232
+      },
+      "inViewport": true
+    },
+    {
+      "viewportName": "desktop-2560x1440",
+      "scenario": "dock-bottom-obstruction",
+      "covered": false,
+      "dock": {
+        "top": 1362,
+        "bottom": 1432
+      },
+      "last": {
+        "top": 1094.671875,
+        "bottom": 1134.96875
+      }
+    },
+    {
+      "viewportName": "tablet-768x1024",
+      "routeName": "dashboard",
+      "theme": "light",
+      "viewport": {
+        "width": 768,
+        "height": 1024
+      },
+      "documentWidth": 768,
+      "horizontalOverflow": 0,
+      "overlaps": [],
+      "interactiveCount": 39
+    },
+    {
+      "viewportName": "tablet-768x1024",
+      "routeName": "tasks",
+      "theme": "light",
+      "viewport": {
+        "width": 768,
+        "height": 1024
+      },
+      "documentWidth": 768,
+      "horizontalOverflow": 0,
+      "overlaps": [],
+      "interactiveCount": 61
+    },
+    {
+      "viewportName": "tablet-768x1024",
+      "routeName": "calendar",
+      "theme": "light",
+      "viewport": {
+        "width": 768,
+        "height": 1024
+      },
+      "documentWidth": 768,
+      "horizontalOverflow": 0,
+      "overlaps": [],
+      "interactiveCount": 56
+    },
+    {
+      "viewportName": "tablet-768x1024",
+      "routeName": "trips",
+      "theme": "light",
+      "viewport": {
+        "width": 768,
+        "height": 1024
+      },
+      "documentWidth": 768,
+      "horizontalOverflow": 0,
+      "overlaps": [],
+      "interactiveCount": 17
+    },
+    {
+      "viewportName": "tablet-768x1024",
+      "routeName": "contacts",
+      "theme": "light",
+      "viewport": {
+        "width": 768,
+        "height": 1024
+      },
+      "documentWidth": 768,
+      "horizontalOverflow": 0,
+      "overlaps": [],
+      "interactiveCount": 30
+    },
+    {
+      "viewportName": "tablet-768x1024",
+      "routeName": "dashboard",
+      "theme": "dark",
+      "viewport": {
+        "width": 768,
+        "height": 1024
+      },
+      "documentWidth": 768,
+      "horizontalOverflow": 0,
+      "overlaps": [],
+      "interactiveCount": 39
+    },
+    {
+      "viewportName": "tablet-768x1024",
+      "routeName": "tasks",
+      "theme": "dark",
+      "viewport": {
+        "width": 768,
+        "height": 1024
+      },
+      "documentWidth": 768,
+      "horizontalOverflow": 0,
+      "overlaps": [],
+      "interactiveCount": 61
+    },
+    {
+      "viewportName": "tablet-768x1024",
+      "routeName": "calendar",
+      "theme": "dark",
+      "viewport": {
+        "width": 768,
+        "height": 1024
+      },
+      "documentWidth": 768,
+      "horizontalOverflow": 0,
+      "overlaps": [],
+      "interactiveCount": 56
+    },
+    {
+      "viewportName": "tablet-768x1024",
+      "routeName": "trips",
+      "theme": "dark",
+      "viewport": {
+        "width": 768,
+        "height": 1024
+      },
+      "documentWidth": 768,
+      "horizontalOverflow": 0,
+      "overlaps": [],
+      "interactiveCount": 17
+    },
+    {
+      "viewportName": "tablet-768x1024",
+      "routeName": "contacts",
+      "theme": "dark",
+      "viewport": {
+        "width": 768,
+        "height": 1024
+      },
+      "documentWidth": 768,
+      "horizontalOverflow": 0,
+      "overlaps": [],
+      "interactiveCount": 30
+    },
+    {
+      "viewportName": "tablet-768x1024",
+      "scenario": "task-form-save",
+      "saveBox": {
+        "x": 631.21875,
+        "y": 966,
+        "width": 116.78125,
+        "height": 44
+      },
+      "saveVisible": true
+    },
+    {
+      "viewportName": "tablet-768x1024",
+      "scenario": "filter-menu",
+      "box": {
+        "x": 445,
+        "y": 131.75,
+        "width": 192,
+        "height": 232
+      },
+      "inViewport": true
+    },
+    {
+      "viewportName": "tablet-768x1024",
+      "scenario": "dock-bottom-obstruction",
+      "covered": false,
+      "dock": {
+        "top": 946,
+        "bottom": 1016
+      },
+      "last": {
+        "top": 704.125,
+        "bottom": 744.421875
+      }
+    },
+    {
+      "viewportName": "tablet-820x1180",
+      "routeName": "dashboard",
+      "theme": "light",
+      "viewport": {
+        "width": 820,
+        "height": 1180
+      },
+      "documentWidth": 820,
+      "horizontalOverflow": 0,
+      "overlaps": [],
+      "interactiveCount": 39
+    },
+    {
+      "viewportName": "tablet-820x1180",
+      "routeName": "tasks",
+      "theme": "light",
+      "viewport": {
+        "width": 820,
+        "height": 1180
+      },
+      "documentWidth": 820,
+      "horizontalOverflow": 0,
+      "overlaps": [],
+      "interactiveCount": 61
+    },
+    {
+      "viewportName": "tablet-820x1180",
+      "routeName": "calendar",
+      "theme": "light",
+      "viewport": {
+        "width": 820,
+        "height": 1180
+      },
+      "documentWidth": 820,
+      "horizontalOverflow": 0,
+      "overlaps": [],
+      "interactiveCount": 56
+    },
+    {
+      "viewportName": "tablet-820x1180",
+      "routeName": "trips",
+      "theme": "light",
+      "viewport": {
+        "width": 820,
+        "height": 1180
+      },
+      "documentWidth": 820,
+      "horizontalOverflow": 0,
+      "overlaps": [],
+      "interactiveCount": 17
+    },
+    {
+      "viewportName": "tablet-820x1180",
+      "routeName": "contacts",
+      "theme": "light",
+      "viewport": {
+        "width": 820,
+        "height": 1180
+      },
+      "documentWidth": 820,
+      "horizontalOverflow": 0,
+      "overlaps": [],
+      "interactiveCount": 30
+    },
+    {
+      "viewportName": "tablet-820x1180",
+      "routeName": "dashboard",
+      "theme": "dark",
+      "viewport": {
+        "width": 820,
+        "height": 1180
+      },
+      "documentWidth": 820,
+      "horizontalOverflow": 0,
+      "overlaps": [],
+      "interactiveCount": 39
+    },
+    {
+      "viewportName": "tablet-820x1180",
+      "routeName": "tasks",
+      "theme": "dark",
+      "viewport": {
+        "width": 820,
+        "height": 1180
+      },
+      "documentWidth": 820,
+      "horizontalOverflow": 0,
+      "overlaps": [],
+      "interactiveCount": 61
+    },
+    {
+      "viewportName": "tablet-820x1180",
+      "routeName": "calendar",
+      "theme": "dark",
+      "viewport": {
+        "width": 820,
+        "height": 1180
+      },
+      "documentWidth": 820,
+      "horizontalOverflow": 0,
+      "overlaps": [],
+      "interactiveCount": 56
+    },
+    {
+      "viewportName": "tablet-820x1180",
+      "routeName": "trips",
+      "theme": "dark",
+      "viewport": {
+        "width": 820,
+        "height": 1180
+      },
+      "documentWidth": 820,
+      "horizontalOverflow": 0,
+      "overlaps": [],
+      "interactiveCount": 17
+    },
+    {
+      "viewportName": "tablet-820x1180",
+      "routeName": "contacts",
+      "theme": "dark",
+      "viewport": {
+        "width": 820,
+        "height": 1180
+      },
+      "documentWidth": 820,
+      "horizontalOverflow": 0,
+      "overlaps": [],
+      "interactiveCount": 30
+    },
+    {
+      "viewportName": "tablet-820x1180",
+      "scenario": "task-form-save",
+      "saveBox": {
+        "x": 683.21875,
+        "y": 1122,
+        "width": 116.78125,
+        "height": 44
+      },
+      "saveVisible": true
+    },
+    {
+      "viewportName": "tablet-820x1180",
+      "scenario": "filter-menu",
+      "box": {
+        "x": 497,
+        "y": 132.46875,
+        "width": 192,
+        "height": 232
+      },
+      "inViewport": true
+    },
+    {
+      "viewportName": "tablet-820x1180",
+      "scenario": "dock-bottom-obstruction",
+      "covered": false,
+      "dock": {
+        "top": 1102,
+        "bottom": 1172
+      },
+      "last": {
+        "top": 858.84375,
+        "bottom": 899.140625
+      }
+    },
+    {
+      "viewportName": "tablet-1024x768",
+      "routeName": "dashboard",
+      "theme": "light",
+      "viewport": {
+        "width": 1024,
+        "height": 768
+      },
+      "documentWidth": 1024,
+      "horizontalOverflow": 0,
+      "overlaps": [],
+      "interactiveCount": 39
+    },
+    {
+      "viewportName": "tablet-1024x768",
+      "routeName": "tasks",
+      "theme": "light",
+      "viewport": {
+        "width": 1024,
+        "height": 768
+      },
+      "documentWidth": 1024,
+      "horizontalOverflow": 0,
+      "overlaps": [],
+      "interactiveCount": 61
+    },
+    {
+      "viewportName": "tablet-1024x768",
+      "routeName": "calendar",
+      "theme": "light",
+      "viewport": {
+        "width": 1024,
+        "height": 768
+      },
+      "documentWidth": 1024,
+      "horizontalOverflow": 0,
+      "overlaps": [],
+      "interactiveCount": 56
+    },
+    {
+      "viewportName": "tablet-1024x768",
+      "routeName": "trips",
+      "theme": "light",
+      "viewport": {
+        "width": 1024,
+        "height": 768
+      },
+      "documentWidth": 1024,
+      "horizontalOverflow": 0,
+      "overlaps": [],
+      "interactiveCount": 17
+    },
+    {
+      "viewportName": "tablet-1024x768",
+      "routeName": "contacts",
+      "theme": "light",
+      "viewport": {
+        "width": 1024,
+        "height": 768
+      },
+      "documentWidth": 1024,
+      "horizontalOverflow": 0,
+      "overlaps": [],
+      "interactiveCount": 30
+    },
+    {
+      "viewportName": "tablet-1024x768",
+      "routeName": "dashboard",
+      "theme": "dark",
+      "viewport": {
+        "width": 1024,
+        "height": 768
+      },
+      "documentWidth": 1024,
+      "horizontalOverflow": 0,
+      "overlaps": [],
+      "interactiveCount": 39
+    },
+    {
+      "viewportName": "tablet-1024x768",
+      "routeName": "tasks",
+      "theme": "dark",
+      "viewport": {
+        "width": 1024,
+        "height": 768
+      },
+      "documentWidth": 1024,
+      "horizontalOverflow": 0,
+      "overlaps": [],
+      "interactiveCount": 61
+    },
+    {
+      "viewportName": "tablet-1024x768",
+      "routeName": "calendar",
+      "theme": "dark",
+      "viewport": {
+        "width": 1024,
+        "height": 768
+      },
+      "documentWidth": 1024,
+      "horizontalOverflow": 0,
+      "overlaps": [],
+      "interactiveCount": 56
+    },
+    {
+      "viewportName": "tablet-1024x768",
+      "routeName": "trips",
+      "theme": "dark",
+      "viewport": {
+        "width": 1024,
+        "height": 768
+      },
+      "documentWidth": 1024,
+      "horizontalOverflow": 0,
+      "overlaps": [],
+      "interactiveCount": 17
+    },
+    {
+      "viewportName": "tablet-1024x768",
+      "routeName": "contacts",
+      "theme": "dark",
+      "viewport": {
+        "width": 1024,
+        "height": 768
+      },
+      "documentWidth": 1024,
+      "horizontalOverflow": 0,
+      "overlaps": [],
+      "interactiveCount": 30
+    },
+    {
+      "viewportName": "tablet-1024x768",
+      "scenario": "task-form-save",
+      "saveBox": {
+        "x": 887.21875,
+        "y": 710,
+        "width": 116.78125,
+        "height": 44
+      },
+      "saveVisible": true
+    },
+    {
+      "viewportName": "tablet-1024x768",
+      "scenario": "filter-menu",
+      "box": {
+        "x": 386.4375,
+        "y": 123.171875,
+        "width": 192,
+        "height": 232
+      },
+      "inViewport": true
+    },
+    {
+      "viewportName": "tablet-1024x768",
+      "scenario": "dock-bottom-obstruction",
+      "covered": false,
+      "dock": {
+        "top": 698,
+        "bottom": 760
+      },
+      "last": {
+        "top": 460.546875,
+        "bottom": 500.84375
+      }
+    },
+    {
+      "viewportName": "phone-360x640",
+      "routeName": "dashboard",
+      "theme": "light",
+      "viewport": {
+        "width": 360,
+        "height": 640
+      },
+      "documentWidth": 360,
+      "horizontalOverflow": 0,
+      "overlaps": [],
+      "interactiveCount": 38
+    },
+    {
+      "viewportName": "phone-360x640",
+      "routeName": "tasks",
+      "theme": "light",
+      "viewport": {
+        "width": 360,
+        "height": 640
+      },
+      "documentWidth": 360,
+      "horizontalOverflow": 0,
+      "overlaps": [],
+      "interactiveCount": 60
+    },
+    {
+      "viewportName": "phone-360x640",
+      "routeName": "calendar",
+      "theme": "light",
+      "viewport": {
+        "width": 360,
+        "height": 640
+      },
+      "documentWidth": 360,
+      "horizontalOverflow": 0,
+      "overlaps": [],
+      "interactiveCount": 55
+    },
+    {
+      "viewportName": "phone-360x640",
+      "routeName": "trips",
+      "theme": "light",
+      "viewport": {
+        "width": 360,
+        "height": 640
+      },
+      "documentWidth": 360,
+      "horizontalOverflow": 0,
+      "overlaps": [],
+      "interactiveCount": 16
+    },
+    {
+      "viewportName": "phone-360x640",
+      "routeName": "contacts",
+      "theme": "light",
+      "viewport": {
+        "width": 360,
+        "height": 640
+      },
+      "documentWidth": 360,
+      "horizontalOverflow": 0,
+      "overlaps": [],
+      "interactiveCount": 29
+    },
+    {
+      "viewportName": "phone-360x640",
+      "routeName": "dashboard",
+      "theme": "dark",
+      "viewport": {
+        "width": 360,
+        "height": 640
+      },
+      "documentWidth": 360,
+      "horizontalOverflow": 0,
+      "overlaps": [],
+      "interactiveCount": 38
+    },
+    {
+      "viewportName": "phone-360x640",
+      "routeName": "tasks",
+      "theme": "dark",
+      "viewport": {
+        "width": 360,
+        "height": 640
+      },
+      "documentWidth": 360,
+      "horizontalOverflow": 0,
+      "overlaps": [],
+      "interactiveCount": 60
+    },
+    {
+      "viewportName": "phone-360x640",
+      "routeName": "calendar",
+      "theme": "dark",
+      "viewport": {
+        "width": 360,
+        "height": 640
+      },
+      "documentWidth": 360,
+      "horizontalOverflow": 0,
+      "overlaps": [],
+      "interactiveCount": 55
+    },
+    {
+      "viewportName": "phone-360x640",
+      "routeName": "trips",
+      "theme": "dark",
+      "viewport": {
+        "width": 360,
+        "height": 640
+      },
+      "documentWidth": 360,
+      "horizontalOverflow": 0,
+      "overlaps": [],
+      "interactiveCount": 16
+    },
+    {
+      "viewportName": "phone-360x640",
+      "routeName": "contacts",
+      "theme": "dark",
+      "viewport": {
+        "width": 360,
+        "height": 640
+      },
+      "documentWidth": 360,
+      "horizontalOverflow": 0,
+      "overlaps": [],
+      "interactiveCount": 29
+    },
+    {
+      "viewportName": "phone-360x640",
+      "scenario": "task-form-save",
+      "saveBox": {
+        "x": 228.21875,
+        "y": 586,
+        "width": 116.78125,
+        "height": 44
+      },
+      "saveVisible": true
+    },
+    {
+      "viewportName": "phone-360x640",
+      "scenario": "filter-menu",
+      "box": {
+        "x": 29,
+        "y": 171,
+        "width": 192,
+        "height": 232
+      },
+      "inViewport": true
+    },
+    {
+      "viewportName": "phone-360x640",
+      "scenario": "dock-bottom-obstruction",
+      "covered": false,
+      "dock": {
+        "top": 570,
+        "bottom": 634
+      },
+      "last": {
+        "top": 250,
+        "bottom": 290.296875
+      }
+    },
+    {
+      "viewportName": "phone-375x667",
+      "routeName": "dashboard",
+      "theme": "light",
+      "viewport": {
+        "width": 375,
+        "height": 667
+      },
+      "documentWidth": 375,
+      "horizontalOverflow": 0,
+      "overlaps": [],
+      "interactiveCount": 38
+    },
+    {
+      "viewportName": "phone-375x667",
+      "routeName": "tasks",
+      "theme": "light",
+      "viewport": {
+        "width": 375,
+        "height": 667
+      },
+      "documentWidth": 375,
+      "horizontalOverflow": 0,
+      "overlaps": [],
+      "interactiveCount": 60
+    },
+    {
+      "viewportName": "phone-375x667",
+      "routeName": "calendar",
+      "theme": "light",
+      "viewport": {
+        "width": 375,
+        "height": 667
+      },
+      "documentWidth": 375,
+      "horizontalOverflow": 0,
+      "overlaps": [],
+      "interactiveCount": 55
+    },
+    {
+      "viewportName": "phone-375x667",
+      "routeName": "trips",
+      "theme": "light",
+      "viewport": {
+        "width": 375,
+        "height": 667
+      },
+      "documentWidth": 375,
+      "horizontalOverflow": 0,
+      "overlaps": [],
+      "interactiveCount": 16
+    },
+    {
+      "viewportName": "phone-375x667",
+      "routeName": "contacts",
+      "theme": "light",
+      "viewport": {
+        "width": 375,
+        "height": 667
+      },
+      "documentWidth": 375,
+      "horizontalOverflow": 0,
+      "overlaps": [],
+      "interactiveCount": 29
+    },
+    {
+      "viewportName": "phone-375x667",
+      "routeName": "dashboard",
+      "theme": "dark",
+      "viewport": {
+        "width": 375,
+        "height": 667
+      },
+      "documentWidth": 375,
+      "horizontalOverflow": 0,
+      "overlaps": [],
+      "interactiveCount": 38
+    },
+    {
+      "viewportName": "phone-375x667",
+      "routeName": "tasks",
+      "theme": "dark",
+      "viewport": {
+        "width": 375,
+        "height": 667
+      },
+      "documentWidth": 375,
+      "horizontalOverflow": 0,
+      "overlaps": [],
+      "interactiveCount": 60
+    },
+    {
+      "viewportName": "phone-375x667",
+      "routeName": "calendar",
+      "theme": "dark",
+      "viewport": {
+        "width": 375,
+        "height": 667
+      },
+      "documentWidth": 375,
+      "horizontalOverflow": 0,
+      "overlaps": [],
+      "interactiveCount": 55
+    },
+    {
+      "viewportName": "phone-375x667",
+      "routeName": "trips",
+      "theme": "dark",
+      "viewport": {
+        "width": 375,
+        "height": 667
+      },
+      "documentWidth": 375,
+      "horizontalOverflow": 0,
+      "overlaps": [],
+      "interactiveCount": 16
+    },
+    {
+      "viewportName": "phone-375x667",
+      "routeName": "contacts",
+      "theme": "dark",
+      "viewport": {
+        "width": 375,
+        "height": 667
+      },
+      "documentWidth": 375,
+      "horizontalOverflow": 0,
+      "overlaps": [],
+      "interactiveCount": 29
+    },
+    {
+      "viewportName": "phone-375x667",
+      "scenario": "task-form-save",
+      "saveBox": {
+        "x": 243.21875,
+        "y": 613,
+        "width": 116.78125,
+        "height": 44
+      },
+      "saveVisible": true
+    },
+    {
+      "viewportName": "phone-375x667",
+      "scenario": "filter-menu",
+      "box": {
+        "x": 29,
+        "y": 171,
+        "width": 192,
+        "height": 232
+      },
+      "inViewport": true
+    },
+    {
+      "viewportName": "phone-375x667",
+      "scenario": "dock-bottom-obstruction",
+      "covered": false,
+      "dock": {
+        "top": 597,
+        "bottom": 661
+      },
+      "last": {
+        "top": 277,
+        "bottom": 317.296875
+      }
+    },
+    {
+      "viewportName": "phone-390x844",
+      "routeName": "dashboard",
+      "theme": "light",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "documentWidth": 390,
+      "horizontalOverflow": 0,
+      "overlaps": [],
+      "interactiveCount": 38
+    },
+    {
+      "viewportName": "phone-390x844",
+      "routeName": "tasks",
+      "theme": "light",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "documentWidth": 390,
+      "horizontalOverflow": 0,
+      "overlaps": [],
+      "interactiveCount": 60
+    },
+    {
+      "viewportName": "phone-390x844",
+      "routeName": "calendar",
+      "theme": "light",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "documentWidth": 390,
+      "horizontalOverflow": 0,
+      "overlaps": [],
+      "interactiveCount": 55
+    },
+    {
+      "viewportName": "phone-390x844",
+      "routeName": "trips",
+      "theme": "light",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "documentWidth": 390,
+      "horizontalOverflow": 0,
+      "overlaps": [],
+      "interactiveCount": 16
+    },
+    {
+      "viewportName": "phone-390x844",
+      "routeName": "contacts",
+      "theme": "light",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "documentWidth": 390,
+      "horizontalOverflow": 0,
+      "overlaps": [],
+      "interactiveCount": 29
+    },
+    {
+      "viewportName": "phone-390x844",
+      "routeName": "dashboard",
+      "theme": "dark",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "documentWidth": 390,
+      "horizontalOverflow": 0,
+      "overlaps": [],
+      "interactiveCount": 38
+    },
+    {
+      "viewportName": "phone-390x844",
+      "routeName": "tasks",
+      "theme": "dark",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "documentWidth": 390,
+      "horizontalOverflow": 0,
+      "overlaps": [],
+      "interactiveCount": 60
+    },
+    {
+      "viewportName": "phone-390x844",
+      "routeName": "calendar",
+      "theme": "dark",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "documentWidth": 390,
+      "horizontalOverflow": 0,
+      "overlaps": [],
+      "interactiveCount": 55
+    },
+    {
+      "viewportName": "phone-390x844",
+      "routeName": "trips",
+      "theme": "dark",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "documentWidth": 390,
+      "horizontalOverflow": 0,
+      "overlaps": [],
+      "interactiveCount": 16
+    },
+    {
+      "viewportName": "phone-390x844",
+      "routeName": "contacts",
+      "theme": "dark",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "documentWidth": 390,
+      "horizontalOverflow": 0,
+      "overlaps": [],
+      "interactiveCount": 29
+    },
+    {
+      "viewportName": "phone-390x844",
+      "scenario": "task-form-save",
+      "saveBox": {
+        "x": 258.21875,
+        "y": 790,
+        "width": 116.78125,
+        "height": 44
+      },
+      "saveVisible": true
+    },
+    {
+      "viewportName": "phone-390x844",
+      "scenario": "filter-menu",
+      "box": {
+        "x": 29,
+        "y": 171,
+        "width": 192,
+        "height": 232
+      },
+      "inViewport": true
+    },
+    {
+      "viewportName": "phone-390x844",
+      "scenario": "dock-bottom-obstruction",
+      "covered": false,
+      "dock": {
+        "top": 774,
+        "bottom": 838
+      },
+      "last": {
+        "top": 511.78125,
+        "bottom": 552.078125
+      }
+    },
+    {
+      "viewportName": "phone-412x915",
+      "routeName": "dashboard",
+      "theme": "light",
+      "viewport": {
+        "width": 412,
+        "height": 915
+      },
+      "documentWidth": 412,
+      "horizontalOverflow": 0,
+      "overlaps": [],
+      "interactiveCount": 38
+    },
+    {
+      "viewportName": "phone-412x915",
+      "routeName": "tasks",
+      "theme": "light",
+      "viewport": {
+        "width": 412,
+        "height": 915
+      },
+      "documentWidth": 412,
+      "horizontalOverflow": 0,
+      "overlaps": [],
+      "interactiveCount": 60
+    },
+    {
+      "viewportName": "phone-412x915",
+      "routeName": "calendar",
+      "theme": "light",
+      "viewport": {
+        "width": 412,
+        "height": 915
+      },
+      "documentWidth": 412,
+      "horizontalOverflow": 0,
+      "overlaps": [],
+      "interactiveCount": 55
+    },
+    {
+      "viewportName": "phone-412x915",
+      "routeName": "trips",
+      "theme": "light",
+      "viewport": {
+        "width": 412,
+        "height": 915
+      },
+      "documentWidth": 412,
+      "horizontalOverflow": 0,
+      "overlaps": [],
+      "interactiveCount": 16
+    },
+    {
+      "viewportName": "phone-412x915",
+      "routeName": "contacts",
+      "theme": "light",
+      "viewport": {
+        "width": 412,
+        "height": 915
+      },
+      "documentWidth": 412,
+      "horizontalOverflow": 0,
+      "overlaps": [],
+      "interactiveCount": 29
+    },
+    {
+      "viewportName": "phone-412x915",
+      "routeName": "dashboard",
+      "theme": "dark",
+      "viewport": {
+        "width": 412,
+        "height": 915
+      },
+      "documentWidth": 412,
+      "horizontalOverflow": 0,
+      "overlaps": [],
+      "interactiveCount": 38
+    },
+    {
+      "viewportName": "phone-412x915",
+      "routeName": "tasks",
+      "theme": "dark",
+      "viewport": {
+        "width": 412,
+        "height": 915
+      },
+      "documentWidth": 412,
+      "horizontalOverflow": 0,
+      "overlaps": [],
+      "interactiveCount": 60
+    },
+    {
+      "viewportName": "phone-412x915",
+      "routeName": "calendar",
+      "theme": "dark",
+      "viewport": {
+        "width": 412,
+        "height": 915
+      },
+      "documentWidth": 412,
+      "horizontalOverflow": 0,
+      "overlaps": [],
+      "interactiveCount": 55
+    },
+    {
+      "viewportName": "phone-412x915",
+      "routeName": "trips",
+      "theme": "dark",
+      "viewport": {
+        "width": 412,
+        "height": 915
+      },
+      "documentWidth": 412,
+      "horizontalOverflow": 0,
+      "overlaps": [],
+      "interactiveCount": 16
+    },
+    {
+      "viewportName": "phone-412x915",
+      "routeName": "contacts",
+      "theme": "dark",
+      "viewport": {
+        "width": 412,
+        "height": 915
+      },
+      "documentWidth": 412,
+      "horizontalOverflow": 0,
+      "overlaps": [],
+      "interactiveCount": 29
+    },
+    {
+      "viewportName": "phone-412x915",
+      "scenario": "task-form-save",
+      "saveBox": {
+        "x": 280.21875,
+        "y": 861,
+        "width": 116.78125,
+        "height": 44
+      },
+      "saveVisible": true
+    },
+    {
+      "viewportName": "phone-412x915",
+      "scenario": "filter-menu",
+      "box": {
+        "x": 29,
+        "y": 173,
+        "width": 192,
+        "height": 232
+      },
+      "inViewport": true
+    },
+    {
+      "viewportName": "phone-412x915",
+      "scenario": "dock-bottom-obstruction",
+      "covered": false,
+      "dock": {
+        "top": 845,
+        "bottom": 909
+      },
+      "last": {
+        "top": 582.484375,
+        "bottom": 622.78125
+      }
+    },
+    {
+      "viewportName": "phone-430x932",
+      "routeName": "dashboard",
+      "theme": "light",
+      "viewport": {
+        "width": 430,
+        "height": 932
+      },
+      "documentWidth": 430,
+      "horizontalOverflow": 0,
+      "overlaps": [],
+      "interactiveCount": 38
+    },
+    {
+      "viewportName": "phone-430x932",
+      "routeName": "tasks",
+      "theme": "light",
+      "viewport": {
+        "width": 430,
+        "height": 932
+      },
+      "documentWidth": 430,
+      "horizontalOverflow": 0,
+      "overlaps": [],
+      "interactiveCount": 60
+    },
+    {
+      "viewportName": "phone-430x932",
+      "routeName": "calendar",
+      "theme": "light",
+      "viewport": {
+        "width": 430,
+        "height": 932
+      },
+      "documentWidth": 430,
+      "horizontalOverflow": 0,
+      "overlaps": [],
+      "interactiveCount": 55
+    },
+    {
+      "viewportName": "phone-430x932",
+      "routeName": "trips",
+      "theme": "light",
+      "viewport": {
+        "width": 430,
+        "height": 932
+      },
+      "documentWidth": 430,
+      "horizontalOverflow": 0,
+      "overlaps": [],
+      "interactiveCount": 16
+    },
+    {
+      "viewportName": "phone-430x932",
+      "routeName": "contacts",
+      "theme": "light",
+      "viewport": {
+        "width": 430,
+        "height": 932
+      },
+      "documentWidth": 430,
+      "horizontalOverflow": 0,
+      "overlaps": [],
+      "interactiveCount": 29
+    },
+    {
+      "viewportName": "phone-430x932",
+      "routeName": "dashboard",
+      "theme": "dark",
+      "viewport": {
+        "width": 430,
+        "height": 932
+      },
+      "documentWidth": 430,
+      "horizontalOverflow": 0,
+      "overlaps": [],
+      "interactiveCount": 38
+    },
+    {
+      "viewportName": "phone-430x932",
+      "routeName": "tasks",
+      "theme": "dark",
+      "viewport": {
+        "width": 430,
+        "height": 932
+      },
+      "documentWidth": 430,
+      "horizontalOverflow": 0,
+      "overlaps": [],
+      "interactiveCount": 60
+    },
+    {
+      "viewportName": "phone-430x932",
+      "routeName": "calendar",
+      "theme": "dark",
+      "viewport": {
+        "width": 430,
+        "height": 932
+      },
+      "documentWidth": 430,
+      "horizontalOverflow": 0,
+      "overlaps": [],
+      "interactiveCount": 55
+    },
+    {
+      "viewportName": "phone-430x932",
+      "routeName": "trips",
+      "theme": "dark",
+      "viewport": {
+        "width": 430,
+        "height": 932
+      },
+      "documentWidth": 430,
+      "horizontalOverflow": 0,
+      "overlaps": [],
+      "interactiveCount": 16
+    },
+    {
+      "viewportName": "phone-430x932",
+      "routeName": "contacts",
+      "theme": "dark",
+      "viewport": {
+        "width": 430,
+        "height": 932
+      },
+      "documentWidth": 430,
+      "horizontalOverflow": 0,
+      "overlaps": [],
+      "interactiveCount": 29
+    },
+    {
+      "viewportName": "phone-430x932",
+      "scenario": "task-form-save",
+      "saveBox": {
+        "x": 298.21875,
+        "y": 878,
+        "width": 116.78125,
+        "height": 44
+      },
+      "saveVisible": true
+    },
+    {
+      "viewportName": "phone-430x932",
+      "scenario": "filter-menu",
+      "box": {
+        "x": 28,
+        "y": 173,
+        "width": 192,
+        "height": 232
+      },
+      "inViewport": true
+    },
+    {
+      "viewportName": "phone-430x932",
+      "scenario": "dock-bottom-obstruction",
+      "covered": false,
+      "dock": {
+        "top": 862,
+        "bottom": 926
+      },
+      "last": {
+        "top": 599.484375,
+        "bottom": 639.78125
+      }
+    },
+    {
+      "viewportName": "phone-landscape-844x390",
+      "routeName": "dashboard",
+      "theme": "light",
+      "viewport": {
+        "width": 844,
+        "height": 390
+      },
+      "documentWidth": 844,
+      "horizontalOverflow": 0,
+      "overlaps": [],
+      "interactiveCount": 39
+    },
+    {
+      "viewportName": "phone-landscape-844x390",
+      "routeName": "tasks",
+      "theme": "light",
+      "viewport": {
+        "width": 844,
+        "height": 390
+      },
+      "documentWidth": 844,
+      "horizontalOverflow": 0,
+      "overlaps": [],
+      "interactiveCount": 61
+    },
+    {
+      "viewportName": "phone-landscape-844x390",
+      "routeName": "calendar",
+      "theme": "light",
+      "viewport": {
+        "width": 844,
+        "height": 390
+      },
+      "documentWidth": 844,
+      "horizontalOverflow": 0,
+      "overlaps": [],
+      "interactiveCount": 56
+    },
+    {
+      "viewportName": "phone-landscape-844x390",
+      "routeName": "trips",
+      "theme": "light",
+      "viewport": {
+        "width": 844,
+        "height": 390
+      },
+      "documentWidth": 844,
+      "horizontalOverflow": 0,
+      "overlaps": [],
+      "interactiveCount": 17
+    },
+    {
+      "viewportName": "phone-landscape-844x390",
+      "routeName": "contacts",
+      "theme": "light",
+      "viewport": {
+        "width": 844,
+        "height": 390
+      },
+      "documentWidth": 844,
+      "horizontalOverflow": 0,
+      "overlaps": [],
+      "interactiveCount": 30
+    },
+    {
+      "viewportName": "phone-landscape-844x390",
+      "routeName": "dashboard",
+      "theme": "dark",
+      "viewport": {
+        "width": 844,
+        "height": 390
+      },
+      "documentWidth": 844,
+      "horizontalOverflow": 0,
+      "overlaps": [],
+      "interactiveCount": 39
+    },
+    {
+      "viewportName": "phone-landscape-844x390",
+      "routeName": "tasks",
+      "theme": "dark",
+      "viewport": {
+        "width": 844,
+        "height": 390
+      },
+      "documentWidth": 844,
+      "horizontalOverflow": 0,
+      "overlaps": [],
+      "interactiveCount": 61
+    },
+    {
+      "viewportName": "phone-landscape-844x390",
+      "routeName": "calendar",
+      "theme": "dark",
+      "viewport": {
+        "width": 844,
+        "height": 390
+      },
+      "documentWidth": 844,
+      "horizontalOverflow": 0,
+      "overlaps": [],
+      "interactiveCount": 56
+    },
+    {
+      "viewportName": "phone-landscape-844x390",
+      "routeName": "trips",
+      "theme": "dark",
+      "viewport": {
+        "width": 844,
+        "height": 390
+      },
+      "documentWidth": 844,
+      "horizontalOverflow": 0,
+      "overlaps": [],
+      "interactiveCount": 17
+    },
+    {
+      "viewportName": "phone-landscape-844x390",
+      "routeName": "contacts",
+      "theme": "dark",
+      "viewport": {
+        "width": 844,
+        "height": 390
+      },
+      "documentWidth": 844,
+      "horizontalOverflow": 0,
+      "overlaps": [],
+      "interactiveCount": 30
+    },
+    {
+      "viewportName": "phone-landscape-844x390",
+      "scenario": "task-form-save",
+      "saveBox": {
+        "x": 707.21875,
+        "y": 332,
+        "width": 116.78125,
+        "height": 44
+      },
+      "saveVisible": true
+    },
+    {
+      "viewportName": "phone-landscape-844x390",
+      "scenario": "filter-menu",
+      "box": {
+        "x": 520.75,
+        "y": 123.234375,
+        "width": 192,
+        "height": 232
+      },
+      "inViewport": true
+    },
+    {
+      "viewportName": "phone-landscape-844x390",
+      "scenario": "dock-bottom-obstruction",
+      "covered": false,
+      "dock": {
+        "top": 320,
+        "bottom": 382
+      },
+      "last": {
+        "top": 25.125,
+        "bottom": 65.421875
+      }
+    }
+  ],
+  "performance": {
+    "longTasks": [],
+    "frameSamples": 201,
+    "droppedFrames": 2,
+    "worstFrameMs": 33.30000000000018,
+    "p95FrameMs": 16.799999999999727
+  }
+}

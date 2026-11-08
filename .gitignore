@@ -1,0 +1,11 @@
+node_modules
+dist
+.env.local
+playwright-report
+test-results
+.DS_Store
+.vercel
+coverage
+firebase-debug.log
+firestore-debug.log
+ui-debug.log

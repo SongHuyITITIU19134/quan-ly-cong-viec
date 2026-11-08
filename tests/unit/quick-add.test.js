@@ -1,0 +1,25 @@
+import { describe, expect, it } from 'vitest'
+import { parseQuickAdd } from '@/lib/quickAdd'
+
+const parse=value=>parseQuickAdd(value,'2026-11-04')
+describe('parseQuickAdd',()=>{
+ it('đọc ví dụ đầy đủ',()=>expect(parse('họp khách thứ 6 #sale !cao')).toEqual({title:'họp khách',dueDate:'2026-11-06',tags:['sale'],priority:'high'}))
+ it('hôm nay',()=>expect(parse('gửi thư hôm nay').dueDate).toBe('2026-11-04'))
+ it('mai',()=>expect(parse('gửi thư mai').dueDate).toBe('2026-11-05'))
+ it('mốt',()=>expect(parse('gửi thư mốt').dueDate).toBe('2026-11-06'))
+ it('thứ 2 là lần tới',()=>expect(parse('họp thứ 2').dueDate).toBe('2026-11-09'))
+ it('CN là lần tới',()=>expect(parse('nghỉ CN').dueDate).toBe('2026-11-08'))
+ it('dd/mm dùng năm hiện tại khi còn phía trước',()=>expect(parse('chốt 25/12').dueDate).toBe('2026-12-25'))
+ it('dd/mm chuyển năm khi ngày đã qua',()=>expect(parse('chốt 01/01').dueDate).toBe('2027-01-01'))
+ it('dd/mm/yyyy giữ năm chỉ định',()=>expect(parse('chốt 01/02/2028').dueDate).toBe('2028-02-01'))
+ it('ngày không hợp lệ không được nhận',()=>expect(parse('chốt 31/02').dueDate).toBe(''))
+ it('đọc nhiều tag',()=>expect(parse('việc #sale #vip').tags).toEqual(['sale','vip']))
+ it.each([['!thấp','low'],['!vừa','medium'],['!cao','high'],['!gấp','urgent']])('đọc ưu tiên %s', (token,priority)=>expect(parse(`việc ${token}`).priority).toBe(priority))
+ it('không có ngày trả dueDate rỗng',()=>expect(parse('việc bình thường')).toMatchObject({title:'việc bình thường',dueDate:''}))
+ it('không hiểu tên riêng Mai là ngày',()=>expect(parse('gặp chị Mai')).toEqual({title:'gặp chị Mai',dueDate:'',tags:[],priority:'medium'}))
+ it('không nhận từ khóa ngày ở giữa chuỗi',()=>expect(parse('chuẩn bị mai họp').dueDate).toBe(''))
+ it('nhận từ khóa ngày ở đầu chuỗi',()=>expect(parse('mai gửi báo cáo')).toMatchObject({title:'gửi báo cáo',dueDate:'2026-11-05'}))
+ it('nhận từ khóa ngày ở cuối sau khi bỏ metadata',()=>expect(parse('gọi khách thứ 6 #sale')).toMatchObject({title:'gọi khách',dueDate:'2026-11-06',tags:['sale']}))
+ it('thứ 6 hôm nay trỏ sang tuần sau ở đầu hoặc cuối',()=>{expect(parseQuickAdd('thứ 6 họp','2026-11-06').dueDate).toBe('2026-11-13');expect(parseQuickAdd('họp thứ 6','2026-11-06').dueDate).toBe('2026-11-13')})
+ it('dd/mm đã qua luôn chuyển sang năm sau',()=>expect(parseQuickAdd('gia hạn 05/11','2026-11-06').dueDate).toBe('2027-11-05'))
+})

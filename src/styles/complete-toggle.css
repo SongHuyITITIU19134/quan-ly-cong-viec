@@ -1,0 +1,81 @@
+.completion-toggle {
+  --toggle-size: 28px;
+  position: relative;
+  display: inline-flex;
+  flex: 0 0 auto;
+  flex-shrink: 0;
+  box-sizing: border-box;
+  align-items: center;
+  justify-content: center;
+  width: var(--toggle-size);
+  height: var(--toggle-size);
+  min-width: 0;
+  padding: 0;
+  border: 2px solid var(--color-ink);
+  border-radius: var(--radius-pill);
+  background: var(--color-paper);
+  color: var(--color-ink);
+  cursor: pointer;
+  touch-action: manipulation;
+  isolation: isolate;
+  transition: background-color 150ms, transform 150ms, box-shadow 150ms;
+}
+.completion-toggle::before {
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: max(44px, 100%);
+  height: max(44px, 100%);
+  transform: translate(-50%, -50%);
+}
+.completion-toggle--lg { --toggle-size: 36px; }
+.completion-toggle--labeled { width: auto; height: 36px; padding: 0 12px; gap: 7px; }
+.completion-toggle__icon { display: grid; place-items: center; flex: 0 0 auto; width: 18px; height: 18px; }
+.completion-toggle--lg .completion-toggle__icon { width: 24px; height: 24px; }
+.completion-toggle--labeled .completion-toggle__icon { box-sizing: border-box; border: 2px solid currentColor; border-radius: var(--radius-pill); }
+.completion-toggle--labeled[aria-pressed='true'] .completion-toggle__icon { border-color: transparent; }
+.completion-toggle__icon svg { display: block; width: 100%; height: 100%; }
+.completion-toggle__text { font-size: 12px; font-weight: 700; line-height: 1; white-space: nowrap; }
+.completion-toggle[aria-pressed='true'] {
+  border-color: var(--color-ink-fixed);
+  background: var(--color-lime);
+  color: var(--color-ink-fixed);
+  box-shadow: var(--shadow-hard-active);
+}
+@media(hover:hover) {
+  .completion-toggle:not(:disabled):hover { transform: translateY(-1px); box-shadow: var(--shadow-hard); }
+  .completion-toggle[aria-pressed='false']:not(:disabled):hover { background: color-mix(in srgb, var(--color-lime) 22%, var(--color-paper)); }
+}
+.completion-toggle:not(:disabled):active { transform: none; box-shadow: var(--shadow-hard-active); }
+.completion-toggle:focus-visible { outline: 3px solid var(--color-focus); outline-offset: 2px; }
+.completion-toggle:disabled { cursor: not-allowed; opacity: 1; }
+.completion-toggle[aria-pressed='true'] .completion-toggle__icon svg { animation: completion-check-in 180ms ease-out; }
+.completion-toggle[aria-pressed='true']::after {
+  content: '';
+  position: absolute;
+  inset: -2px;
+  border: 2px solid var(--color-ink);
+  border-radius: inherit;
+  pointer-events: none;
+  animation: completion-ring 180ms ease-out both;
+}
+@keyframes completion-check-in { from { transform: scale(.6); } to { transform: scale(1); } }
+@keyframes completion-ring { from { transform: scale(1); opacity: .6; } to { transform: scale(1.15); opacity: 0; } }
+@media(prefers-reduced-motion:reduce) {
+  .completion-toggle { transition: none; }
+  .completion-toggle[aria-pressed='true'] .completion-toggle__icon svg,.completion-toggle[aria-pressed='true']::after { animation: none; }
+  .completion-toggle[aria-pressed='true']::after { display: none; }
+  .completion-toggle:not(:disabled):hover { transform: none; }
+}
+.task-title-row,.trip-title-row { min-width: 0; }
+.task-title-row>.task-title,.trip-title-row>h3 { min-width: 0; overflow-wrap: anywhere; }
+.task-table-title { display: flex; align-items: center; gap: 12px; min-width: 0; }
+.task-table-title>.link-button { min-width: 0; overflow-wrap: anywhere; }
+.focus-task.data-row { flex-wrap: wrap; }
+.focus-task.data-row>span { min-width: 0; overflow-wrap: anywhere; }
+.focus-task:has(.completion-toggle[aria-pressed='true'])>span,.related-row.is-complete>.related-task-title { text-decoration: line-through; color: var(--muted); opacity: .78; }
+.related-row>.related-task-title { flex: 1; min-width: 0; overflow-wrap: anywhere; }
+.check-row:has(.completion-toggle[aria-pressed='true'])>input { text-decoration: line-through; }
+.check-row>.completion-toggle { justify-self: center; }
+.phase-timeline .related-row>.completion-toggle { justify-self: start; }
