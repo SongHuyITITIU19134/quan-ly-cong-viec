@@ -39,14 +39,14 @@ Router ở `src/app/App.jsx`. Các trang nghiệp vụ được lazy-load. `Rout
 | `/so-do` | `src/pages/MindMap.jsx` | Mind map, tree-map và danh sách; lọc dự án/trạng thái; hiển thị nhiệm vụ, công tác liên quan và nhóm công tác chưa gắn dự án. |
 | `/so-tay` | `src/pages/Notebooks.jsx` | Tổng quan sổ tay dạng lưới/danh sách, mẫu sổ, tìm kiếm, ghim, lưu trữ, sắp xếp. |
 | `/so-tay/:notebookId` | `src/pages/Notebooks.jsx` | Tạo/sửa/xóa/chuyển ghi chú; tìm nội dung, lọc nhãn; ghim; liên kết dự án/công tác/liên hệ; hoàn tác khi xóa. |
-| `/cai-dat` | `src/pages/Settings.jsx` | Theme, trang mặc định, kỳ báo cáo; xuất JSON/CSV/ICS, nhập JSON preview/xử lý trùng và xóa local hai bước. |
+| `/cai-dat` | `src/pages/Settings.jsx` | Theme, trang mặc định, kỳ báo cáo; xuất/nhập, xóa local; mở lại onboarding và xóa dữ liệu mẫu. |
 | `/login` | `src/app/App.jsx` | Redirect về `/`; đăng nhập Firebase do `RouteGuard` hiển thị tại route nghiệp vụ khi chưa có user. |
 | `*` | `src/pages/NotFound.jsx` | Trang 404 có nút quay về trang chủ. |
 | `/__tags` | `src/components/tags/TagPreview.jsx` | Trang xem nhãn chỉ được đưa vào router ở DEV. |
 
 Đăng nhập nằm trong `src/pages/Login.jsx`, không phải route `/login` riêng. Có email/password, đăng ký, xác minh email, đặt lại mật khẩu, đăng nhập Google và đăng xuất. Logic xác thực/mapping lỗi nằm trong `src/data/firebase.js`, `src/auth/` và `useData`.
 
-Layout chung ở `src/components/layout/AppLayout.jsx`: điều hướng, tìm kiếm, menu tạo nhanh, tài khoản, theme, thông báo lỗi và các banner xác minh/nhập local. `src/components/create/CreateCombo.jsx` xử lý tạo kết hợp dự án và nhiệm vụ.
+Layout chung ở `src/components/layout/AppLayout.jsx`: điều hướng, tìm kiếm, menu tạo nhanh, onboarding, tài khoản, theme, thông báo lỗi và các banner xác minh/nhập local. `src/components/create/CreateCombo.jsx` xử lý tạo kết hợp dự án và nhiệm vụ.
 
 ## 4. Kiến trúc và đường đi dữ liệu
 
@@ -239,6 +239,7 @@ pnpm test
 pnpm test:coverage
 pnpm e2e
 pnpm test:pwa
+pnpm lh
 JAVA_HOME="$HOME/.local/jdk21/Contents/Home" pnpm test:rules
 pnpm build
 pnpm test:contrast
@@ -247,7 +248,7 @@ pnpm test:motion
 
 Node 24 được quản lý bằng nvm trong môi trường phát triển này; shell có thể chưa nạp nvm. Tuân thủ yêu cầu cụ thể của người dùng về PATH/cài đặt, không mặc định tự sửa môi trường. Không đọc file môi trường để chẩn đoán.
 
-`vite.config.js` cấu hình jsdom, timeout 10 giây, coverage V8 (toàn src 70%, lib/tags/data 80%) và các file `tests/**/*.test.{js,jsx}`. Rules test cần Firestore Emulator và JDK 21. Playwright có ba viewport 360/768/1280, năm flow đầy đủ và axe toàn route ở light/dark.
+`vite.config.js` cấu hình jsdom, timeout 10 giây, coverage V8 (toàn src 70%, lib/tags/data 80%) và các file `tests/**/*.test.{js,jsx}`. Rules test cần Firestore Emulator và JDK 21. Hiện có 54 file/275 test; Playwright có 57 test trên ba viewport 360/768/1280, năm flow đầy đủ, onboarding và axe toàn route ở light/dark.
 
 Khi bàn giao, ghi kết quả lint/test/build đã chạy; nếu thiếu tool hoặc không chạy, nói rõ, không dùng số test của phiên cũ làm kết quả phiên hiện tại. Không tự chạy `pnpm e2e`.
 

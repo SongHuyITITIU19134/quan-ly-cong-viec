@@ -2,12 +2,21 @@
 
 Ngày cập nhật: 08/11/2026
 
+## Phase 6b — hiệu năng, i18n và onboarding
+
+- Kanban chỉ render 40 thẻ mỗi cột với “Xem thêm”; danh sách phân trang 100 dòng. Tasks 5.000 mục giảm từ 3.330,7 ms xuống 94,5 ms.
+- Thêm cổng `pnpm lh`: Lighthouse mobile đạt 95 Performance, 100 Accessibility, 100 Best Practices; PWA verifier kiểm manifest, SW và icon maskable.
+- Chuyển 582 chuỗi giao diện vào `src/i18n/vi.js`; scanner hiện có 0 ngoại lệ ngoài allowlist có lý do.
+- Thêm onboarding ba bước, dữ liệu mẫu qua import pipeline, lưu trạng thái local/cloud, mở lại và xóa nhanh; E2E chạy trên ba viewport.
+- Vitest đạt 54 file/275 test trong 19,47 giây. Coverage lines: toàn src 71,50%, lib 97,19%, tags 97,22%, data 82,39%.
+- Playwright 5.000 task: Dashboard 127,7 ms, Calendar 61,2 ms, Tasks 94,5 ms; JS gzip route `/` 110,1 kB.
+
 ## Phase 6a — kiểm chứng và hoàn thiện
 
 - Sửa vòng render vô hạn khi tạo sổ/ghi chú mới và giữ input quick-add qua ranh giới `await`.
-- Vitest có timeout rõ ràng; 49 file, 265 test đạt trong 19,91 giây. Coverage lines đạt 71,85% toàn src, 96,33% lib, 97,22% tags và 81,48% data.
+- Vitest có timeout rõ ràng và coverage gate theo thư mục; số liệu mới nhất nằm ở Phase 6b.
 - Firestore Emulator dùng JDK 21: 14/14 rules test đạt. CI tách `verify`, `coverage`, `e2e`, `rules` trên Node 24/pnpm frozen lockfile.
-- Playwright 5.000 task: Dashboard 71,3 ms, Calendar 40,6 ms, Tasks 3.330,7 ms; JS gzip lần đầu route `/` là 103,8 kB.
+- Phép đo Phase 6a xác định Tasks là điểm nghẽn; Phase 6b đã thêm cửa sổ render và đo lại.
 - PWA đã xác minh offline reload, toast cập nhật, thay cache cũ và không cache Firebase/Auth; sửa cache match với `Vary` và race cleanup khi worker đổi phiên bản.
 - Thêm năm flow E2E chạy trên ba viewport và axe 10 route × light/dark × ba viewport, 0 lỗi serious/critical.
 
@@ -26,7 +35,7 @@ Ngày cập nhật: 08/11/2026
 - Project CRUD, migration localStorage/Firestore, màu/trạng thái/người phụ trách, detail bookmark, bulk move, lưu trữ và xóa an toàn có hoàn tác.
 - Animation chỉ dùng transform/opacity; count-up không re-render mỗi frame; TaskCard memo; tìm kiếm debounce.
 - Ma trận responsive kiểm tra các trạng thái drawer, dock và nội dung dài tại 360/768/1280.
-- Lighthouse production preview: mobile 98 Performance / 100 Accessibility; desktop 100 / 100; CLS 0.
+- Lighthouse production preview được thay bằng cổng mobile `pnpm lh` có ngưỡng cố định.
 
 ## Tổng quan
 
@@ -97,25 +106,25 @@ Palette nhãn/dự án gồm tám cặp `--label-1…8` và `--label-1-ink…8`:
 - Memo hóa nhóm/lọc chính ở Dashboard và Tasks.
 - Giảm font từ bốn xuống ba weight.
 - Thay hai biểu đồ Recharts bằng HTML/CSS semantic nhẹ trong `src/pages/Dashboard.jsx`, `src/styles/charts.css`.
-- JS gzip tải lần đầu route `/` là **103,8 kB**; CSS **22,58 kB gzip**. Firebase vẫn dynamic import; Firestore chunk **142,40 kB gzip**.
+- JS gzip tải lần đầu route `/` là **110,1 kB**; CSS **22,60 kB gzip**. Firebase vẫn dynamic import; Firestore chunk **142,40 kB gzip**.
 
 ## Kiểm chứng
 
 - ESLint: đạt, 0 lỗi và 0 cảnh báo.
-- Unit/component: 49 file, 265/265 test đạt.
-- Toàn bộ E2E 54/54 đạt; năm flow Phase 6 đạt 15/15 trên viewport 360×800, 768×1024 và 1280×800.
+- Unit/component: 54 file, 275/275 test đạt.
+- Toàn bộ E2E 57/57 đạt; năm flow Phase 6 và onboarding chạy trên viewport 360×800, 768×1024 và 1280×800.
 - Axe: 0 lỗi critical/serious trên 10 route, light/dark, ba viewport; keyboard flow đạt.
 - Build production: đạt; các route chunk dưới 12 kB gzip, React vendor 59,13 kB gzip; Firebase/Firestore là vendor động.
 - Persistence: E2E tạo dữ liệu rồi reload vẫn còn; theme reload vẫn giữ.
 - Contrast semantic: 12/12 đạt WCAG AA; thấp nhất 6,85:1 ở light và dark.
-- Lighthouse production preview: mobile 99 Performance / 100 Accessibility; desktop 100 / 100; CLS đều bằng 0.
+- Lighthouse mobile: 95 Performance, 100 Accessibility, 100 Best Practices.
 
 ## Chưa làm / đề xuất vòng tiếp theo
 
 Các mục dưới đây đều là nâng cấp 🟢, không chặn phát hành:
 
-1. Đưa axe-core/Lighthouse đang chạy cục bộ vào CI và biến 36 ảnh after thành visual regression có ngưỡng pixel diff.
-2. Thêm virtualization cho bảng/Kanban khi dữ liệu đạt hàng nghìn nhiệm vụ.
+1. Cân nhắc đưa cổng Lighthouse cục bộ vào CI và thêm visual regression có ngưỡng pixel diff.
+2. Theo dõi trải nghiệm phân trang/cửa sổ render khi dữ liệu vượt 5.000 nhiệm vụ.
 3. Thêm trình chọn palette 8 màu cho người dùng; hiện dự án được ánh xạ tự động vào palette, màu chuyến đi cũ vẫn được giữ để tương thích dữ liệu.
 4. Kiểm thử offline queue và xung đột đa thiết bị bằng tài khoản staging thật; rules đã có 14 test Emulator.
 5. Chuẩn hóa thêm spacing scale thành token; hiện radius và motion đã có token, spacing vẫn dùng thang giá trị nhất quán trong CSS.

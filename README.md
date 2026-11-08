@@ -41,6 +41,7 @@ Production: [https://quan-ly-cong-viec-sable.vercel.app](https://quan-ly-cong-vi
 - Quản lý danh bạ và hiển thị các nhiệm vụ liên quan theo vai trò.
 - Sổ tay/ghi chú có nhãn và backlinks tới dự án, chuyến đi, liên hệ; quản lý nhãn task + note trong một batch.
 - Command palette `Ctrl/Cmd+K`, trang Cài đặt, xuất JSON/CSV/ICS, nhập JSON có preview và xóa local xác nhận hai bước.
+- Onboarding ba bước cho lần dùng đầu, lựa chọn dữ liệu mẫu hoặc bắt đầu trống; có thể mở lại và xóa nhanh dữ liệu mẫu.
 - Lưu dữ liệu bền vững bằng localStorage hoặc Firebase/Firestore.
 - PWA precache app shell, chạy lại offline sau lần tải đầu và thông báo khi có phiên bản mới; không cache request Firebase/Auth.
 
@@ -70,7 +71,7 @@ Production: [https://quan-ly-cong-viec-sable.vercel.app](https://quan-ly-cong-vi
 
 - Mutation thất bại không đóng form và hiển thị lỗi bằng tiếng Việt.
 - Bắt lỗi quota/security của localStorage.
-- Dữ liệu local có seed mẫu; dữ liệu Firebase được phân vùng theo tài khoản và không ghi đè dữ liệu local nếu người dùng chưa chọn nhập.
+- Dữ liệu mẫu chỉ được thêm khi người dùng chọn trong onboarding; dữ liệu Firebase được phân vùng theo tài khoản và không ghi đè dữ liệu local nếu người dùng chưa chọn nhập.
 - Firestore sử dụng persistent local cache nhiều tab.
 - Lazy-load từng phân hệ; Firebase chỉ import động khi thực sự bật chế độ Firebase.
 - Biểu đồ được xây bằng SVG/HTML/CSS nhẹ thay vì thư viện biểu đồ nặng.
@@ -306,7 +307,7 @@ Cấu trúc:
 src/
 ├── app/                 # Router, Page và Header
 ├── components/
-│   ├── layout/          # Topbar, floating dock, theme, error banner
+│   ├── layout/          # Topbar, dock, command palette và onboarding
 │   ├── mindmap/         # Dựng dữ liệu và hiển thị mind map/tree-map
 │   ├── project/         # Form và nghiệp vụ giao diện dự án
 │   ├── tags/            # Nhập, lọc, hiển thị và quản lý nhãn
@@ -381,21 +382,23 @@ pnpm test:coverage
 pnpm build
 pnpm e2e
 pnpm test:pwa
+pnpm lh
 JAVA_HOME="$HOME/.local/jdk21/Contents/Home" pnpm test:rules
 ```
 
 Kết quả gần nhất:
 
 - ESLint: đạt, không có lỗi/cảnh báo.
-- Unit/component test: 49 file, 265/265 test đạt; thời gian gần nhất 19,91 giây không coverage.
-- Coverage V8 theo lines: toàn `src` 71,85%; `src/lib` 96,33%; `src/tags` 97,22%; `src/data` 81,48%.
+- Unit/component test: 54 file, 275/275 test đạt; thời gian gần nhất 19,47 giây không coverage.
+- Coverage V8 theo lines: toàn `src` 71,50%; `src/lib` 97,19%; `src/tags` 97,22%; `src/data` 82,39%.
 - Firestore Emulator: 14/14 rules test đạt; `firebase-tools` 15 cần JDK 21.
 - Production build: đạt với Node.js 24 và Vite 8.3.5.
 - E2E có sẵn cho Project CRUD, responsive, smoke, reduced-motion, axe và keyboard; chỉ chạy khi cần kiểm tra trình duyệt đầy đủ.
 - Viewport E2E: 360×800, 768×1024 và 1280×800.
 - Production build hiện không có chunk vượt 500 kB.
-- Toàn bộ E2E 54/54 đạt; năm flow Phase 6 chạy 15/15 trên ba viewport; axe 0 lỗi critical/serious trên 10 route, light/dark, 3 viewport.
-- Lighthouse production preview: mobile 98/100 Performance/Accessibility; desktop 100/100; CLS đều 0.
+- Toàn bộ E2E 57/57 đạt; năm flow Phase 6 và onboarding chạy trên ba viewport; axe 0 lỗi critical/serious trên 10 route, light/dark, 3 viewport.
+- Playwright 5.000 task: Dashboard 127,7 ms, Calendar 61,2 ms, Tasks 94,5 ms; JS gzip route `/` là 110,1 kB.
+- Lighthouse mobile: Performance 95, Accessibility 100, Best Practices 100; `pnpm lh` fail nếu dưới 90/95/95.
 - Contrast token: 12/12 cặp đạt WCAG AA, thấp nhất 6,85:1.
 
 ## 9. Deploy Vercel
@@ -425,9 +428,9 @@ vercel curl https://quan-ly-cong-viec-sable.vercel.app
 
 ## 11. Đề xuất nâng cấp tiếp theo
 
-- Đưa axe-core/Lighthouse hiện đã chạy cục bộ vào CI và đặt performance budget bắt buộc.
+- Cân nhắc đưa cổng Lighthouse cục bộ hiện tại vào CI khi runner đủ ổn định.
 - Nâng bộ ảnh before/after hiện có thành visual regression có ngưỡng pixel diff.
-- Virtualization cho Kanban/bảng khi dữ liệu đạt hàng nghìn nhiệm vụ.
+- Theo dõi UX nút “Xem thêm” Kanban và phân trang danh sách ở tập dữ liệu lớn.
 - Dùng Firebase Emulator để kiểm thử migration/rules và xung đột đa thiết bị.
 - Kiểm thử Firebase Rules, offline queue và xung đột đa thiết bị bằng Emulator Suite.
 
