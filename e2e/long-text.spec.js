@@ -14,7 +14,7 @@ test('chữ dài: giới hạn nhập, Kanban, chi tiết và biểu đồ',asyn
  await page.getByRole('button',{name:'Lưu dự án',exact:true}).click()
  await page.getByRole('tab',{name:'Kanban',exact:true}).click()
  for(const title of [spaced,unbroken,vietnamese]){
-  await page.getByRole('button',{name:'Tạo nhiệm vụ',exact:true}).click()
+  await page.keyboard.press('n')
   const input=page.getByLabel('Tên nhiệm vụ *')
   if(title===spaced){await input.fill('B'.repeat(125));await expect(input).toHaveValue('B'.repeat(120));const counter=page.getByText('120/120',{exact:true});await expect(counter).toHaveClass(/text-danger/);const rgb=await counter.evaluate(el=>getComputedStyle(el).color.match(/\d+/g).map(Number));expect(rgb[0]).toBeGreaterThan(rgb[1])}
   await input.fill(title)
@@ -38,7 +38,7 @@ test('chữ dài: giới hạn nhập, Kanban, chi tiết và biểu đồ',asyn
   await page.getByRole('dialog').getByRole('button',{name:'Đóng',exact:true}).click()
   await expect(page.getByRole('dialog')).toBeHidden()
  }
- await page.evaluate(()=>{const data=JSON.parse(localStorage.getItem('nhip-viec-v1'));data.projects=data.projects.slice(0,3).map((project,index)=>({...project,name:['Báo cáo quy hoạch phục vụ họp thẩm định cấp tỉnh quý 4','Triển khai hệ thống quản lý vận tải và kho hàng ABC','Công việc hành chính và tổng hợp báo cáo định kỳ'][index]}));data.tasks=data.tasks.slice(0,13);data.tasks.forEach((task,index)=>{task.projectId=data.projects[index<5?0:index<10?1:2].id;task.status='todo'});localStorage.setItem('nhip-viec-v1',JSON.stringify(data))})
+ await page.evaluate(()=>{const data=JSON.parse(localStorage.getItem('nhip-viec-v1')),names=['Báo cáo quy hoạch phục vụ họp thẩm định cấp tỉnh quý 4','Triển khai hệ thống quản lý vận tải và kho hàng ABC','Công việc hành chính và tổng hợp báo cáo định kỳ'],project=data.projects[0],tasks=data.tasks;data.projects=names.map((name,index)=>({...project,id:`layout-p${index}`,name}));data.tasks=Array.from({length:13},(_,index)=>({...tasks[index%tasks.length],id:`layout-t${index}`,title:index<tasks.length?tasks[index].title:`Nhiệm vụ bố cục ${index+1}`,projectId:data.projects[index<5?0:index<10?1:2].id,status:'todo',order:index+1}));localStorage.setItem('nhip-viec-v1',JSON.stringify(data))})
  await page.reload()
  const column=page.locator('.kanban-column').first();expect(await column.locator('.task-card').count()).toBeGreaterThan(6)
  await column.locator('.task-card').last().scrollIntoViewIfNeeded();await expect(column.locator('.task-card').last()).toBeInViewport()
