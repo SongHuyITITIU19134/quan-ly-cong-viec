@@ -6,6 +6,10 @@ on:
 
 jobs:
   verify:
+    strategy:
+      fail-fast: false
+      matrix:
+        node: [24]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -14,7 +18,7 @@ jobs:
           version: 12.15.0
       - uses: actions/setup-node@v4
         with:
-          node-version: 24
+          node-version: ${{ matrix.node }}
           cache: pnpm
       - run: pnpm install --frozen-lockfile
       - run: pnpm lint
@@ -22,6 +26,10 @@ jobs:
       - run: pnpm build
 
   coverage:
+    strategy:
+      fail-fast: false
+      matrix:
+        node: [24]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -30,12 +38,16 @@ jobs:
           version: 12.15.0
       - uses: actions/setup-node@v4
         with:
-          node-version: 24
+          node-version: ${{ matrix.node }}
           cache: pnpm
       - run: pnpm install --frozen-lockfile
       - run: pnpm test:coverage
 
   e2e:
+    strategy:
+      fail-fast: false
+      matrix:
+        node: [24]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -44,13 +56,17 @@ jobs:
           version: 12.15.0
       - uses: actions/setup-node@v4
         with:
-          node-version: 24
+          node-version: ${{ matrix.node }}
           cache: pnpm
       - run: pnpm install --frozen-lockfile
       - run: pnpm exec playwright install --with-deps chromium
       - run: pnpm e2e
 
   rules:
+    strategy:
+      fail-fast: false
+      matrix:
+        node: [24]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -59,7 +75,7 @@ jobs:
           version: 12.15.0
       - uses: actions/setup-node@v4
         with:
-          node-version: 24
+          node-version: ${{ matrix.node }}
           cache: pnpm
       - uses: actions/setup-java@v4
         with:
@@ -67,3 +83,28 @@ jobs:
           java-version: 21
       - run: pnpm install --frozen-lockfile
       - run: pnpm test:rules
+
+  lighthouse:
+    strategy:
+      fail-fast: false
+      matrix:
+        node: [24]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 12.15.0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node }}
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm exec playwright install --with-deps chromium
+      - run: pnpm lh
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: lighthouse-report
+          path: test-results/lighthouse-report.json
+          if-no-files-found: error

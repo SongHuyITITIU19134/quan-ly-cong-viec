@@ -1,4 +1,5 @@
 import { spawn } from 'node:child_process'
+import { mkdir, writeFile } from 'node:fs/promises'
 import { chromium } from '@playwright/test'
 import { preview } from 'vite'
 
@@ -29,6 +30,8 @@ try{
     Accessibility:Math.round(report.categories.accessibility.score*100),
     'Best Practices':Math.round(report.categories['best-practices'].score*100)
   }
+  await mkdir('test-results',{recursive:true})
+  await writeFile('test-results/lighthouse-report.json',JSON.stringify(report,null,2))
   console.table(scores)
   const failed=[]
   if(scores.Performance<90)failed.push('Performance < 90')
