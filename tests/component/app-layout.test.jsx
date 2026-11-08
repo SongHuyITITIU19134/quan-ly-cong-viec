@@ -41,6 +41,7 @@ describe('bố cục và bảng lệnh',()=>{
     expect(screen.getByRole('option',{name:/Cài đặt/})).toHaveAttribute('aria-selected','true')
     await userEvent.keyboard('{Enter}')
     expect(mocks.navigate).toHaveBeenCalledWith('/cai-dat')
+    await vi.waitFor(()=>expect(screen.queryByRole('dialog',{name:'Bảng lệnh'})).not.toBeInTheDocument())
     trigger.focus()
     fireEvent.keyDown(window,{key:'k',metaKey:true,target:document.body})
     await userEvent.keyboard('{Escape}')

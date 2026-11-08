@@ -8,7 +8,7 @@ test('chữ dài: giới hạn nhập, Kanban, chi tiết và biểu đồ',asyn
  const vietnamese='Hoàn thiện số liệu báo cáo quy hoạch phục vụ họp thẩm định cấp tỉnh quý 4'
  const projectName='Báo cáo quy hoạch phục vụ họp thẩm định cấp tỉnh Q4!!'
  await page.goto('/cong-viec')
- await page.evaluate(()=>localStorage.clear());await page.reload()
+ await page.evaluate(()=>{localStorage.clear();localStorage.setItem('nhip-viec-initialized','true');localStorage.setItem('nhip-viec-settings',JSON.stringify({onboardingSeen:true}))});await page.reload()
  await page.getByRole('tab',{name:'Dự án'}).click()
  await page.getByRole('button',{name:'Tạo dự án',exact:true}).first().click()
  await page.getByLabel('Tên dự án *').fill(projectName)

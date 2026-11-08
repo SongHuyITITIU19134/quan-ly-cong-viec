@@ -1,6 +1,6 @@
 import { test, expect } from '@playwright/test'
 
-test.beforeEach(async({page})=>{await page.goto('/cong-viec');await page.evaluate(()=>localStorage.clear());await page.reload()})
+test.beforeEach(async({page})=>{await page.goto('/cong-viec');await page.evaluate(()=>{localStorage.clear();localStorage.setItem('nhip-viec-initialized','true');localStorage.setItem('nhip-viec-settings',JSON.stringify({onboardingSeen:true}))});await page.reload()})
 
 test('drawer giữ nút lưu, focus và bảo vệ thay đổi chưa lưu',async({page})=>{
   await page.getByRole('button',{name:'Tạo nhiệm vụ'}).click()

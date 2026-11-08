@@ -58,7 +58,11 @@ try{
   await page.getByRole('button',{name:'Tải lại'}).click()
   await page.waitForLoadState('domcontentloaded')
   await page.locator('.page h1').waitFor()
-  const newCaches=await page.evaluate(()=>caches.keys())
+  let newCaches
+  for(let attempt=0;attempt<20;attempt+=1){
+    try{newCaches=await page.evaluate(()=>caches.keys());break}
+    catch(error){if(attempt===19)throw error;await page.waitForTimeout(100)}
+  }
   if(oldCaches.some(key=>newCaches.includes(key)))throw new Error('Cache cũ chưa được thay thế')
   console.log(`PWA: offline OK; update toast OK; cache ${oldCaches.length}→${newCaches.length}; external requests cached: 0`)
 }finally{

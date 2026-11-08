@@ -1,6 +1,6 @@
 import { test, expect } from '@playwright/test'
 
-test.beforeEach(async({page})=>{await page.goto('/cong-viec');await page.evaluate(()=>localStorage.clear());await page.reload();await page.getByRole('tab',{name:'Dự án'}).click()})
+test.beforeEach(async({page})=>{await page.goto('/cong-viec');await page.evaluate(()=>{localStorage.clear();localStorage.setItem('nhip-viec-initialized','true');localStorage.setItem('nhip-viec-settings',JSON.stringify({onboardingSeen:true}))});await page.reload();await page.getByRole('tab',{name:'Dự án'}).click()})
 
 test('vòng đời tạo, sửa, lưu trữ và xóa dự án',async({page})=>{
  await page.getByRole('button',{name:'Tạo dự án'}).first().click()

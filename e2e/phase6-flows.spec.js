@@ -51,7 +51,7 @@ test('lịch đổi hạn và hoàn tác → chuyến trùng lịch',async({page
   await page.getByRole('button',{name:'Hoàn tác'}).click()
   await expect.poll(()=>page.evaluate(()=>JSON.parse(localStorage.getItem('nhip-viec-v1')).tasks.find(item=>item.id==='t1').dueDate)).toBe(isoDate(0))
   await page.goto('/cong-tac')
-  await page.getByRole('button',{name:'Tạo chuyến'}).click()
+  await page.getByRole('button',{name:'Tạo chuyến',exact:true}).click()
   await page.getByLabel('Tên chuyến *').fill('Chuyến trùng')
   await page.getByLabel('Địa điểm *').fill('Đà Nẵng')
   await page.getByLabel('Ngày đi').fill(isoDate(1))
