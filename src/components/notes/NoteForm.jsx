@@ -4,7 +4,7 @@ import TagInput from '@/components/tags/TagInput'
 import { vi } from '@/i18n/vi'
 import { NOTE_BODY_MAX, NOTE_TITLE_MAX } from '@/lib/limits'
 
-export default function NoteForm({note={},notebooks,projects,trips,contacts,tagCatalog,tagRegistry,onSave,onCancel,formId='note-form'}){
+export default function NoteForm({note,notebooks,projects,trips,contacts,tagCatalog,tagRegistry,onSave,onCancel,formId='note-form'}){
   const[form,setForm]=useState({title:'',body:'',tags:[],notebookId:notebooks[0]?.id||'',pinned:false,links:{},...note}),[error,setError]=useState(''),[saving,setSaving]=useState(false)
   useEffect(()=>setForm({title:'',body:'',tags:[],notebookId:notebooks[0]?.id||'',pinned:false,links:{},...note}),[note,notebooks])
   const set=(key,value)=>{setForm(current=>({...current,[key]:value}));setError('')}

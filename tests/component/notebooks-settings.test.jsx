@@ -10,7 +10,7 @@ vi.mock('@/hooks/useTransitionNavigate',()=>({useTransitionNavigate:()=>mocks.na
 import Notebooks from '@/pages/Notebooks'
 import Settings from '@/pages/Settings'
 
-const show=(component,path='/')=>render(<MemoryRouter initialEntries={[path]}><Routes><Route path="*" element={component}/></Routes></MemoryRouter>)
+const show=(component,path='/')=>render(<MemoryRouter initialEntries={[path]}><Routes><Route path="/so-tay" element={component}/><Route path="/so-tay/:notebookId" element={component}/><Route path="*" element={component}/></Routes></MemoryRouter>)
 
 describe('trang sổ tay và cài đặt',()=>{
   beforeEach(()=>{Object.values(mocks).forEach(mock=>mock.mockReset?.());mocks.batch.mockResolvedValue(true);mocks.update.mockResolvedValue(true);mocks.saveSettings.mockResolvedValue(true);mocks.reset.mockResolvedValue(true)})
@@ -24,7 +24,7 @@ describe('trang sổ tay và cài đặt',()=>{
     show(<Notebooks/>,'/so-tay/b1');expect(screen.getByRole('heading',{name:'Sổ dự án'})).toBeInTheDocument()
     const quick=screen.getByLabelText('Thêm nhanh ghi chú');await userEvent.type(quick,'Việc mới{Enter}')
     expect(mocks.batch).toHaveBeenCalledWith([expect.objectContaining({type:'create',collection:'notes',data:expect.objectContaining({title:'Việc mới',notebookId:'b1'})})])
-    await userEvent.click(screen.getByRole('button',{name:/Biên bản họp/}));expect(screen.getByRole('dialog',{name:'Sửa'})).toBeInTheDocument()
+    await userEvent.click(screen.getByRole('button',{name:/^Biên bản họp/}));expect(screen.getByRole('dialog',{name:'Sửa'})).toBeInTheDocument()
   })
   it('lưu settings và xác nhận xóa local hai bước',async()=>{
     show(<Settings/>,'/cai-dat');await userEvent.selectOptions(screen.getByLabelText('Giao diện'),'dark')

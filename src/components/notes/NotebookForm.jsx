@@ -5,7 +5,7 @@ import { validateNotebook } from '@/lib/notes'
 import { vi } from '@/i18n/vi'
 import { NOTEBOOK_NAME_MAX } from '@/lib/limits'
 
-export default function NotebookForm({notebook={},notebooks,onSave,onCancel,formId='notebook-form'}){
+export default function NotebookForm({notebook,notebooks,onSave,onCancel,formId='notebook-form'}){
   const[form,setForm]=useState({name:'',color:0,pinned:false,archived:false,...notebook}),[error,setError]=useState(''),[saving,setSaving]=useState(false)
   useEffect(()=>setForm({name:'',color:0,pinned:false,archived:false,...notebook}),[notebook])
   const set=(key,value)=>{setForm(current=>({...current,[key]:value}));setError('')}
