@@ -2,6 +2,13 @@ export const vi = {
   appName: 'Nhịp việc', tagline: 'Công việc rõ ràng, lịch trình thảnh thơi',
   projects: { running:'Đang thực hiện',archived:'Đã lưu trữ',autoWaiting:'Tất cả nhiệm vụ đã hoàn thành, dự án đang chờ phản hồi.',derivedSaveHint:'Trạng thái chờ phản hồi được tính tự động; lưu thông tin khác sẽ giữ nguyên trạng thái nền của dự án.' },
   dashboard: { priority:'Ưu tiên',attention:'Cần chú ý',todayTasks:'Việc hôm nay',nextWeekTasks:'7 ngày tới',emptyTasks:'Chưa có việc trong khoảng này.',dueToday:'Hạn hôm nay',overdue:'Quá hạn',completedProject:'Đã hoàn thành',completeLabel:title=>`Complete: ${title}` },
+  dailyBriefing: {
+    title:date=>`Báo cáo công việc · ${date}`,todayTasks:'Công việc hôm nay',summary:'Tổng quan',topPriorities:'Ba việc nên ưu tiên',
+    priority:'Ưu tiên',task:'Công việc',project:'Dự án',due:'Hạn',status:'Trạng thái',doing:'Đang làm',overdue:'Quá hạn',dueToday:'Đến hạn hôm nay',dueSoon:'Gần đến hạn trong 3 ngày',completedToday:'Đã hoàn thành hôm nay',
+    states:{overdue:'Quá hạn',today:'Đến hạn hôm nay',doing:'Đang làm'},empty:'Hôm nay chưa có công việc đến hạn.',noPriorities:'Không có việc cần ưu tiên.',
+    ready:'Báo cáo công việc hôm nay đã sẵn sàng.',unavailable:'Không thể truy cập dữ liệu Nhịp việc',enableNotifications:'Bật thông báo hằng ngày',notificationsEnabled:'Đã bật thông báo hằng ngày.',notificationsDenied:'Trình duyệt chưa cho phép gửi thông báo.',notificationsUnsupported:'Trình duyệt không hỗ trợ thông báo.',
+    notificationBody:(today,overdue)=>`${today} việc đến hạn hôm nay · ${overdue} việc quá hạn`,openAppNote:'Báo cáo chạy lúc 06:00 khi ứng dụng đang mở; nếu ứng dụng đóng, báo cáo xuất hiện ở lần mở đầu tiên sau 06:00.'
+  },
   completeToggle: { complete:label=>`Đánh dấu hoàn thành: ${label}`,reopen:label=>`Mở lại: ${label}`,unchecked:'Hoàn thành',checked:'Đã hoàn thành',checklistItem:index=>`Mục ${index}` },
   nav: { dashboard: 'Tổng quan', tasks: 'Công việc', mindMap: 'Sơ đồ', calendar: 'Lịch', trips: 'Công tác', contacts: 'Danh bạ', notebooks: 'Sổ tay' },
   action: { create: 'Tạo', createTask: 'Tạo nhiệm vụ', add: 'Thêm mới', save: 'Lưu thay đổi', cancel: 'Hủy', edit: 'Chỉnh sửa', remove: 'Xóa', close: 'Đóng', retry: 'Thử lại', undo: 'Hoàn tác', today: 'Hôm nay', previous: 'Trước', next: 'Sau', search: 'Tìm kiếm', reset: 'Đặt lại' },

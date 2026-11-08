@@ -1,7 +1,8 @@
 import { fireEvent, render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { MemoryRouter, Route, Routes } from 'react-router-dom'
-import { beforeEach, describe, expect, it, vi } from 'vitest'
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
+import { briefingClock, DAILY_BRIEFING_STORAGE_KEY } from '@/lib/dailyBriefing'
 
 const mocks=vi.hoisted(()=>({navigate:vi.fn(),saveSettings:vi.fn(),install:vi.fn(),toast:vi.fn()}))
 const data={tasks:[{id:'t1',title:'Họp khách hàng',status:'todo',dueDate:'2020-01-01'}],projects:[{id:'p1',name:'Dự án Mới'}],trips:[],notes:[]}
@@ -18,7 +19,8 @@ import CommandPalette from '@/components/layout/CommandPalette'
 const showLayout=()=>render(<MemoryRouter initialEntries={['/']}><Routes><Route element={<AppLayout/>}><Route path="/" element={<div className="page"><h1>Tổng quan</h1></div>}/></Route></Routes></MemoryRouter>)
 
 describe('bố cục và bảng lệnh',()=>{
-  beforeEach(()=>{Object.values(mocks).forEach(mock=>mock.mockReset())})
+  beforeEach(()=>{Object.values(mocks).forEach(mock=>mock.mockReset());localStorage.setItem(DAILY_BRIEFING_STORAGE_KEY,briefingClock().date)})
+  afterEach(()=>{vi.useRealTimers();vi.unstubAllGlobals()})
 
   it('điều hướng, đổi giao diện và cài ứng dụng',async()=>{
     showLayout()
@@ -44,7 +46,7 @@ describe('bố cục và bảng lệnh',()=>{
     await vi.waitFor(()=>expect(screen.queryByRole('dialog',{name:'Bảng lệnh'})).not.toBeInTheDocument())
     trigger.focus()
     fireEvent.keyDown(window,{key:'k',metaKey:true,target:document.body})
-    await userEvent.keyboard('{Escape}')
+    fireEvent.keyDown(screen.getByRole('combobox',{name:'Tìm lệnh hoặc dữ liệu'}),{key:'Escape'})
     await vi.waitFor(()=>expect(trigger).toHaveFocus())
   })
 
@@ -61,5 +63,20 @@ describe('bố cục và bảng lệnh',()=>{
     expect(screen.getByText('Không tìm thấy kết quả.')).toBeInTheDocument()
     rerender(<CommandPalette open={false} data={data} onClose={close} onChoose={choose}/>)
     expect(screen.queryByRole('dialog')).not.toBeInTheDocument()
+  })
+
+  it('hiện báo cáo một lần từ 06:00 và gửi notification khi đã được phép',()=>{
+    vi.useFakeTimers()
+    vi.setSystemTime(new Date('2026-11-08T00:00:00Z'))
+    localStorage.removeItem(DAILY_BRIEFING_STORAGE_KEY)
+    const NotificationMock=vi.fn()
+    NotificationMock.permission='granted'
+    vi.stubGlobal('Notification',NotificationMock)
+    showLayout()
+    expect(screen.getByRole('dialog',{name:/Báo cáo công việc/})).toBeInTheDocument()
+    expect(screen.getAllByText('Họp khách hàng')).toHaveLength(2)
+    expect(screen.getByRole('heading',{name:'Tổng quan',level:3})).toBeInTheDocument()
+    expect(localStorage.getItem(DAILY_BRIEFING_STORAGE_KEY)).toBe('2026-11-08')
+    expect(NotificationMock).toHaveBeenCalledOnce()
   })
 })

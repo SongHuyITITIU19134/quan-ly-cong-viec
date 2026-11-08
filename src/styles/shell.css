@@ -19,6 +19,16 @@ body { min-width: 320px; height: 100%; overflow: hidden; background: linear-grad
 .topbar-button:active,.profile-button:active { transform: translate(1px,1px); }
 .notification-button { position: relative; }
 .notification-count { position: absolute; top: -7px; right: -7px; display: grid; min-width: 22px; height: 22px; place-items: center; border: 2px solid var(--color-paper); border-radius: 999px; padding: 0 5px; background: var(--color-danger-dot); color: #fff; font-size: 10px; font-weight: 700; }
+.daily-briefing { display: grid; gap: var(--space-5); }
+.daily-briefing h3 { margin: 0 0 var(--space-3); }
+.daily-briefing .table-wrap { max-height: min(38vh,360px); overflow: auto; }
+.daily-briefing table { width: 100%; border-collapse: collapse; }
+.daily-briefing th,.daily-briefing td { border-bottom: 1px solid var(--color-border-subtle); padding: 9px 12px; text-align: left; }
+.daily-briefing thead th { position: sticky; top: 0; background: var(--color-paper); }
+.daily-briefing .daily-summary { max-width: 480px; }
+.daily-briefing .daily-summary td { text-align: right; font-weight: 800; }
+.daily-briefing ol { margin: 0; padding-left: 24px; }
+.daily-briefing-note { margin: 0; font-size: 12px; }
 .profile-button { display: inline-flex; width: auto; align-items: center; gap: 7px; border-radius: var(--radius-pill); padding: 4px 12px 4px 5px; }
 .profile-button>span { display: grid; width: 32px; height: 32px; place-items: center; border-radius: 50%; background: var(--color-lavender); color: var(--color-ink-fixed); font-weight: 700; }
 .floating-dock { position: relative; z-index: var(--z-dock); display: grid; width: min(100%,1500px); min-height: var(--dock-height); margin: 0 auto; grid-template-columns: minmax(48px,auto) minmax(0,1fr) minmax(48px,auto); align-items: center; gap: clamp(6px,1.2vw,18px); border: 1.5px solid #0b0b0c; border-radius: 25px; padding: 8px 11px; background: #0b0b0c; color: #fff; box-shadow: 4px 4px 0 rgb(255 255 255 / 65%); }

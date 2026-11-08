@@ -14,6 +14,8 @@ import CommandPalette from '@/components/layout/CommandPalette'
 import { shouldOpenPalette } from '@/lib/palette'
 import { usePwa } from '@/hooks/usePwa'
 import OnboardingTour from '@/components/layout/OnboardingTour'
+import DailyBriefingDialog from '@/components/layout/DailyBriefingDialog'
+import { briefingClock, buildDailyBriefing, DAILY_BRIEFING_STORAGE_KEY, shouldShowDailyBriefing } from '@/lib/dailyBriefing'
 
 const links = [
   ['/', vi.nav.dashboard, LayoutDashboard],
@@ -50,7 +52,9 @@ export default function AppLayout(){
   const previousPath=useRef(location.pathname)
   const notified=useRef(new Set())
   const[reminderCount,setReminderCount]=useState(0)
+  const[dailyBriefingState,setDailyBriefingState]=useState(null)
   const overdueCount=useMemo(()=>data.tasks.filter(task=>getDueState(task,todayISO())==='overdue').length,[data.tasks])
+  const dailyBriefing=useMemo(()=>buildDailyBriefing(data,dailyBriefingState?.date||todayISO()),[data,dailyBriefingState?.date])
 
   useEffect(()=>{pruneReminderIds(localStorage,todayISO())},[])
 
@@ -77,6 +81,27 @@ export default function AppLayout(){
   useEffect(()=>{const check=()=>{const reminders=pendingReminders(data.tasks,new Date(),localStorage);setReminderCount(reminders.length);for(const task of reminders){const key=reminderId(task);if(notified.current.has(key))continue;notified.current.add(key);rememberReminder(localStorage,task);const message=vi.generated.AppLayout_67_2(task.title);toast(message);if(typeof Notification!=='undefined'&&Notification.permission==='granted')new Notification(vi.generated.AppLayout_67_3,{body:message})}};check();const timer=window.setInterval(check,30000);return()=>window.clearInterval(timer)},[data.tasks,toast])
 
   useEffect(()=>{
+    if(loading)return undefined
+    const check=()=>{
+      let shown=''
+      try{shown=localStorage.getItem(DAILY_BRIEFING_STORAGE_KEY)||''}catch{/* The report still opens when storage is blocked. */}
+      const now=new Date()
+      if(!shouldShowDailyBriefing(now,shown))return
+      const{date}=briefingClock(now),unavailable=Boolean(error)
+      try{localStorage.setItem(DAILY_BRIEFING_STORAGE_KEY,date)}catch{/* Daily deduplication is best effort. */}
+      setDailyBriefingState({date,unavailable})
+      toast(unavailable?vi.dailyBriefing.unavailable:vi.dailyBriefing.ready)
+      if(typeof Notification!=='undefined'&&Notification.permission==='granted'){
+        const report=buildDailyBriefing(data,date)
+        new Notification(vi.dailyBriefing.ready,{body:unavailable?vi.dailyBriefing.unavailable:vi.dailyBriefing.notificationBody(report.summary.today,report.summary.overdue)})
+      }
+    }
+    check()
+    const timer=window.setInterval(check,30000)
+    return()=>window.clearInterval(timer)
+  },[data,error,loading,toast])
+
+  useEffect(()=>{
     if(previousPath.current===location.pathname)return
     previousPath.current=location.pathname
     requestAnimationFrame(()=>{const heading=document.querySelector('.page h1');if(heading){heading.tabIndex=-1;heading.focus({preventScroll:true})}})
@@ -96,7 +121,7 @@ export default function AppLayout(){
     setPaletteInitial(query.trim())
     setPaletteOpen(true)
   }
-  const closePalette=()=>setPaletteOpen(false)
+  const closePalette=()=>{setPaletteOpen(false);paletteReturnFocus.current?.focus?.()}
   const changeTheme=()=>saveSettings({...settings,theme:resolved==='dark'?'light':'dark'})
   const choosePalette=item=>{setPaletteOpen(false);if(item.action==='task')setCreateMode('task');else if(item.action==='theme')changeTheme();else if(item.to)navigate(item.to)}
   const chooseCreate=mode=>{
@@ -104,6 +129,13 @@ export default function AppLayout(){
     else setCreateMode(mode)
   }
   const finishOnboarding=()=>saveSettings({...settings,onboardingSeen:true})
+  const enableDailyNotifications=async()=>{
+    if(typeof Notification==='undefined'){toast(vi.dailyBriefing.notificationsUnsupported);return}
+    const permission=await Notification.requestPermission()
+    if(permission!=='granted'){toast(vi.dailyBriefing.notificationsDenied);return}
+    toast(vi.dailyBriefing.notificationsEnabled)
+    new Notification(vi.dailyBriefing.ready,{body:vi.dailyBriefing.notificationBody(dailyBriefing.summary.today,dailyBriefing.summary.overdue)})
+  }
   const useSample=async()=>{
     const[{onboardingSample},{stringifyJsonExport,parseJsonImport,buildImportOps}]=await Promise.all([
       import('@/data/onboardingSample'),import('@/lib/dataTransfer')
@@ -147,5 +179,6 @@ export default function AppLayout(){
     <CreateCombo open={Boolean(createMode)} mode={createMode||'combo'} preselectedProjectId={new URLSearchParams(location.search).get('project')||new URLSearchParams(location.search).get('projectId')||''} onClose={()=>setCreateMode(null)}/>
     {!loading&&!readOnly&&settings.onboardingSeen!==true&&<OnboardingTour onFinish={finishOnboarding} onSample={useSample}/>} 
     <CommandPalette open={paletteOpen} data={data} initialQuery={paletteInitial} onClose={closePalette} onChoose={choosePalette}/>
+    {dailyBriefingState&&<DailyBriefingDialog briefing={dailyBriefing} date={dailyBriefingState.date} unavailable={dailyBriefingState.unavailable} onClose={()=>setDailyBriefingState(null)} onEnableNotifications={enableDailyNotifications} canEnableNotifications={typeof Notification!=='undefined'&&Notification.permission==='default'}/>}
   </div>
 }
