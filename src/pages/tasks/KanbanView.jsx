@@ -1,6 +1,8 @@
+import { useEffect, useState } from 'react'
 import { EmptyState, Button, StatusBadge } from '@/components/ui'
 import TaskCard from '@/components/task/TaskCard'
 import { STATUS_KEYS, vi } from '@/i18n/vi'
+export const KANBAN_PAGE_SIZE=40
 export default function KanbanView({
   data,
   filtered,
@@ -13,6 +15,8 @@ export default function KanbanView({
   setDragging,
   setEditing
 }) {
+  const[limits,setLimits]=useState(()=>Object.fromEntries(STATUS_KEYS.map(key=>[key,KANBAN_PAGE_SIZE])))
+  useEffect(()=>setLimits(Object.fromEntries(STATUS_KEYS.map(key=>[key,KANBAN_PAGE_SIZE]))),[filtered])
   if(!data.tasks.length)return <EmptyState
     title="Chưa có nhiệm vụ"
     description="Tạo nhiệm vụ đầu tiên để bắt đầu bảng Kanban."
@@ -32,7 +36,7 @@ export default function KanbanView({
 <StatusBadge value={key} />
 <strong>{grouped[key].length}</strong>
 </div>
-<div className="column-body">{grouped[key].map((task, index) => <div className="kanban-task-shell" draggable onDragStart={event => {
+<div className="column-body">{grouped[key].slice(0,limits[key]).map((task, index) => <div className="kanban-task-shell" draggable onDragStart={event => {
           event.dataTransfer.setData('text/task-id', task.id)
           event.dataTransfer.effectAllowed = 'move'
           setDragging(task.id)
@@ -49,6 +53,11 @@ export default function KanbanView({
 {STATUS_KEYS.filter(status=>status!==task.status).map(status=><option key={status} value={status}>
   {vi.status[status]}
 </option>)}</select>
-</div>)}{!grouped[key].length && <p className="column-empty">Chưa có nhiệm vụ</p>}</div>
+</div>)}
+{grouped[key].length>limits[key]&&<Button
+  variant="secondary"
+  onClick={()=>setLimits(current=>({...current,[key]:current[key]+KANBAN_PAGE_SIZE}))}
+>Xem thêm (còn {grouped[key].length-limits[key]})</Button>}
+{!grouped[key].length && <p className="column-empty">Chưa có nhiệm vụ</p>}</div>
 </section>)}</div>
 }

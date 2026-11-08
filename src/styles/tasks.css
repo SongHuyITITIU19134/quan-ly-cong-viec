@@ -14,6 +14,7 @@
 .column-head { padding: 3px 2px 14px; }
 .column-head>strong { display: grid; min-width: 30px; height: 30px; place-items: center; border: 1px solid var(--color-border-subtle); background: var(--color-paper); }
 .task-card { contain: layout paint style; content-visibility: auto; contain-intrinsic-size: auto 270px; border: 1.5px solid var(--color-border-subtle); border-radius: var(--radius-md); box-shadow: none; }
+.list-pagination { display:flex; align-items:center; justify-content:center; gap:12px; padding:16px; }
 .task-card:hover { border-color: var(--color-border); box-shadow: none; transform: translateY(-2px); }
 .kanban-column,.column-body,.task-card { min-width:0; max-width:100%; }
 .task-card { box-sizing:border-box; width:100%; max-width:100%; min-width:0; margin-inline:0; overflow:hidden; min-height:270px; }

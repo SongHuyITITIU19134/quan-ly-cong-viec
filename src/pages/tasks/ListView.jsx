@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react'
 import { Trash2 } from 'lucide-react'
 import { Button, Card, EmptyState, PriorityBadge, ProgressBar } from '@/components/ui'
 import CompleteToggle from '@/components/ui/CompleteToggle'
@@ -5,6 +6,7 @@ import TaskTags from '@/components/tags/TaskTags'
 import { STATUS_KEYS, vi } from '@/i18n/vi'
 import { formatDate } from '@/lib/dates'
 import { taskProgress } from '@/lib/progress'
+export const LIST_PAGE_SIZE=100
 export default function ListView({
   data,
   filtered,
@@ -16,6 +18,10 @@ export default function ListView({
   setConfirm,
   setParams
 }) {
+  const[page,setPage]=useState(1)
+  const pageCount=Math.max(1,Math.ceil(filtered.length/LIST_PAGE_SIZE))
+  const visible=filtered.slice((page-1)*LIST_PAGE_SIZE,page*LIST_PAGE_SIZE)
+  useEffect(()=>setPage(1),[filtered])
   return <Card className="table-wrap">{filtered.length ? <table>
 <thead>
 <tr>
@@ -31,7 +37,7 @@ export default function ListView({
 </th>
 </tr>
 </thead>
-<tbody>{filtered.map(task => <tr key={task.id} className={task.status === 'done' ? 'is-complete' : ''}>
+<tbody>{visible.map(task => <tr key={task.id} className={task.status === 'done' ? 'is-complete' : ''}>
 <td>
 <div className="task-table-title">
 <CompleteToggle checked={task.status === 'done'} onChange={checked => changeStatus(task, checked ? 'done' : 'todo')} label={task.title} showLabel />
@@ -70,5 +76,9 @@ export default function ListView({
   action={data.tasks.length
     ?<Button variant="secondary" onClick={()=>setParams({})}>Đặt lại</Button>
     :<Button onClick={()=>setEditing({})}>Tạo nhiệm vụ</Button>}
-/>}</Card>
+/>}{filtered.length>LIST_PAGE_SIZE&&<nav className="list-pagination" aria-label="Phân trang nhiệm vụ">
+<Button variant="secondary" disabled={page===1} onClick={()=>setPage(value=>Math.max(1,value-1))}>Trang trước</Button>
+<span>Trang {page}/{pageCount}</span>
+<Button variant="secondary" disabled={page===pageCount} onClick={()=>setPage(value=>Math.min(pageCount,value+1))}>Trang sau</Button>
+</nav>}</Card>
 }

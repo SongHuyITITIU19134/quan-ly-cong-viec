@@ -40,18 +40,6 @@ export default function TasksPage() {
     [quickText, setQuickText] = useState('')
   const filters = useTaskFilters(data, params, setParams),
     quickParsed = useMemo(() => parseQuickAdd(quickText, todayISO()), [quickText])
-  const [renderLimit,setRenderLimit]=useState(100)
-  useEffect(()=>setRenderLimit(100),[view,params])
-  useEffect(()=>{
-    if(renderLimit>=filters.filtered.length)return
-    const schedule=window.requestIdleCallback||((callback)=>window.setTimeout(callback,30))
-    const cancel=window.cancelIdleCallback||window.clearTimeout
-    const id=schedule(()=>setRenderLimit(value=>Math.min(filters.filtered.length,value+200)),{timeout:250})
-    return()=>cancel(id)
-  },[filters.filtered.length,renderLimit])
-  const visibleFiltered=filters.filtered.slice(0,renderLimit)
-  const visibleIds=new Set(visibleFiltered.map(task=>task.id))
-  const visibleGrouped=Object.fromEntries(Object.entries(filters.grouped).map(([status,tasks])=>[status,tasks.filter(task=>visibleIds.has(task.id))]))
   const actions = useTaskActions({
     data,
     loading,
@@ -104,8 +92,8 @@ export default function TasksPage() {
       next.set('new', '1')
       setParams(next)
     }}>{vi.action.create}</Button>} />
-    <span className="sr-only" data-render-complete={renderLimit>=filters.filtered.length}>
-      Đã render {Math.min(renderLimit,filters.filtered.length)} nhiệm vụ
+    <span className="sr-only" data-render-complete="true">
+      Đã chuẩn bị {filters.filtered.length} nhiệm vụ
     </span>
     <div className="quick-add-task">
 <label htmlFor="task-quick-add">Thêm nhanh</label>
@@ -185,12 +173,12 @@ export default function TasksPage() {
 >Đặt lại</Button>}</div>
     <p className="sr-only" aria-live="polite">{actions.announcement}</p>
     {view==='kanban'&&<KanbanView
-      data={data} filtered={visibleFiltered} grouped={visibleGrouped} hasFilters={filters.hasFilters}
+      data={data} filtered={filters.filtered} grouped={filters.grouped} hasFilters={filters.hasFilters}
       setParams={setParams} taskProps={actions.taskProps} changeStatus={actions.changeStatus}
       dropTask={actions.dropTask} setDragging={actions.setDragging} setEditing={setEditing}
     />}
     {view==='list'&&<ListView
-      data={data} filtered={visibleFiltered} tagRegistry={tagRegistry} tagFilters={filters.tagFilters}
+      data={data} filtered={filters.filtered} tagRegistry={tagRegistry} tagFilters={filters.tagFilters}
       toggleTag={actions.toggleTag} changeStatus={actions.changeStatus} setEditing={setEditing}
       setConfirm={setConfirm} setParams={setParams}
     />}
