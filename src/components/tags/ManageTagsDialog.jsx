@@ -8,8 +8,10 @@ import { buildTagMutation } from '@/tags/tagMutations'
 import { normalizeText } from '@/lib/tasks'
 import { TAG_MAX } from '@/lib/limits'
 
+const EMPTY_REGISTRY={c:{}}
+
 export default function ManageTagsDialog({onClose,onMutation=()=>{},scope='all'}){
-  const{data,tagRegistry={c:{}},manageTags,toast}=useData(),[query,setQuery]=useState(''),[renameKey,setRenameKey]=useState(''),[renameValue,setRenameValue]=useState(''),[paletteKey,setPaletteKey]=useState(''),[confirm,setConfirm]=useState(null),[error,setError]=useState(''),[busy,setBusy]=useState(false)
+  const{data,tagRegistry=EMPTY_REGISTRY,manageTags,toast}=useData(),[query,setQuery]=useState(''),[renameKey,setRenameKey]=useState(''),[renameValue,setRenameValue]=useState(''),[paletteKey,setPaletteKey]=useState(''),[confirm,setConfirm]=useState(null),[error,setError]=useState(''),[busy,setBusy]=useState(false)
   const sources=useMemo(()=>[...(scope!=='notes'?data.tasks.map(item=>({...item,collection:'tasks'})):[]),...(scope!=='tasks'?data.notes.map(item=>({...item,collection:'notes'})):[])],[data.notes,data.tasks,scope])
   const scopedCatalog=useMemo(()=>buildCatalog(sources,tagRegistry),[sources,tagRegistry])
   const items=useMemo(()=>scopedCatalog.filter(item=>normalizeText(item.name).includes(normalizeText(query))),[scopedCatalog,query])

@@ -13,7 +13,10 @@ const messageFor=(raw,selected)=>{
   return''
 }
 
-export default function TagInput({value=[],onChange,catalog=[],registry={c:{}},compact=false}){
+const EMPTY_ARR=[]
+const EMPTY_REGISTRY={c:{}}
+
+export default function TagInput({value=EMPTY_ARR,onChange,catalog=EMPTY_ARR,registry=EMPTY_REGISTRY,compact=false}){
   const[input,setInput]=useState(''),[open,setOpen]=useState(false),[active,setActive]=useState(0),[armed,setArmed]=useState(-1),[error,setError]=useState(''),[announcement,setAnnouncement]=useState('')
   const rootRef=useRef(null),inputRef=useRef(null),uid=useId(),listId=`${uid}-list`,errorId=`${uid}-error`
   const selected=Array.isArray(value)?value:[],selectedKeys=useMemo(()=>new Set(selected.map(tagKey)),[selected])
