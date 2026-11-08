@@ -391,13 +391,13 @@ Kết quả gần nhất:
 - ESLint: đạt, không có lỗi/cảnh báo.
 - Unit/component test: 54 file, 275/275 test đạt; thời gian gần nhất 19,47 giây không coverage.
 - Coverage V8 theo lines: toàn `src` 71,50%; `src/lib` 97,19%; `src/tags` 97,22%; `src/data` 82,39%.
-- Firestore Emulator: 14/14 rules test đạt; `firebase-tools` 15 cần JDK 21.
+- Firestore Emulator: 18/18 rules test đạt, gồm bốn ca tương thích tài liệu legacy; `firebase-tools` 15 cần JDK 21.
 - Production build: đạt với Node.js 24 và Vite 8.3.5.
 - E2E có sẵn cho Project CRUD, responsive, smoke, reduced-motion, axe và keyboard; chỉ chạy khi cần kiểm tra trình duyệt đầy đủ.
 - Viewport E2E: 360×800, 768×1024 và 1280×800.
 - Production build hiện không có chunk vượt 500 kB.
 - Toàn bộ E2E 57/57 đạt; năm flow Phase 6 và onboarding chạy trên ba viewport; axe 0 lỗi critical/serious trên 10 route, light/dark, 3 viewport.
-- Playwright 5.000 task: Dashboard 127,7 ms, Calendar 61,2 ms, Tasks 94,5 ms; JS gzip route `/` là 110,1 kB.
+- Playwright 5.000 task, trung vị năm lượt: Dashboard 62,8 ms, Calendar 33,6 ms, Tasks 85,3 ms; CPU throttle 4x lần lượt 148,6/32,8/322,4 ms; JS gzip route `/` là 110,1 kB.
 - Lighthouse mobile: Performance 95, Accessibility 100, Best Practices 100; `pnpm lh` fail nếu dưới 90/95/95.
 - Contrast token: 12/12 cặp đạt WCAG AA, thấp nhất 6,85:1.
 
@@ -415,6 +415,10 @@ Sau khi deploy, xác minh kể cả khi Deployment Protection đang bật:
 vercel curl https://quan-ly-cong-viec-sable.vercel.app
 ```
 
+`vercel.json` bật các header chống sniffing, giảm referrer, giới hạn quyền trình duyệt và chống nhúng trang. CSP hiện là `Content-Security-Policy-Report-Only` để quan sát Firebase Auth, Firestore, Google Sign-In và reCAPTCHA trước khi bật chặn. Quy trình sao lưu, thử rules trên project riêng, quay lại rules cũ và chuyển CSP sang enforce nằm tại [`docs/DEPLOY.md`](docs/DEPLOY.md).
+
+`pnpm audit --prod` hiện không còn lỗ hổng đã biết; Firebase 13.2.0 dùng bản vá `@grpc/grpc-js` 1.14.7. CI chạy riêng lint/test/build, coverage, E2E, rules và Lighthouse; báo cáo Lighthouse được lưu thành artifact.
+
 ## 10. Giả định nghiệp vụ
 
 - Một nhiệm vụ thuộc tối đa một dự án và một chuyến công tác.
@@ -428,7 +432,7 @@ vercel curl https://quan-ly-cong-viec-sable.vercel.app
 
 ## 11. Đề xuất nâng cấp tiếp theo
 
-- Cân nhắc đưa cổng Lighthouse cục bộ hiện tại vào CI khi runner đủ ổn định.
+- Theo dõi độ ổn định điểm Lighthouse giữa các GitHub runner và giữ artifact để đối chiếu.
 - Nâng bộ ảnh before/after hiện có thành visual regression có ngưỡng pixel diff.
 - Theo dõi UX nút “Xem thêm” Kanban và phân trang danh sách ở tập dữ liệu lớn.
 - Dùng Firebase Emulator để kiểm thử migration/rules và xung đột đa thiết bị.

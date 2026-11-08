@@ -2,6 +2,14 @@
 
 Ngày cập nhật: 08/11/2026
 
+## Phase 6c — hardening
+
+- Đo năm lượt với 5.000 task: trung vị Dashboard 62,8 ms, Calendar 33,6 ms, Tasks 85,3 ms; một lượt CPU throttle 4x lần lượt 148,6/32,8/322,4 ms.
+- Bổ sung bốn rules test cho tài liệu legacy; Firestore Emulator đạt 18/18 và có hướng dẫn deploy/rollback an toàn trong `docs/DEPLOY.md`.
+- Thêm security headers cho Vercel; CSP giữ ở chế độ Report-Only với allowlist Firebase Auth, Firestore, Google Sign-In và reCAPTCHA.
+- Nâng Firebase lên 13.2.0, override `@grpc/grpc-js` 1.14.7; `pnpm audit --prod` không còn lỗ hổng đã biết.
+- CI thêm job Lighthouse 95/100/100, tắt fail-fast cho các matrix một phiên bản Node 24 và upload báo cáo làm artifact.
+
 ## Phase 6b — hiệu năng, i18n và onboarding
 
 - Kanban chỉ render 40 thẻ mỗi cột với “Xem thêm”; danh sách phân trang 100 dòng. Tasks 5.000 mục giảm từ 3.330,7 ms xuống 94,5 ms.
