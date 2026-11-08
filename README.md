@@ -387,14 +387,14 @@ JAVA_HOME="$HOME/.local/jdk21/Contents/Home" pnpm test:rules
 Kết quả gần nhất:
 
 - ESLint: đạt, không có lỗi/cảnh báo.
-- Unit/component test: 49 file, 265/265 test đạt; thời gian gần nhất 17,56 giây không coverage.
+- Unit/component test: 49 file, 265/265 test đạt; thời gian gần nhất 19,91 giây không coverage.
 - Coverage V8 theo lines: toàn `src` 71,85%; `src/lib` 96,33%; `src/tags` 97,22%; `src/data` 81,48%.
 - Firestore Emulator: 14/14 rules test đạt; `firebase-tools` 15 cần JDK 21.
 - Production build: đạt với Node.js 24 và Vite 8.3.5.
 - E2E có sẵn cho Project CRUD, responsive, smoke, reduced-motion, axe và keyboard; chỉ chạy khi cần kiểm tra trình duyệt đầy đủ.
 - Viewport E2E: 360×800, 768×1024 và 1280×800.
 - Production build hiện không có chunk vượt 500 kB.
-- Năm flow Phase 6 chạy 15/15 trên ba viewport; axe 0 lỗi critical/serious trên 10 route, light/dark, 3 viewport.
+- Toàn bộ E2E 54/54 đạt; năm flow Phase 6 chạy 15/15 trên ba viewport; axe 0 lỗi critical/serious trên 10 route, light/dark, 3 viewport.
 - Lighthouse production preview: mobile 98/100 Performance/Accessibility; desktop 100/100; CLS đều 0.
 - Contrast token: 12/12 cặp đạt WCAG AA, thấp nhất 6,85:1.
 

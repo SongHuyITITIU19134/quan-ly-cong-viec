@@ -5,7 +5,7 @@ Ngày cập nhật: 08/11/2026
 ## Phase 6a — kiểm chứng và hoàn thiện
 
 - Sửa vòng render vô hạn khi tạo sổ/ghi chú mới và giữ input quick-add qua ranh giới `await`.
-- Vitest có timeout rõ ràng; 49 file, 265 test đạt trong 17,56 giây. Coverage lines đạt 71,85% toàn src, 96,33% lib, 97,22% tags và 81,48% data.
+- Vitest có timeout rõ ràng; 49 file, 265 test đạt trong 19,91 giây. Coverage lines đạt 71,85% toàn src, 96,33% lib, 97,22% tags và 81,48% data.
 - Firestore Emulator dùng JDK 21: 14/14 rules test đạt. CI tách `verify`, `coverage`, `e2e`, `rules` trên Node 24/pnpm frozen lockfile.
 - Playwright 5.000 task: Dashboard 71,3 ms, Calendar 40,6 ms, Tasks 3.330,7 ms; JS gzip lần đầu route `/` là 103,8 kB.
 - PWA đã xác minh offline reload, toast cập nhật, thay cache cũ và không cache Firebase/Auth; sửa cache match với `Vary` và race cleanup khi worker đổi phiên bản.
@@ -103,7 +103,7 @@ Palette nhãn/dự án gồm tám cặp `--label-1…8` và `--label-1-ink…8`:
 
 - ESLint: đạt, 0 lỗi và 0 cảnh báo.
 - Unit/component: 49 file, 265/265 test đạt.
-- Năm flow Phase 6: 15/15 đạt trên viewport 360×800, 768×1024 và 1280×800.
+- Toàn bộ E2E 54/54 đạt; năm flow Phase 6 đạt 15/15 trên viewport 360×800, 768×1024 và 1280×800.
 - Axe: 0 lỗi critical/serious trên 10 route, light/dark, ba viewport; keyboard flow đạt.
 - Build production: đạt; các route chunk dưới 12 kB gzip, React vendor 59,13 kB gzip; Firebase/Firestore là vendor động.
 - Persistence: E2E tạo dữ liệu rồi reload vẫn còn; theme reload vẫn giữ.
