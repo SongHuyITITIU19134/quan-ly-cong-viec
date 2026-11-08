@@ -27,7 +27,7 @@ describe('thành phần sổ tay',()=>{
   })
   it('card và row gọi đúng hành động chính',()=>{
     const open=vi.fn(),pin=vi.fn();wrap(<><NotebookCard notebook={{id:'b1',name:'Sổ',color:1,createdAt:'2026-11-01'}} count={2} onOpen={open} onEdit={vi.fn()} onPin={pin} onArchive={vi.fn()} onDelete={vi.fn()}/><NoteRow note={{id:'n1',title:'Ghi chú',body:'Nội dung',tags:[],links:{projectId:'p1'},updatedAt:'2026-11-01'}} tagRegistry={{c:{}}} projects={[{id:'p1',name:'Dự án'}]} trips={[]} contacts={[]} onOpen={open} onPin={pin} onMove={vi.fn()} onDelete={vi.fn()}/></>)
-    fireEvent.click(screen.getByRole('button',{name:'Sổ, 2 ghi chú'}));fireEvent.click(screen.getByRole('button',{name:'Ghim Ghi chú'}))
+    fireEvent.click(screen.getByRole('button',{name:/^Sổ2 ghi chú/}));fireEvent.click(screen.getByRole('button',{name:'Ghim Ghi chú'}))
     expect(open).toHaveBeenCalledOnce();expect(pin).toHaveBeenCalledOnce();expect(screen.getByText('Dự án: Dự án')).toBeInTheDocument()
   })
 })
