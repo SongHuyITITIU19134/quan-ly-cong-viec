@@ -121,7 +121,7 @@ export default function Trips() {
           const tasks = tripTasks(trip)
           const prep = tasks.filter(task => getTripPhase(task, trip) === 'before')
           const prepProgress=prep.length ? Math.round(prep.reduce((sum, task) => sum + taskProgress(task), 0) / prep.length) : 0
-          return <Card key={trip.id} className={`trip-card trip-tile label-theme-${index%8+1} ${trip.completed?'is-complete':''}`}>
+          return <Card key={trip.id} className={`trip-card trip-tile trip-state-${key} label-theme-${index%8+1} ${trip.completed?'is-complete':''}`}>
             <div className="trip-content">
               <span className="trip-date"><TripRange trip={trip}/></span>
               <div className="trip-title-row">{completionTick(trip)}<h3><button className="trip-title" onClick={()=>setSelected(trip)}>{trip.name}</button></h3></div>
