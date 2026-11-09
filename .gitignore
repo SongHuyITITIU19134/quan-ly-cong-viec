@@ -10,3 +10,5 @@ firebase-debug.log
 firestore-debug.log
 ui-debug.log
 docs/screenshots/
+.env*
+docs/design/reference-dashboard.jpg
