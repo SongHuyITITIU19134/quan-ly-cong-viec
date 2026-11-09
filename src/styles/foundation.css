@@ -65,6 +65,7 @@
 .not-found>strong { color: var(--accent-text); font-size: clamp(72px,13vw,150px); line-height: .85; letter-spacing: -.08em; }
 .not-found h1 { margin: 8px 0 0; font-size: clamp(28px,4vw,40px); }
 .not-found>p:not(.eyebrow) { max-width: 440px; margin: 0 0 10px; color: var(--text-2); }
+.onboarding-tour>.eyebrow { color:var(--text-2); }
 .not-found .button svg { flex: 0 0 auto; }
 :root[data-theme='dark'] .card { border: 1px solid var(--line); box-shadow: none; }
 :root[data-theme='dark'] .chip[aria-pressed='true'],:root[data-theme='dark'] .chip.active { background: var(--accent); color: var(--on-accent); }

@@ -1,8 +1,8 @@
 import { useEffect, useMemo, useState } from 'react'
 import { useSearchParams } from 'react-router-dom'
 import { Plus, Search, SlidersHorizontal, Trash2 } from 'lucide-react'
-import { Header, Page } from '@/app/App'
-import { Button, Drawer, LoadingState, Modal, Popover, PriorityBadge, StatusBadge } from '@/components/ui'
+import { Page } from '@/app/App'
+import { Button, Chip, Drawer, LoadingState, Modal, Popover, PriorityBadge, StatusBadge } from '@/components/ui'
 import TaskForm from '@/components/task/TaskForm'
 import TagFilter from '@/components/tags/TagFilter'
 import { useActions, useDataState, useToast } from '@/hooks/useData'
@@ -69,6 +69,12 @@ export default function TasksPage() {
   })
   const selectedProject = data.projects.find(project => project.id === params.get('project')),
     taskFormId = 'task-editor-form'
+  const changeView = nextView => {
+    setView(nextView)
+    const next = new URLSearchParams(params)
+    nextView === 'kanban' ? next.delete('view') : next.set('view', nextView)
+    setParams(next)
+  }
   useEffect(() => {
     if (params.get('new') === 'task') setEditing(current => current || {})
     if (params.get('new') === 'project') setProjectEditing(current => current || {})
@@ -87,11 +93,17 @@ export default function TasksPage() {
 <LoadingState />
 </Page>
   return <Page>
-    <Header
-      title={vi.nav.tasks}
-      description={vi.generated.TasksPage_90_0(filters.filtered.length)}
-      action={<Button icon={Plus} onClick={()=>setEditing({})}>{data.tasks.length?vi.action.createTask:vi.action.create}</Button>}
-    />
+    <header className="tasks-page-head">
+<div><h1>{vi.nav.tasks}</h1><p>{vi.tasks.filtered(filters.filtered.length)}</p></div>
+<div className="tasks-head-actions">
+<div className="task-view-tabs" role="tablist" aria-label={vi.tasks.viewChoice}>
+<button role="tab" aria-label={vi.tasks.boardA11y} aria-selected={view === 'kanban'} onClick={() => changeView('kanban')}>{vi.tasks.board}</button>
+<button role="tab" aria-selected={view === 'list'} onClick={() => changeView('list')}>{vi.tasks.list}</button>
+<button role="tab" aria-selected={view === 'projects'} onClick={() => changeView('projects')}>{vi.tasks.projects}</button>
+</div>
+<Button icon={Plus} onClick={()=>setEditing({})}>{vi.tasks.addTask}</Button>
+</div>
+</header>
     <span className="sr-only" data-render-complete="true">{vi.generated.TasksPage_95_1}{filters.filtered.length}{vi.generated.TasksPage_96_2}</span>
     <div className="quick-add-task">
 <label htmlFor="task-quick-add">{vi.generated.TasksPage_99_3}</label>
@@ -106,10 +118,13 @@ export default function TasksPage() {
   {quickParsed.dueDate?` · ${quickParsed.dueDate}`:''}
   {quickParsed.tags.length?` · #${quickParsed.tags.join(' #')}`:''} · {vi.priority[quickParsed.priority]}
 </small>}</div>
-    <div className="underline-tabs task-view-tabs" role="tablist" aria-label={vi.generated.TasksPage_112_7}>
-<button className="underline-tab" role="tab" aria-selected={view === 'kanban'} onClick={() => setView('kanban')}>Kanban</button>
-<button className="underline-tab" role="tab" aria-selected={view === 'list'} onClick={() => setView('list')}>{vi.generated.TasksPage_114_8}</button>
-<button className="underline-tab" role="tab" aria-selected={view === 'projects'} onClick={() => setView('projects')}>{vi.generated.TasksPage_115_9}</button>
+    <div className="tasks-filter-chips" aria-label={vi.tasks.filters}>
+<Chip active={!filters.status.length} onClick={()=>filters.changeParam('status','')}>{vi.tasks.all}</Chip>
+{STATUS_KEYS.map(key=><Chip
+  key={key}
+  active={filters.status.includes(key)}
+  onClick={()=>filters.toggleParamValue('status',filters.status,key)}
+>{vi.status[key]}</Chip>)}
 </div>
     <div className="toolbar">
 <div className="search">
@@ -181,7 +196,7 @@ export default function TasksPage() {
     />}
     <ProjectsView
       active={view==='projects'} editing={editing} data={data} loading={loading}
-      projectStatus={actions.projectStatus} changeParam={filters.changeParam} setView={setView}
+      projectStatus={actions.projectStatus} changeParam={filters.changeParam} setView={changeView}
       projectEditing={projectEditing} setProjectEditing={setProjectEditing}
       projectConfirm={projectConfirm} setProjectConfirm={setProjectConfirm}
       deleteTarget={deleteTarget} setDeleteTarget={setDeleteTarget}

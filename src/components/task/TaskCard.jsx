@@ -11,7 +11,7 @@ import TaskTags from '@/components/tags/TaskTags'
 function TaskCard({task,project,projectIndex=0,contact,onOpen,onStatus,onToggle,tagRegistry,selectedTags,onTagToggle}){
   const due=getDueState(task)
   const dueLabel=due==='overdue'?vi.generated.TaskCard_13_0:due==='today'?vi.generated.TaskCard_13_1:due==='soon'?vi.generated.TaskCard_13_2:null
-  return <article className={`task-card due-${due} ${task.status==='done'?'is-complete':''}`} onClick={event=>{if(!event.target.closest('button,input,a'))onOpen()}}>
+  return <article className={`task-card due-${due} ${task.priority==='urgent'?'is-emphasis':''} ${task.status==='done'?'is-complete':''}`} onClick={event=>{if(!event.target.closest('button,input,a'))onOpen()}}>
     <div className="task-card-top"><PriorityBadge value={task.priority}/><Popover className="task-menu" align="end" panelClassName="task-menu-pop" accessibleLabel={vi.generated.TaskCard_15_3(task.title)} label={<MoreHorizontal size={18}/>}><strong>{vi.generated.TaskCard_15_4}</strong>{STATUS_KEYS.map(key=><button role="menuitem" key={key} onClick={()=>onStatus(key)}>{vi.status[key]}</button>)}</Popover></div>
     <div className="task-title-row"><CompleteToggle checked={task.status==='done'} onChange={onToggle} label={task.title}/><button className="task-title" onClick={onOpen} title={task.title}>{task.title}</button></div>
     <TaskTags tags={task.tags} registry={tagRegistry} selected={selectedTags} onToggle={onTagToggle}/>

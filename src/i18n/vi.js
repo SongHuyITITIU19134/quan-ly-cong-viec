@@ -1,7 +1,23 @@
 export const vi = {
   appName: 'Nhịp việc', tagline: 'Công việc rõ ràng, lịch trình thảnh thơi',
   projects: { running:'Đang thực hiện',archived:'Đã lưu trữ',autoWaiting:'Tất cả nhiệm vụ đã hoàn thành, dự án đang chờ phản hồi.',derivedSaveHint:'Trạng thái chờ phản hồi được tính tự động; lưu thông tin khác sẽ giữ nguyên trạng thái nền của dự án.' },
-  dashboard: { priority:'Ưu tiên',attention:'Cần chú ý',todayTasks:'Việc hôm nay',nextWeekTasks:'7 ngày tới',emptyTasks:'Chưa có việc trong khoảng này.',dueToday:'Hạn hôm nay',overdue:'Quá hạn',completedProject:'Đã hoàn thành',completeLabel:title=>`Complete: ${title}` },
+  dashboard: {
+    priority:'Ưu tiên',attention:'Cần chú ý',todayTasks:'Việc hôm nay',nextWeekTasks:'7 ngày tới',emptyTasks:'Chưa có việc trong khoảng này.',
+    dueToday:'Hạn hôm nay',overdue:'Quá hạn',completedProject:'Đã hoàn thành',completeLabel:title=>`Complete: ${title}`,morning:'Chào buổi sáng',
+    greeting:name=>`Chào ${name},`,todayCount:count=>`Hôm nay bạn có ${count} việc`,search:'Tìm hoặc chạy lệnh',period:'Phạm vi báo cáo',
+    weeklyReport:'Báo cáo tuần',copy:'Sao chép',todayPeriod:'Hôm nay',weekPeriod:'Tuần này',monthPeriod:'Tháng này',kpiToday:'Hôm nay',
+    kpiOverdue:'Quá hạn',kpiSoon:'Sắp hạn',kpiDone:'Xong trong tuần',myTasks:'Việc của tôi',recent:'Gần đây',today:'Hôm nay',upcoming:'Sắp tới',
+    quickAdd:'Thêm nhanh',quickPlaceholder:'Ví dụ: Họp khách thứ 6 #sale !cao',quickHint:'Nhập tự nhiên, nhấn Enter hoặc nút cộng.',projects:'Dự án',
+    viewAll:'Xem tất cả',longDate:'Lịch hôm nay',addTask:'Thêm việc',allDay:'Cả ngày',timelineEmpty:'Hôm nay chưa có lịch.',noDescription:'Chưa có mô tả',
+    tasks:count=>`${count} việc`,week:'Tuần làm việc',previousWeek:'Tuần trước',nextWeek:'Tuần sau',noDue:'Chưa đặt hạn',recovery:'Không đọc được dữ liệu cũ. Bản gốc đã được giữ lại.',
+    completed:'Đã hoàn thành nhiệm vụ.',reopened:'Đã mở lại nhiệm vụ.',quickAdded:'Đã thêm nhanh nhiệm vụ.',reportCopied:'Đã sao chép báo cáo tuần.',
+  },
+  tasks: {
+    board:'Kanban',boardA11y:'Kanban',list:'Danh sách',projects:'Dự án',viewChoice:'Kiểu hiển thị công việc',filters:'Bộ lọc công việc',all:'Tất cả',
+    addTask:'Thêm việc',quickAdd:'Thêm nhanh',search:'Tìm nhiệm vụ',status:'Trạng thái',priority:'Ưu tiên',project:'Dự án',sort:'Sắp xếp',reset:'Đặt lại',
+    filtered:count=>`${count} nhiệm vụ đang hiển thị`,showing:(shown,total)=>`Đang hiển thị ${shown}/${total}`,previousPage:'Trang trước',nextPage:'Trang sau',
+    page:(current,total)=>`Trang ${current}/${total}`,boardLabel:'Bảng công việc',loadMore:count=>`Hiện thêm (${count})`,emptyLane:'Chưa có nhiệm vụ',moveTo:title=>`Chuyển sang… ${title}`,
+  },
   dailyBriefing: {
     title:date=>`Báo cáo công việc · ${date}`,todayTasks:'Công việc hôm nay',summary:'Tổng quan',topPriorities:'Ba việc nên ưu tiên',
     priority:'Ưu tiên',task:'Công việc',project:'Dự án',due:'Hạn',status:'Trạng thái',doing:'Đang làm',overdue:'Quá hạn',dueToday:'Đến hạn hôm nay',dueSoon:'Gần đến hạn trong 3 ngày',completedToday:'Đã hoàn thành hôm nay',
