@@ -1,4 +1,4 @@
-import { fireEvent, render, screen } from '@testing-library/react'
+import { fireEvent, render, screen, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { MemoryRouter, Route, Routes } from 'react-router-dom'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
@@ -24,10 +24,11 @@ describe('bố cục và bảng lệnh',()=>{
 
   it('điều hướng, đổi giao diện và cài ứng dụng',async()=>{
     showLayout()
-    await userEvent.click(screen.getByRole('button',{name:'Đi tới hôm nay'}))
-    await userEvent.click(screen.getByRole('button',{name:'Chuyển sang giao diện tối'}))
-    await userEvent.click(screen.getByRole('button',{name:'Cài ứng dụng'}))
-    await userEvent.click(screen.getByRole('link',{name:'Công việc'}))
+    const topbar=within(document.querySelector('.shell-topbar'))
+    await userEvent.click(topbar.getByRole('button',{name:'Đi tới hôm nay'}))
+    await userEvent.click(topbar.getByRole('button',{name:'Chuyển sang giao diện tối'}))
+    await userEvent.click(topbar.getByRole('button',{name:'Cài ứng dụng'}))
+    await userEvent.click(within(document.querySelector('.shell-sidebar')).getByRole('link',{name:'Công việc'}))
     expect(mocks.navigate.mock.calls.map(call=>call[0])).toEqual(['/lich','/cong-viec'])
     expect(mocks.saveSettings).toHaveBeenCalledWith(expect.objectContaining({theme:'dark',defaultView:'dashboard'}))
     expect(mocks.install).toHaveBeenCalledOnce()

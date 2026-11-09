@@ -37,7 +37,7 @@ function CompletionChart({ values, labels }) {
   </svg>
 }
 
-function AnimatedNumber({value}){const ref=useCountUp(value);return <span className="animated-number"><span className="sr-only">{value}</span><span ref={ref} aria-hidden="true">{value}</span></span>}
+function AnimatedNumber({value}){const animationRef=useCountUp(value),ref=typeof animationRef==='function'||(animationRef&&typeof animationRef==='object')?animationRef:null;return <span className="animated-number"><span className="sr-only">{value}</span><span ref={ref} aria-hidden="true">{value}</span></span>}
 
 function Dashboard() {
   const { data, loading } = useDataState()

@@ -87,11 +87,11 @@ export default function TasksPage() {
 <LoadingState />
 </Page>
   return <Page>
-    <Header title={vi.nav.tasks} description={vi.generated.TasksPage_90_0(filters.filtered.length)} action={<Button icon={Plus} onClick={() => {
-      const next = new URLSearchParams(params)
-      next.set('new', '1')
-      setParams(next)
-    }}>{vi.action.create}</Button>} />
+    <Header
+      title={vi.nav.tasks}
+      description={vi.generated.TasksPage_90_0(filters.filtered.length)}
+      action={<Button icon={Plus} onClick={()=>setEditing({})}>{data.tasks.length?vi.action.createTask:vi.action.create}</Button>}
+    />
     <span className="sr-only" data-render-complete="true">{vi.generated.TasksPage_95_1}{filters.filtered.length}{vi.generated.TasksPage_96_2}</span>
     <div className="quick-add-task">
 <label htmlFor="task-quick-add">{vi.generated.TasksPage_99_3}</label>

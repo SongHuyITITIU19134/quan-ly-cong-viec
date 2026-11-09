@@ -1,6 +1,9 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { NavLink, Outlet, useLocation } from 'react-router-dom'
-import { Bell, CalendarCheck, CalendarDays, ChevronDown, ContactRound, Download, GitBranch, LayoutDashboard, ListTodo, LogOut, Moon, NotebookTabs, Plane, Plus, Search, Settings, Sparkles, Sun } from 'lucide-react'
+import {
+  Bell, CalendarCheck, CalendarDays, ContactRound, Download, GitBranch, LayoutDashboard, ListTodo, LogOut, Moon, MoreHorizontal, NotebookTabs,
+  Plane, Plus, Search, Settings, Sparkles, Sun,
+} from 'lucide-react'
 import { vi } from '@/i18n/vi'
 import { Popover } from '@/components/ui'
 import CreateCombo from '@/components/create/CreateCombo'
@@ -20,17 +23,25 @@ import { briefingClock, buildDailyBriefing, DAILY_BRIEFING_STORAGE_KEY, shouldSh
 const links = [
   ['/', vi.nav.dashboard, LayoutDashboard],
   ['/cong-viec', vi.nav.tasks, ListTodo],
-  ['/so-do', vi.nav.mindMap, GitBranch],
   ['/lich', vi.nav.calendar, CalendarDays],
   ['/cong-tac', vi.nav.trips, Plane],
   ['/danh-ba', vi.nav.contacts, ContactRound],
+  ['/so-do', vi.nav.mindMap, GitBranch],
   ['/so-tay', vi.nav.notebooks, NotebookTabs],
-  ['/cai-dat', vi.generated.AppLayout_25_0, Settings],
 ]
+const mobileLinks = [links[0],links[1],links[2],links[6]]
+const moreLinks = [links[3],links[4],links[5]]
+
+function AppLink({item,onNavigate,className='shell-nav-link',role}) {
+  const[to,label,Icon]=item
+  return <NavLink to={to} end={to==='/' } className={className} aria-label={label} title={label} role={role} onClick={event=>{
+    if(!event.metaKey&&!event.ctrlKey&&!event.shiftKey&&!event.altKey){event.preventDefault();onNavigate(to)}
+  }}><Icon size={20} aria-hidden="true"/><span>{label}</span></NavLink>
+}
 
 function Navigation({onNavigate}) {
-  return <nav className="dock-nav" aria-label={vi.generated.AppLayout_29_1}>
-    {links.map(([to,label,Icon])=><NavLink key={to} to={to} end={to==='/' } className="dock-link" onClick={event=>{if(!event.metaKey&&!event.ctrlKey&&!event.shiftKey&&!event.altKey){event.preventDefault();onNavigate(to)}}}><Icon size={19} aria-hidden="true"/><span>{label}</span></NavLink>)}
+  return <nav className="shell-nav" aria-label={vi.shell.navigation}>
+    {links.map(item=><AppLink key={item[0]} item={item} onNavigate={onNavigate}/>)}
   </nav>
 }
 
@@ -55,6 +66,8 @@ export default function AppLayout(){
   const[dailyBriefingState,setDailyBriefingState]=useState(null)
   const overdueCount=useMemo(()=>data.tasks.filter(task=>getDueState(task,todayISO())==='overdue').length,[data.tasks])
   const dailyBriefing=useMemo(()=>buildDailyBriefing(data,dailyBriefingState?.date||todayISO()),[data,dailyBriefingState?.date])
+  const personName=user?.displayName||vi.common.assignee
+  const personInitial=(user?.displayName||user?.email||'T').slice(0,1).toUpperCase()
 
   useEffect(()=>{pruneReminderIds(localStorage,todayISO())},[])
 
@@ -69,10 +82,7 @@ export default function AppLayout(){
   useEffect(()=>{
     const onShortcut=event=>{
       if(shouldOpenPalette(event)){event.preventDefault();paletteReturnFocus.current=document.activeElement;setPaletteInitial('');setPaletteOpen(true);return}
-      if(event.key==='/'&&!['INPUT','TEXTAREA','SELECT'].includes(document.activeElement?.tagName)){
-        event.preventDefault()
-        searchRef.current?.focus()
-      }
+      if(event.key==='/'&&!['INPUT','TEXTAREA','SELECT'].includes(document.activeElement?.tagName)){event.preventDefault();searchRef.current?.focus()}
     }
     window.addEventListener('keydown',onShortcut)
     return()=>window.removeEventListener('keydown',onShortcut)
@@ -81,6 +91,7 @@ export default function AppLayout(){
   useEffect(()=>{const check=()=>{const reminders=pendingReminders(data.tasks,new Date(),localStorage);setReminderCount(reminders.length);for(const task of reminders){const key=reminderId(task);if(notified.current.has(key))continue;notified.current.add(key);rememberReminder(localStorage,task);const message=vi.generated.AppLayout_67_2(task.title);toast(message);if(typeof Notification!=='undefined'&&Notification.permission==='granted')new Notification(vi.generated.AppLayout_67_3,{body:message})}};check();const timer=window.setInterval(check,30000);return()=>window.clearInterval(timer)},[data.tasks,toast])
 
   useEffect(()=>{
+    if(import.meta.env.VITE_E2E==='true')return undefined
     if(loading)return undefined
     const check=()=>{
       let shown=''
@@ -115,19 +126,11 @@ export default function AppLayout(){
     navigate(`${location.pathname}${params.size?`?${params}`:''}`,{replace:true})
   },[location.pathname,location.search,navigate])
 
-  const submitSearch=event=>{
-    event.preventDefault()
-    paletteReturnFocus.current=searchRef.current
-    setPaletteInitial(query.trim())
-    setPaletteOpen(true)
-  }
+  const openPalette=(initial='',returnFocus=document.activeElement)=>{paletteReturnFocus.current=returnFocus;setPaletteInitial(initial);setPaletteOpen(true)}
+  const submitSearch=event=>{event.preventDefault();openPalette(query.trim(),searchRef.current)}
   const closePalette=()=>{setPaletteOpen(false);paletteReturnFocus.current?.focus?.()}
   const changeTheme=()=>saveSettings({...settings,theme:resolved==='dark'?'light':'dark'})
   const choosePalette=item=>{setPaletteOpen(false);if(item.action==='task')setCreateMode('task');else if(item.action==='theme')changeTheme();else if(item.to)navigate(item.to)}
-  const chooseCreate=mode=>{
-    if(mode==='trip')navigate('/cong-tac?new=trip')
-    else setCreateMode(mode)
-  }
   const finishOnboarding=()=>saveSettings({...settings,onboardingSeen:true})
   const enableDailyNotifications=async()=>{
     if(typeof Notification==='undefined'){toast(vi.dailyBriefing.notificationsUnsupported);return}
@@ -145,37 +148,72 @@ export default function AppLayout(){
     if(ops.length&&!await batch(ops))return
     if(await finishOnboarding())toast(vi.onboarding.sampleAdded)
   }
-  const menuKeys=event=>{
-    if(!['ArrowDown','ArrowUp','Home','End'].includes(event.key))return
-    event.preventDefault()
-    const items=[...event.currentTarget.parentElement.querySelectorAll('[role="menuitem"]')],index=items.indexOf(event.currentTarget)
-    items[event.key==='Home'?0:event.key==='End'?items.length-1:(index+(event.key==='ArrowDown'?1:-1)+items.length)%items.length]?.focus()
-  }
+  const alertLabel=vi.shell.reminders(reminderCount,overdueCount)
+  const profile=<>{user?.photoURL?<img src={user.photoURL} alt="" referrerPolicy="no-referrer"/>:<span aria-hidden="true">{personInitial}</span>}<strong>{personName}</strong></>
+  const accountMenu=<>
+    {mode==='firebase'&&<div className="profile-menu-identity"><strong>{personName}</strong><span>{user?.email}</span></div>}
+    <button type="button" role="menuitem" onClick={changeTheme}>{resolved==='dark'?<Sun size={17}/>:<Moon size={17}/>}<span>{resolved==='dark'?vi.shell.light:vi.shell.dark}</span></button>
+    {mode==='firebase'&&<button type="button" role="menuitem" onClick={logout}><LogOut size={17}/><span>{vi.auth.signOut}</span></button>}
+  </>
 
   return <div className="app-shell">
-      <header className="shell-topbar" aria-label={vi.generated.AppLayout_104_4}>
-        <form className="global-search hard-shadow" role="search" onSubmit={submitSearch}>
-          <Search size={17} aria-hidden="true"/>
-          <input ref={searchRef} value={query} onChange={event=>setQuery(event.target.value)} onFocus={()=>setQuery('')} aria-label={vi.generated.AppLayout_107_5} placeholder={vi.generated.AppLayout_107_6}/>
+    <aside className="shell-sidebar">
+      <NavLink className="shell-brand" to="/" aria-label={`${vi.appName} — ${vi.nav.dashboard}`} onClick={event=>{event.preventDefault();navigate('/')}}>
+        <span className="shell-brand-mark"><Sparkles size={20}/></span><strong>{vi.appName}</strong>
+      </NavLink>
+      {location.pathname!=='/cong-viec'&&<button className="shell-create-task" type="button" onClick={()=>setCreateMode('task')}><Plus size={19} aria-hidden="true"/><span>{vi.action.createTask}</span></button>}
+      <Navigation onNavigate={navigate}/>
+      <div className="shell-sidebar-bottom">
+        <AppLink item={['/cai-dat',vi.nav.settings,Settings]} onNavigate={navigate}/>
+        <Popover className="workspace-menu" panelClassName="profile-menu-panel" label={<><span className="workspace-avatar" aria-hidden="true">{personInitial}</span><span className="workspace-copy"><small>{vi.shell.workspace}</small><strong>{mode==='firebase'?personName:vi.shell.local}</strong></span><MoreHorizontal size={18}/></>}>
+          {accountMenu}
+        </Popover>
+      </div>
+    </aside>
+
+    <header className="mobile-header" aria-label={vi.shell.quickTools}>
+      <div><small>{vi.shell.greeting(personName)}</small><strong>{vi.appName}</strong></div>
+      <button className="topbar-button" type="button" aria-label={vi.shell.today} title={vi.shell.today} onClick={()=>navigate('/lich')}><CalendarCheck size={20}/></button>
+      <button className="topbar-button notification-button" type="button" aria-label={alertLabel} title={vi.shell.reminderTitle} onClick={()=>navigate('/cong-viec?due=overdue')}>
+        <Bell size={20}/>{overdueCount+reminderCount>0&&<span className="notification-count">{overdueCount+reminderCount}</span>}
+      </button>
+      <button className="topbar-button" type="button" onClick={changeTheme} aria-label={resolved==='dark'?vi.shell.lightTheme:vi.shell.darkTheme} title={resolved==='dark'?vi.shell.light:vi.shell.dark}>{resolved==='dark'?<Sun size={20}/>:<Moon size={20}/>}</button>
+      <Popover className="mobile-more" panelClassName="mobile-more-panel" align="end" accessibleLabel={vi.nav.more} label={<MoreHorizontal size={20}/>}>
+        <button type="button" role="menuitem" onClick={event=>openPalette('',event.currentTarget)}><Search size={18}/><span>{vi.action.search}</span></button>
+        {moreLinks.map(item=><AppLink key={item[0]} item={item} onNavigate={navigate} className="mobile-menu-link" role="menuitem"/>)}
+        <AppLink item={['/cai-dat',vi.nav.settings,Settings]} onNavigate={navigate} className="mobile-menu-link" role="menuitem"/>
+        {accountMenu}
+      </Popover>
+    </header>
+
+    <div className="shell-workspace">
+      <header className="shell-topbar" aria-label={vi.shell.quickTools}>
+        <form className="global-search" role="search" onSubmit={submitSearch}>
+          <Search size={18} aria-hidden="true"/>
+          <input ref={searchRef} value={query} onChange={event=>setQuery(event.target.value)} onFocus={()=>setQuery('')} aria-label={vi.shell.search} placeholder={vi.shell.searchPlaceholder}/>
           <kbd aria-hidden="true">⌘K</kbd>
         </form>
-        <button className="topbar-button" type="button" aria-label={vi.generated.AppLayout_110_7} title={vi.generated.AppLayout_110_8} onClick={()=>navigate('/lich')}><CalendarCheck size={19}/></button>
-        <button className={`topbar-button notification-button ${overdueCount||reminderCount?'has-alert':''}`} type="button" aria-label={vi.generated.AppLayout_111_9(reminderCount,overdueCount)} title={vi.generated.AppLayout_111_10} onClick={()=>navigate('/cong-viec?due=overdue')}><Bell size={19}/>{overdueCount+reminderCount>0&&<span className="notification-count">{overdueCount+reminderCount}</span>}</button>
-        <button className="topbar-button" type="button" onClick={changeTheme} aria-label={resolved==='dark'?vi.generated.AppLayout_112_11:vi.generated.AppLayout_112_12} title={resolved==='dark'?vi.generated.AppLayout_112_13:vi.generated.AppLayout_112_14}>{resolved==='dark'?<Sun size={19}/>:<Moon size={19}/>}</button>
-        {canInstall&&<button className="topbar-button" type="button" onClick={install} aria-label={vi.generated.AppLayout_113_15} title={vi.generated.AppLayout_113_16}><Download size={19}/></button>}
-        {mode==='firebase'?<Popover className="profile-menu" panelClassName="profile-menu-panel" align="end" accessibleLabel={vi.generated.AppLayout_114_17} label={<>{user?.photoURL?<img src={user.photoURL} alt="" referrerPolicy="no-referrer"/>:<span aria-hidden="true">{(user?.displayName||user?.email||'T').slice(0,1).toUpperCase()}</span>}<strong>{user?.displayName||vi.generated.AppLayout_114_18}</strong></>}><div className="profile-menu-identity"><strong>{user?.displayName||vi.generated.AppLayout_114_19}</strong><span>{user?.email}</span></div><button type="button" role="menuitem" onClick={logout}><LogOut size={17}/>{vi.auth.signOut}</button></Popover>:<button className="profile-button" type="button" title={vi.generated.AppLayout_114_20}><span aria-hidden="true">T</span><strong>{vi.generated.AppLayout_114_21}</strong></button>}
+        <button className="topbar-button" type="button" aria-label={vi.shell.today} title={vi.shell.today} onClick={()=>navigate('/lich')}><CalendarCheck size={19}/></button>
+        <button className="topbar-button notification-button" type="button" aria-label={alertLabel} title={vi.shell.reminderTitle} onClick={()=>navigate('/cong-viec?due=overdue')}><Bell size={19}/>{overdueCount+reminderCount>0&&<span className="notification-count">{overdueCount+reminderCount}</span>}</button>
+        <button className="topbar-button" type="button" onClick={changeTheme} aria-label={resolved==='dark'?vi.shell.lightTheme:vi.shell.darkTheme} title={resolved==='dark'?vi.shell.light:vi.shell.dark}>{resolved==='dark'?<Sun size={19}/>:<Moon size={19}/>}</button>
+        {canInstall&&<button className="topbar-button" type="button" onClick={install} aria-label={vi.shell.install} title={vi.shell.install}><Download size={19}/></button>}
+        <Popover className="profile-menu" panelClassName="profile-menu-panel" align="end" label={profile}>{accountMenu}</Popover>
       </header>
-    <main className="main surface-sheet" id="main-content">
-      {error&&<div className="global-error" role="alert"><span>{error}</span><button onClick={()=>setError(null)}>{vi.generated.AppLayout_117_22}</button></div>}
-      {emailNeedsVerification&&<section className="verification-banner" aria-label={vi.auth.verifyTitle}><div><strong>{vi.auth.verifyTitle}</strong><p>{vi.auth.verifyDescription}</p></div><div><button type="button" onClick={resendEmail}>{vi.auth.resend}</button><button type="button" onClick={confirmEmail}>{vi.auth.verified}</button></div></section>}
-      {importOffer&&<section className="cloud-import-banner" aria-label={vi.generated.AppLayout_119_23}><div><strong>{vi.auth.importTitle}</strong><p>{vi.auth.importDescription}</p></div><div><button type="button" disabled={importBusy} onClick={skipImport}>{vi.auth.skip}</button><button type="button" disabled={importBusy} onClick={importLocal}>{importBusy?vi.auth.importing:vi.auth.import}</button></div></section>}
-      <Outlet/>
-    </main>
-    <footer className="floating-dock">
-      <NavLink className="dock-brand" to="/" aria-label={vi.generated.AppLayout_123_24} onClick={event=>{event.preventDefault();navigate('/')}}><span className="dock-brand-mark"><Sparkles size={19}/></span><strong>{vi.appName}</strong></NavLink>
-      <Navigation onNavigate={navigate}/>
-      <div className="dock-create-group"><button className="dock-create" type="button" aria-label={vi.generated.AppLayout_125_25} onClick={()=>setCreateMode('combo')}><Plus size={20}/><span>{vi.generated.AppLayout_125_26}</span></button><Popover className="dock-create-more" panelClassName="create-menu" align="end" accessibleLabel={vi.generated.AppLayout_125_27} label={<ChevronDown size={17}/>}>{[['combo',vi.generated.AppLayout_125_28],['task',vi.generated.AppLayout_125_29],['project',vi.generated.AppLayout_125_30],['trip',vi.generated.AppLayout_125_31]].map(([mode,label])=><button type="button" role="menuitem" key={mode} onKeyDown={menuKeys} onClick={()=>chooseCreate(mode)}>{label}</button>)}</Popover></div>
-    </footer>
+      <main className="main" id="main-content">
+        {error&&<div className="global-error" role="alert"><span>{error}</span><button onClick={()=>setError(null)}>{vi.action.close}</button></div>}
+        {emailNeedsVerification&&<section className="verification-banner" aria-label={vi.auth.verifyTitle}><div><strong>{vi.auth.verifyTitle}</strong><p>{vi.auth.verifyDescription}</p></div><div><button type="button" onClick={resendEmail}>{vi.auth.resend}</button><button type="button" onClick={confirmEmail}>{vi.auth.verified}</button></div></section>}
+        {importOffer&&<section className="cloud-import-banner" aria-label={vi.shell.localImport}><div><strong>{vi.auth.importTitle}</strong><p>{vi.auth.importDescription}</p></div><div><button type="button" disabled={importBusy} onClick={skipImport}>{vi.auth.skip}</button><button type="button" disabled={importBusy} onClick={importLocal}>{importBusy?vi.auth.importing:vi.auth.import}</button></div></section>}
+        <Outlet/>
+      </main>
+    </div>
+
+    <nav className="mobile-tabs" aria-label={vi.shell.navigation}>
+      <AppLink item={mobileLinks[0]} onNavigate={navigate} className="mobile-tab"/>
+      <AppLink item={mobileLinks[1]} onNavigate={navigate} className="mobile-tab"/>
+      <button className="mobile-create" type="button" aria-label={vi.action.create} onClick={()=>setCreateMode('combo')}><Plus size={24}/><span>{vi.action.create}</span></button>
+      <AppLink item={mobileLinks[2]} onNavigate={navigate} className="mobile-tab"/>
+      <AppLink item={mobileLinks[3]} onNavigate={navigate} className="mobile-tab"/>
+    </nav>
     <CreateCombo open={Boolean(createMode)} mode={createMode||'combo'} preselectedProjectId={new URLSearchParams(location.search).get('project')||new URLSearchParams(location.search).get('projectId')||''} onClose={()=>setCreateMode(null)}/>
     {!loading&&!readOnly&&settings.onboardingSeen!==true&&<OnboardingTour onFinish={finishOnboarding} onSample={useSample}/>} 
     <CommandPalette open={paletteOpen} data={data} initialQuery={paletteInitial} onClose={closePalette} onChoose={choosePalette}/>
