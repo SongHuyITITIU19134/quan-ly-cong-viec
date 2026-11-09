@@ -2,14 +2,16 @@ html { height: 100%; background: var(--bg); scrollbar-gutter: stable; }
 body { min-width: 320px; height: 100%; overflow: hidden; background: var(--bg); font-family: var(--font-sans); font-size: 14px; font-weight: var(--font-weight-medium); }
 #root { height: 100%; }
 .app-shell { display: grid; width: 100%; height: 100dvh; min-height: 100svh; grid-template-columns: 248px minmax(0,1fr); background: var(--bg); }
-.shell-sidebar { position: relative; z-index: var(--z-sticky); display: flex; min-width: 0; flex-direction: column; gap: var(--space-5); border-right: 1px solid var(--line); padding: 24px 16px 20px; background: var(--surface); }
-.shell-brand { display: flex; min-height: 48px; align-items: center; gap: 12px; padding: 0 10px; }
+.shell-sidebar { position: relative; z-index: var(--z-sticky); display: flex; min-width: 0; overflow: visible; flex-direction: column; gap: var(--space-5); border-right: 1px solid var(--line); padding: 24px 16px 20px 24px; background: var(--surface); }
+.shell-brand { display: flex; min-width: 0; min-height: 48px; align-items: center; gap: 12px; padding: 0 8px; }
 .shell-brand-mark { display: grid; width: 40px; height: 40px; flex: 0 0 40px; place-items: center; border-radius: 14px; background: var(--ink); color: var(--accent); }
 .shell-brand strong { font-size: 17px; letter-spacing: -.02em; }
 .shell-create-task { display: flex; min-height: 48px; align-items: center; justify-content: center; gap: 9px; border: 0; border-radius: var(--radius-control); padding: 0 14px; background: var(--accent); color: var(--on-accent); font-weight: 800; box-shadow: var(--shadow-hard-sm); }
 .shell-create-task:hover { filter: brightness(.97); transform: translate(-1px,-1px); }
-.shell-nav { display: grid; gap: 6px; }
-.shell-nav-link { display: flex; min-height: 48px; align-items: center; gap: 13px; border-radius: var(--radius-inner); padding: 0 14px; color: var(--text-2); font-size: 13px; font-weight: 700; transition: background-color var(--motion-fast) var(--ease-out-expo),color var(--motion-fast) var(--ease-out-expo); }
+.shell-nav { display: grid; width: 100%; min-width: 0; gap: 6px; }
+.shell-nav-link { box-sizing: border-box; display: flex; width: 100%; min-width: 0; min-height: 48px; align-items: center; gap: 13px; border-radius: var(--radius-inner); padding: 0 14px; color: var(--text-2); font-size: 13px; font-weight: 700; transition: background-color var(--motion-fast) var(--ease-out-expo),color var(--motion-fast) var(--ease-out-expo); }
+.shell-nav-link svg { flex: 0 0 20px; }
+.shell-nav-link span { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .shell-nav-link:hover { background: var(--fill); color: var(--text); }
 .shell-nav-link.active { background: var(--ink); color: var(--bg); }
 .shell-sidebar-bottom { display: grid; gap: 8px; margin-top: auto; }

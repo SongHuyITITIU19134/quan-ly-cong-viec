@@ -11,6 +11,8 @@ export const vi = {
     viewAll:'Xem tất cả',longDate:'Lịch hôm nay',addTask:'Thêm việc',allDay:'Cả ngày',timelineEmpty:'Hôm nay chưa có lịch.',noDescription:'Chưa có mô tả',
     tasks:count=>`${count} việc`,week:'Tuần làm việc',previousWeek:'Tuần trước',nextWeek:'Tuần sau',noDue:'Chưa đặt hạn',recovery:'Không đọc được dữ liệu cũ. Bản gốc đã được giữ lại.',
     completed:'Đã hoàn thành nhiệm vụ.',reopened:'Đã mở lại nhiệm vụ.',quickAdded:'Đã thêm nhanh nhiệm vụ.',reportCopied:'Đã sao chép báo cáo tuần.',
+    emptyTitle:'Bắt đầu một nhịp làm việc mới',emptyDescription:'Tạo dự án đầu tiên hoặc dùng dữ liệu mẫu để khám phá Tổng quan.',
+    createFirstProject:'Tạo dự án đầu tiên',useSample:'Dùng dữ liệu mẫu',sampleAdded:'Đã thêm dữ liệu mẫu.',
   },
   tasks: {
     board:'Kanban',boardA11y:'Kanban',list:'Danh sách',projects:'Dự án',viewChoice:'Kiểu hiển thị công việc',filters:'Bộ lọc công việc',all:'Tất cả',

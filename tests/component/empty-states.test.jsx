@@ -26,7 +26,7 @@ const show=(Component,url='/')=>render(<MemoryRouter initialEntries={[url]}><Com
 describe('trạng thái dữ liệu trống',()=>{
   beforeEach(()=>{state.data=empty})
   it.each([
-    [Dashboard,'/','Chào mừng! Hãy tạo dự án đầu tiên','Tạo'],
+    [Dashboard,'/','Bắt đầu một nhịp làm việc mới','Tạo dự án đầu tiên'],
     [Tasks,'/cong-viec','Chưa có nhiệm vụ','Tạo nhiệm vụ'],
     [Tasks,'/cong-viec?view=list','Chưa có nhiệm vụ','Tạo nhiệm vụ'],
     [Tasks,'/cong-viec?view=projects','Chưa có dự án','Tạo dự án'],

@@ -78,7 +78,7 @@ function Dashboard(){
   const quickParsed=useMemo(()=>parseQuickAdd(quickText,today),[quickText,today])
   const self=data.contacts.find(contact=>contact.isSelf)||data.contacts.find(contact=>contact.id==='self')
   const name=self?.fullName||vi.common.assignee,report=useMemo(()=>weeklyReport(data,today),[data,today])
-  const noData=!data.projects.length&&!data.tasks.length&&!data.contacts.length&&!data.trips.length
+  const noData=!data.projects.length&&!data.tasks.length&&!data.trips.length
   const goToScope=query=>navigate(`/cong-viec${query?`?${query}`:''}`)
   const toggleTask=async task=>{
     const status=task.status==='done'?'todo':'done',created=status==='done'?recurrenceCreateOp(task,data.tasks):null
@@ -94,12 +94,16 @@ function Dashboard(){
       checklist:[],progress:0,progressMode:'auto',tripId:null,tripPhase:null,order:data.tasks.length+1,tags:normalizeTags(quickParsed.tags)}}])
     if(saved){setQuickText('');toast(vi.dashboard.quickAdded,{label:vi.action.undo,onClick:()=>batch([{type:'delete',collection:'tasks',id}])})}
   }
+  const useSample=async()=>{
+    const[{onboardingSample},{stringifyJsonExport,parseJsonImport,buildImportOps}]=await Promise.all([
+      import('@/data/onboardingSample'),import('@/lib/dataTransfer')
+    ])
+    const ops=buildImportOps(parseJsonImport(stringifyJsonExport(onboardingSample())).data,data,'skip')
+    if(ops.length&&await batch(ops))toast(vi.dashboard.sampleAdded)
+  }
   const openPalette=()=>window.dispatchEvent(new KeyboardEvent('keydown',{key:'k',metaKey:true,bubbles:true}))
   const copyReport=async()=>{await navigator.clipboard.writeText(report);toast(vi.dashboard.reportCopied)}
   const longDate=new Intl.DateTimeFormat('vi-VN',{weekday:'long',day:'numeric',month:'long',year:'numeric'}).format(new Date())
-  if(noData)return <Page><h1 className="sr-only">{vi.dashboard.morning}</h1><Card><EmptyState title={vi.empty.welcome} description={vi.empty.description}
-    action={<Button icon={Plus} onClick={()=>navigate('/?new=1')}>{vi.action.create}</Button>}/></Card></Page>
-
   return <Page><div className="dashboard-layout">
     <section className="dashboard-center">
       <header className="dashboard-welcome"><p>{vi.dashboard.greeting(name)}</p>
@@ -110,6 +114,9 @@ function Dashboard(){
           <select id="dashboard-period" value={period} onChange={event=>setPeriod(event.target.value)}><option value="today">{vi.dashboard.todayPeriod}</option>
             <option value="week">{vi.dashboard.weekPeriod}</option><option value="month">{vi.dashboard.monthPeriod}</option></select>
           <Button variant="ghost" onClick={()=>setShowReport(value=>!value)}>{vi.dashboard.weeklyReport}</Button></div></header>
+      {noData?<Card className="dashboard-empty-card"><EmptyState title={vi.dashboard.emptyTitle} description={vi.dashboard.emptyDescription}
+        action={<div className="dashboard-empty-actions"><Button icon={Plus} onClick={()=>navigate('/cong-viec?view=projects&new=project')}>{vi.dashboard.createFirstProject}</Button>
+          <Button variant="secondary" onClick={useSample}>{vi.dashboard.useSample}</Button></div>}/></Card>:<>
       {showReport&&<Card className="dashboard-report"><div className="section-row"><h2>{vi.dashboard.weeklyReport}</h2>
         <Button onClick={copyReport}>{vi.dashboard.copy}</Button></div><pre>{report}</pre></Card>}
       <div className="dashboard-kpis"><button onClick={()=>goToScope(`from=${today}&to=${today}`)}><span>{vi.dashboard.kpiToday}</span><strong>{summary.today.length}</strong></button>
@@ -135,7 +142,7 @@ function Dashboard(){
           :vi.dashboard.projects}>
           {projectRows.slice(0,6).map((item,index)=><div className="mini-bar-item" key={item.project.id}><span className={`mini-bar label-theme-${index%8+1}`}
             style={{width:`${Math.max(8,item.tasks.length/Math.max(1,...projectRows.map(row=>row.tasks.length))*100)}%`}}/><small title={item.project.name}>{item.project.name}</small><strong>{item.tasks.length}</strong></div>)}</div>
-      </section>
+      </section></>}
     </section>
     <aside className="dashboard-right" aria-label={vi.dashboard.longDate}>
       <div className="dashboard-profile"><Avatar name={name}/><span><small>{vi.dashboard.morning}</small><strong>{name}</strong></span>
