@@ -5,6 +5,7 @@
 .contact-main>span:last-child { min-width: 0; }
 .contact-main strong { font-size: 16px; }
 .contact-main small { max-width: 220px; }
+.contact-org-chip { display: inline-flex; margin-top: 8px; border-radius: var(--radius-pill); padding: 3px 8px; background: var(--color-surface-soft); color: var(--color-text); font-size: 11px; font-weight: 700; }
 .contact-card .avatar-lg { width: 64px; height: 64px; flex: 0 0 64px; border: var(--border-ink); background: var(--label-bg); color: var(--color-ink-fixed); font-size: 24px; box-shadow: var(--shadow-hard); }
 .contact-actions a { width: 44px; height: 44px; border: var(--border-ink); border-radius: 50%; background: var(--color-paper); color: var(--color-text); box-shadow: var(--shadow-hard); transition: transform var(--motion-fast) var(--ease-out-expo); }
 .contact-actions a:hover { background: var(--color-paper); transform: translateY(-1px); }
@@ -12,5 +13,9 @@
 .profile-head p { color: var(--color-ink-fixed); opacity: .75; }
 .profile-head .avatar-xl { border: var(--border-ink); background: rgb(255 255 255 / 60%); color: var(--color-ink-fixed); box-shadow: var(--shadow-hard); }
 .related-row { min-height: 48px; border-bottom-color: var(--color-border-subtle); }
+.contact-detail-layout { display: grid; grid-template-columns: minmax(210px,.72fr) minmax(280px,1.28fr); gap: var(--space-5); }
+.modal:has(.contact-detail-layout) { width: min(820px,100%); }
+.contact-profile-column { min-width: 0; }
+.contact-detail-layout .related-block { margin: 0; border-left: 1px solid var(--color-border-subtle); padding-left: var(--space-5); }
 
-@media(max-width:767px){.contacts-grid{grid-template-columns:1fr}.contact-card{min-height:112px;padding:14px}.contact-card .avatar-lg{width:54px;height:54px;flex-basis:54px}.contact-main small{max-width:155px}.contact-card:hover{transform:none}}
+@media(max-width:767px){.contacts-grid{grid-template-columns:1fr}.contact-card{min-height:112px;padding:14px}.contact-card .avatar-lg{width:54px;height:54px;flex-basis:54px}.contact-main small{max-width:155px}.contact-card:hover{transform:none}.contact-detail-layout{grid-template-columns:1fr}.contact-detail-layout .related-block{border-left:0;border-top:1px solid var(--color-border-subtle);padding-top:var(--space-4);padding-left:0}}
