@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { Trash2 } from 'lucide-react'
-import { Button, Card, EmptyState, PriorityBadge, ProgressBar } from '@/components/ui'
+import { Button, Card, EmptyState, PriorityBadge, ProgressBar, StatusBadge } from '@/components/ui'
 import CompleteToggle from '@/components/ui/CompleteToggle'
 import TaskTags from '@/components/tags/TaskTags'
 import { STATUS_KEYS, vi } from '@/i18n/vi'
@@ -51,6 +51,7 @@ export default function ListView({
 <TaskTags tags={task.tags} registry={tagRegistry} selected={tagFilters} onToggle={toggleTag} />
 </td>
 <td>
+<StatusBadge value={task.status} />
 <select
   aria-label={vi.generated.ListView_53_8(task.title)}
   value={task.status}
@@ -61,7 +62,7 @@ export default function ListView({
 <PriorityBadge value={task.priority} />
 </td>
 <td><span className={due==='overdue'?'overdue-date':''}>{formatDate(task.dueDate)}</span>
-{due==='overdue'&&<span className="overdue-badge">{vi.tasks.overdue}</span>}</td>
+{['overdue','today','soon'].includes(due)&&<StatusBadge value={due}/>}</td>
 <td className="progress-cell">
 <ProgressBar value={taskProgress(task)} label={false} />
 <small>{taskProgress(task)}%</small>

@@ -38,7 +38,7 @@ export const vi = {
     createTask: 'Chỉ nhiệm vụ', createProject: 'Chỉ dự án', createTrip: 'Công tác', greeting: name=>`Chào ${name}`, localImport: 'Nhập dữ liệu cục bộ',
   },
   action: { create: 'Tạo', createNew:'Tạo mới', createTask: 'Tạo nhiệm vụ', add: 'Thêm mới', save: 'Lưu thay đổi', cancel: 'Hủy', edit: 'Chỉnh sửa', remove: 'Xóa', close: 'Đóng', retry: 'Thử lại', undo: 'Hoàn tác', today: 'Hôm nay', previous: 'Trước', next: 'Sau', search: 'Tìm kiếm', reset: 'Đặt lại' },
-  status: { todo: 'Chưa bắt đầu', doing: 'Đang thực hiện', waiting: 'Chờ phản hồi', done: 'Hoàn thành', paused: 'Tạm dừng' },
+  status: { todo: 'Chưa bắt đầu', doing: 'Đang thực hiện', waiting: 'Chờ phản hồi', done: 'Hoàn thành', paused: 'Tạm dừng', soon:'Sắp hạn', today:'Hôm nay', overdue:'Quá hạn' },
   priority: { low: 'Thấp', medium: 'Trung bình', high: 'Cao', urgent: 'Khẩn cấp' },
   common: { loading: 'Đang tải dữ liệu…', error: 'Không thể tải dữ liệu', empty: 'Chưa có dữ liệu', task: 'nhiệm vụ', project: 'Dự án', due: 'Hạn', progress: 'Tiến độ', assignee: 'Phụ trách', all: 'Tất cả', tabs: 'Các thẻ' },
   mindMap: { allProjects: 'Tất cả dự án', noMatches: 'Không có nhiệm vụ khớp bộ lọc', treeMap: 'Tree-map' },

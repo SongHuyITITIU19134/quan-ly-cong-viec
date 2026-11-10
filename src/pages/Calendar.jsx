@@ -70,9 +70,9 @@ export default function Calendar() {
           <span className="sr-only">{formatDate(date)}, {tasks.length}{vi.generated.Calendar_68_13}{trips.length}{vi.generated.Calendar_68_14}{overlap?vi.generated.Calendar_68_15:''}. </span><span className="day-number">{format(day, 'd')}</span>{overlap&&<AlertTriangle className="day-overlap-icon" size={15} aria-hidden="true"/>}
           {mode==='month'?<>{[...trips.map(item=>({type:'trip',item})),...tasks.map(item=>({type:'task',item}))].slice(0,2).map(({type,item})=>type==='trip'
             ?<span className={`trip-strip label-theme-${data.trips.indexOf(item)%8+1}`} key={`trip-${item.id}`}><Plane size={11}/>{item.location}{tripDaySession(item,date)&&` · ${tripDaySession(item,date)}`}</span>
-            :<span className={`calendar-task status-${item.status} due-${getDueState(item)}`} key={`task-${item.id}`} onClick={event=>{event.stopPropagation();setEditing(item)}}>{item.title}</span>)}
+            :<span className={`calendar-task status-${item.status} due-${getDueState(item)}`} key={`task-${item.id}`} onClick={event=>{event.stopPropagation();setEditing(item)}}><StatusBadge value={item.status}/><span>{item.title}</span></span>)}
           {tasks.length+trips.length>2&&<small>+{tasks.length+trips.length-2}{vi.calendar.moreItems}</small>}</>:<>{trips.map(trip=><span className={`trip-strip label-theme-${data.trips.indexOf(trip)%8+1}`} key={trip.id}><Plane size={11}/>{trip.location}{tripDaySession(trip,date)&&` · ${tripDaySession(trip,date)}`}</span>)}
-          {tasks.slice(0,10).map(task=><span className={`calendar-task status-${task.status} due-${getDueState(task)}`} key={task.id} onClick={event=>{event.stopPropagation();setEditing(task)}}>{task.title}</span>)}</>}
+          {tasks.slice(0,10).map(task=><span className={`calendar-task status-${task.status} due-${getDueState(task)}`} key={task.id} onClick={event=>{event.stopPropagation();setEditing(task)}}><StatusBadge value={task.status}/><span>{task.title}</span></span>)}</>}
         </button>
       })}</div>
     </div>

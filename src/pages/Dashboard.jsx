@@ -2,7 +2,7 @@ import { memo, useEffect, useMemo, useRef, useState } from 'react'
 import { Bell, CalendarDays, Check, ChevronLeft, ChevronRight, Plus, Search } from 'lucide-react'
 import { addDays, endOfMonth, endOfWeek, startOfMonth, startOfWeek } from 'date-fns'
 import { Page } from '@/app/App'
-import { Avatar, AvatarStack, Button, Card, EmptyState, ProgressBar } from '@/components/ui'
+import { Avatar, AvatarStack, Button, Card, EmptyState, ProgressBar, StatusBadge } from '@/components/ui'
 import { useActions, useAuth, useDataState, useToast } from '@/hooks/useData'
 import { getProjectEffectiveStatus } from '@/lib/projectStatus'
 import { getDueState } from '@/lib/tasks'
@@ -25,9 +25,9 @@ function DashboardTask({task,indexes,onToggle,onOpen,emphasis=false}){
   return <article className={`dashboard-task-card due-${due} ${project?`has-project label-theme-${projectColor}`:''} ${emphasis?'is-emphasis':''} ${task.status==='done'?'is-done':''}`}>
     <div className="dashboard-task-main"><button className="dashboard-task-title" type="button" onClick={onOpen}>{task.title}</button>
       <p>{task.description||vi.dashboard.noDescription}</p></div>
-    <div className="dashboard-task-meta">{project&&<span className="project-chip">{project.name}</span>}<AvatarStack people={people} max={4}/>
+    <div className="dashboard-task-meta"><StatusBadge value={task.status}/>{project&&<span className="project-chip">{project.name}</span>}<AvatarStack people={people} max={4}/>
       <span className={due==='overdue'?'overdue-date':''}>{task.dueDate?formatDate(task.dueDate):vi.dashboard.noDue}</span>
-      {due==='overdue'&&<span className="overdue-badge">{vi.tasks.overdue}</span>}</div>
+      {['overdue','today','soon'].includes(due)&&<StatusBadge value={due}/>}</div>
     <ProgressBar value={taskProgress(task)}/>
     <button type="button" className="dashboard-task-check" aria-label={task.status==='done'?vi.completeToggle.reopen(task.title):vi.completeToggle.complete(task.title)}
       aria-pressed={task.status==='done'} onClick={onToggle}>{task.status==='done'&&<Check size={17}/>}</button>
@@ -154,7 +154,7 @@ function Dashboard(){
       <Card className="dashboard-timeline"><h2>{vi.dashboard.longDate}</h2>{summary.today.length||todayTrips.length?<div className="timeline-list">
         {summary.today.map(task=><article className={`timeline-item ${task.id===nextTimelineId?'is-next':''}`} key={task.id}>
           <button aria-label={task.status==='done'?vi.completeToggle.reopen(task.title):vi.completeToggle.complete(task.title)} aria-pressed={task.status==='done'}
-            onClick={()=>toggleTask(task)}>{task.status==='done'&&<Check size={15}/>}</button><span><strong>{task.title}</strong><small>{vi.priority[task.priority]||vi.dashboard.allDay}</small></span></article>)}
+          onClick={()=>toggleTask(task)}>{task.status==='done'&&<Check size={15}/>}</button><span><strong>{task.title}</strong><small>{vi.priority[task.priority]||vi.dashboard.allDay}</small><StatusBadge value={task.status}/></span></article>)}
         {todayTrips.map(trip=><article className="timeline-item is-trip" key={trip.id}><span className="timeline-dot"/><span><strong>{trip.name}</strong><small>{trip.location}</small></span></article>)}</div>
         :<p className="dashboard-empty">{vi.dashboard.timelineEmpty}</p>}</Card>
     </aside>

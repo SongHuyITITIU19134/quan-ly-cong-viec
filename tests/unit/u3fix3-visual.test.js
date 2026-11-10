@@ -1,6 +1,10 @@
 import { readFileSync, readdirSync } from 'node:fs'
 import { resolve } from 'node:path'
 import { describe, expect, it } from 'vitest'
+import { createElement } from 'react'
+import { cleanup, render, screen } from '@testing-library/react'
+import { StatusBadge } from '@/components/ui'
+import { vi } from '@/i18n/vi'
 
 const read=file=>readFileSync(resolve(file),'utf8')
 const styles=readdirSync(resolve('src/styles')).filter(file=>file.endsWith('.css')).map(file=>read(`src/styles/${file}`)).join('\n')
@@ -25,5 +29,14 @@ describe('U3-fix3 visual polish',()=>{
     const dashboard=read('src/styles/dashboard.css')
     expect(dashboard).toMatch(/\[data-theme='dark'\][^{]+is-emphasis[^}]*border:\s*1px solid #3a3a40;[^}]*background:\s*#000/)
     expect(read('src/styles/tasks.css')).toMatch(/\[data-theme='dark'\] \.task-card\.is-emphasis\s*\{[^}]*border:\s*1px solid #3a3a40;[^}]*background:\s*#000/)
+  })
+
+  it('cả tám status chip đều có icon và nhãn chữ',()=>{
+    for(const value of ['todo','doing','waiting','paused','done','soon','today','overdue']){
+      const{container}=render(createElement(StatusBadge,{value}))
+      expect(screen.getByText(vi.status[value])).toBeInTheDocument()
+      expect(container.querySelector('.badge-marker svg')).toBeInTheDocument()
+      cleanup()
+    }
   })
 })

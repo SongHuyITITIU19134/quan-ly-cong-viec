@@ -1,9 +1,9 @@
 import { forwardRef, useCallback, useEffect, useId, useLayoutEffect, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
-import { AlertCircle, ArrowDown, CheckCircle2, Circle, CircleDotDashed, Inbox, PauseCircle, Timer, TriangleAlert, X } from 'lucide-react'
+import { AlertCircle, ArrowDown, CalendarClock, CheckCircle2, Circle, CircleDotDashed, Clock3, Inbox, PauseCircle, Timer, TriangleAlert, X } from 'lucide-react'
 import { vi } from '@/i18n/vi'
 
-const statusIcons={todo:Circle,doing:CircleDotDashed,waiting:Timer,done:CheckCircle2,paused:PauseCircle}
+const statusIcons={todo:Circle,doing:CircleDotDashed,waiting:Timer,done:CheckCircle2,paused:PauseCircle,soon:Clock3,today:CalendarClock,overdue:TriangleAlert}
 const priorityIcons={urgent:TriangleAlert,high:TriangleAlert,medium:Timer,low:ArrowDown}
 
 export function Button({ children, variant = '', icon: Icon, type = 'button', ...props }) { return <button type={type} className={`button ${variant}`.trim()} {...props}>{Icon && <Icon size={17} aria-hidden="true"/>}<span>{children}</span></button> }

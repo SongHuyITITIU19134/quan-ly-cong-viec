@@ -59,7 +59,8 @@
 .table-wrap td { border-top: 1px solid var(--color-border-subtle); border-bottom: 1px solid var(--color-border-subtle); background: var(--color-paper); }
 .table-wrap tr.has-project td { background:color-mix(in srgb,var(--label-bg) 12%,var(--surface)); }
 .table-wrap tr.due-overdue td:first-child { border-left:4px solid var(--danger); }
-.table-wrap td .overdue-badge { margin-left:6px; }
+.table-wrap td>.badge { margin:4px 0 0 6px; }
+.table-wrap td>select { margin-top:6px; }
 .table-wrap td:first-child { border-left: 1px solid var(--color-border-subtle); border-radius: var(--radius-sm) 0 0 var(--radius-sm); }
 .table-wrap td:last-child { border-right: 1px solid var(--color-border-subtle); border-radius: 0 var(--radius-sm) var(--radius-sm) 0; }
 .table-wrap .tags-column{width:190px;max-width:190px}.table-wrap .task-tags{max-width:180px;flex-wrap:nowrap}.task-tags-mobile{display:none}
