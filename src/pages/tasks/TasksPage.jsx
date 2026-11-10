@@ -105,7 +105,7 @@ export default function TasksPage() {
 <button role="tab" aria-selected={view === 'list'} onClick={() => changeView('list')}>{vi.tasks.list}</button>
 <button role="tab" aria-selected={view === 'projects'} onClick={() => changeView('projects')}>{vi.tasks.projects}</button>
 </div>
-<Popover className="create-menu-trigger" panelClassName="create-menu-panel" accessibleLabel={vi.tasks.addTask}
+<Popover className="create-menu-trigger" panelClassName="create-menu-panel" align="end" accessibleLabel={vi.tasks.addTask}
   label={<><Plus size={16}/><span>{vi.tasks.addTask}</span></>}>
 {[['project',vi.shell.projectChoice],['task',vi.shell.taskChoice],['combo',vi.shell.createCombo]].map(([value,label])=><button
   type="button" role="menuitem" {...blockedCreateProps} key={value} onClick={()=>openCreate(value)}>{label}</button>)}

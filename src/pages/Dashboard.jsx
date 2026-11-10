@@ -141,7 +141,7 @@ function Dashboard(){
     <aside className="dashboard-right" aria-label={vi.dashboard.longDate}>
       <div className="dashboard-profile"><Avatar name={name}/><span><small>{vi.dashboard.morning}</small><strong>{name}</strong></span>
         <button type="button" aria-label={vi.shell.reminders(0,summary.overdue.length)} onClick={()=>goToScope('due=overdue')}><Bell size={20}/>{summary.overdue.length>0&&<i>{summary.overdue.length}</i>}</button></div>
-      <div className="dashboard-date-head"><span><CalendarDays size={18}/>{longDate}</span><Popover className="create-menu-trigger" panelClassName="create-menu-panel" accessibleLabel={vi.dashboard.addTask} label={<><Plus size={16}/><span>{vi.dashboard.addTask}</span></>}>
+      <div className="dashboard-date-head"><span><CalendarDays size={18}/>{longDate}</span><Popover className="create-menu-trigger" panelClassName="create-menu-panel" align="end" accessibleLabel={vi.dashboard.addTask} label={<><Plus size={16}/><span>{vi.dashboard.addTask}</span></>}>
         {[['project',vi.shell.projectChoice],['task',vi.shell.taskChoice],['combo',vi.shell.createCombo]].map(([value,label])=><button type="button" role="menuitem" {...blockedCreateProps} key={value} onClick={()=>openCreate(value)}>{label}</button>)}
       </Popover></div>
       <Card className="dashboard-week"><div className="section-row"><h2>{vi.dashboard.week}</h2><span>

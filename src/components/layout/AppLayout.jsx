@@ -166,7 +166,7 @@ export default function AppLayout(){
       <NavLink className="shell-brand" to="/" aria-label={`${vi.appName} — ${vi.nav.dashboard}`} onClick={event=>{event.preventDefault();navigate('/')}}>
         <span className="shell-brand-mark"><Sparkles size={20}/></span><strong>{vi.appName}</strong>
       </NavLink>
-      {location.pathname!=='/cong-viec'&&<Popover className="shell-create-menu" panelClassName="create-menu-panel" accessibleLabel={vi.action.createNew} label={<><Plus size={19} aria-hidden="true"/><span>{vi.action.createNew}</span></>}>
+      {location.pathname!=='/cong-viec'&&<Popover className="shell-create-menu" panelClassName="create-menu-panel" align="end" accessibleLabel={vi.action.createNew} label={<><Plus size={19} aria-hidden="true"/><span>{vi.action.createNew}</span></>}>
         {[['project',vi.shell.projectChoice],['task',vi.shell.taskChoice],['combo',vi.shell.createCombo]].map(([value,label])=><button type="button" role="menuitem" {...blockedCreateProps} key={value} onClick={()=>window.setTimeout(()=>requestCreate(value),0)}>{label}</button>)}
       </Popover>}
       <Navigation onNavigate={navigate}/>

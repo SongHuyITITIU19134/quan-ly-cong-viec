@@ -30,11 +30,15 @@ export function Popover({label,accessibleLabel,children,className='',panelClassN
   const place=useCallback(()=>{
     const anchor=anchorRef.current?.getBoundingClientRect(),panel=panelRef.current?.getBoundingClientRect()
     if(!anchor||!panel)return
-    const gap=8,pad=10,spaceBelow=innerHeight-anchor.bottom-gap,spaceAbove=anchor.top-gap
+    const viewport=window.visualViewport,viewportLeft=viewport?.offsetLeft||0,viewportTop=viewport?.offsetTop||0
+    const viewportWidth=viewport?.width||innerWidth,viewportHeight=viewport?.height||innerHeight
+    const viewportRight=viewportLeft+viewportWidth,viewportBottom=viewportTop+viewportHeight
+    const gap=8,pad=10,spaceBelow=viewportBottom-anchor.bottom-gap,spaceAbove=anchor.top-viewportTop-gap
     const useAbove=spaceBelow<Math.min(panel.height,240)&&spaceAbove>spaceBelow
-    const top=useAbove?Math.max(pad,anchor.top-panel.height-gap):Math.min(innerHeight-panel.height-pad,anchor.bottom+gap)
+    const top=useAbove?Math.max(viewportTop+pad,anchor.top-panel.height-gap):Math.min(viewportBottom-panel.height-pad,anchor.bottom+gap)
     const preferred=align==='end'?anchor.right-panel.width:anchor.left
-    setPosition({top:Math.max(pad,top),left:Math.min(innerWidth-panel.width-pad,Math.max(pad,preferred)),maxHeight:Math.max(120,(useAbove?spaceAbove:spaceBelow)-pad)})
+    const left=Math.min(viewportRight-panel.width-pad,Math.max(viewportLeft+pad,preferred))
+    setPosition({top:Math.max(viewportTop+pad,top),left,maxHeight:Math.max(120,(useAbove?spaceAbove:spaceBelow)-pad)})
   },[align])
   useLayoutEffect(()=>{if(open){place();requestAnimationFrame(()=>panelRef.current?.querySelector('button,input,[href],[tabindex]:not([tabindex="-1"])')?.focus())}},[open,place])
   useEffect(()=>{
