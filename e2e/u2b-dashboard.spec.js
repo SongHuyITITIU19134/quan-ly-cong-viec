@@ -38,16 +38,6 @@ test('dải tuần chuyển tuần trước và tuần sau',async({page})=>{
   await expect(strip.locator('.is-today')).toHaveCount(1)
 })
 
-test('Thêm nhanh dùng parseQuickAdd để tạo nhiệm vụ',async({page})=>{
-  const input=page.getByLabel('Thêm nhanh',{exact:true})
-  await input.fill('Gọi khách hôm nay #sale !gấp')
-  await input.press('Enter')
-  await expect.poll(()=>page.evaluate(()=>{
-    const task=JSON.parse(localStorage.getItem('nhip-viec-v1')).tasks.find(item=>item.title==='Gọi khách')
-    return task&&{priority:task.priority,tags:task.tags,dueDate:task.dueDate}
-  })).toEqual({priority:'urgent',tags:['sale'],dueDate:demo.tasks[0].dueDate})
-})
-
 test('nút kiểm timeline hoàn thành nhiệm vụ hôm nay',async({page})=>{
   const timeline=page.getByRole('complementary',{name:'Lịch hôm nay'})
   await timeline.getByRole('button',{name:'Đánh dấu hoàn thành: Chốt kế hoạch ra mắt'}).click()
@@ -58,7 +48,7 @@ test('trạng thái rỗng vẫn giữ greeting và cột phải',async({page})=
   await expect(page.getByRole('heading',{name:/Hôm nay bạn có 0 việc/})).toBeVisible()
   await expect(page.getByRole('button',{name:'Tạo dự án đầu tiên'})).toBeVisible()
   await expect(page.getByRole('button',{name:'Dùng dữ liệu mẫu'})).toBeVisible()
-  await expect(page.getByLabel('Thêm nhanh',{exact:true})).toBeVisible()
+  await expect(page.getByRole('button',{name:'Thêm việc'})).toBeVisible()
   await expect(page.locator('.week-strip')).toBeVisible()
   await expect(page.getByText('Hôm nay chưa có lịch.')).toBeVisible()
 })

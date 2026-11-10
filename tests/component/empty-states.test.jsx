@@ -8,6 +8,7 @@ vi.mock('@/hooks/useData',()=>({
   useData:()=>({data:state.data,loading:false,create:noop,update:noop,remove:noop,batch:noop,toast:noop}),
   useDataState:()=>({data:state.data,loading:false}),
   useActions:()=>({create:noop,update:noop,remove:noop,batch:noop}),
+  useAuth:()=>({readOnly:false}),
   useToast:()=>noop,
 }))
 vi.mock('@/app/App',()=>({Page:({children})=><main>{children}</main>,Header:({title,description,action})=><header><h1>{title}</h1><p>{description}</p>{action}</header>}))

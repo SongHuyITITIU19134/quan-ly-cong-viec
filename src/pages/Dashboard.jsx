@@ -3,7 +3,7 @@ import { Bell, CalendarDays, Check, ChevronLeft, ChevronRight, Plus, Search } fr
 import { addDays, endOfMonth, endOfWeek, startOfMonth, startOfWeek } from 'date-fns'
 import { Page } from '@/app/App'
 import { Avatar, AvatarStack, Button, Card, EmptyState, ProgressBar } from '@/components/ui'
-import { useActions, useDataState, useToast } from '@/hooks/useData'
+import { useActions, useAuth, useDataState, useToast } from '@/hooks/useData'
 import { getProjectEffectiveStatus } from '@/lib/projectStatus'
 import { getDueState } from '@/lib/tasks'
 import { projectProgress, taskProgress, withStatus } from '@/lib/progress'
@@ -13,8 +13,6 @@ import { useTransitionNavigate } from '@/hooks/useTransitionNavigate'
 import { recurrenceCreateOp, recurrenceUndoOp } from '@/lib/recurrence'
 import { weeklyReport } from '@/lib/weeklyReport'
 import { buildIndexes } from '@/lib/indexes'
-import { parseQuickAdd } from '@/lib/quickAdd'
-import { normalizeTags } from '@/tags/tagUtils'
 
 const priorityRank={urgent:0,high:1,medium:2,low:3}
 const taskOrder=(left,right)=>(priorityRank[left.priority]??4)-(priorityRank[right.priority]??4)||(left.order??0)-(right.order??0)
@@ -35,9 +33,9 @@ function DashboardTask({task,indexes,onToggle,onOpen,emphasis=false}){
 }
 
 function Dashboard(){
-  const{data,loading}=useDataState(),{batch}=useActions(),toast=useToast(),navigate=useTransitionNavigate()
+  const{data,loading}=useDataState(),{batch}=useActions(),{readOnly}=useAuth(),toast=useToast(),navigate=useTransitionNavigate()
   const[period,setPeriod]=useState(()=>{try{const value=localStorage.getItem('nhip-viec-period');return['today','week','month'].includes(value)?value:'week'}catch{return'week'}})
-  const[taskTab,setTaskTab]=useState('recent'),[weekOffset,setWeekOffset]=useState(0),[quickText,setQuickText]=useState(''),[showReport,setShowReport]=useState(false)
+  const[taskTab,setTaskTab]=useState('recent'),[weekOffset,setWeekOffset]=useState(0),[showReport,setShowReport]=useState(false)
   const recoveryShown=useRef(false),today=todayISO()
   useEffect(()=>{try{localStorage.setItem('nhip-viec-period',period)}catch{/* Storage can be unavailable. */}},[period])
   useEffect(()=>{if(data.recoveryError&&!recoveryShown.current){recoveryShown.current=true;toast(vi.dashboard.recovery)}if(!data.recoveryError)recoveryShown.current=false},[data.recoveryError,toast])
@@ -75,7 +73,6 @@ function Dashboard(){
     return{date,label:['CN','T2','T3','T4','T5','T6','T7'][addDays(start,index).getDay()]}
   }),[weekOffset])
   const todayTrips=useMemo(()=>data.trips.filter(trip=>trip.startDate<=today&&trip.endDate>=today),[data.trips,today])
-  const quickParsed=useMemo(()=>parseQuickAdd(quickText,today),[quickText,today])
   const self=data.contacts.find(contact=>contact.isSelf)||data.contacts.find(contact=>contact.id==='self')
   const name=self?.fullName||vi.common.assignee,report=useMemo(()=>weeklyReport(data,today),[data,today])
   const noData=!data.projects.length&&!data.tasks.length&&!data.trips.length
@@ -87,13 +84,8 @@ function Dashboard(){
     const undo=[{type:'update',collection:'tasks',id:task.id,data:task},...(created?[recurrenceUndoOp(created)]:[])]
     toast(status==='done'?vi.dashboard.completed:vi.dashboard.reopened,{label:vi.action.undo,onClick:()=>batch(undo)})
   }
-  const addQuickTask=async()=>{
-    if(!quickParsed.title)return
-    const id=crypto.randomUUID(),saved=await batch([{type:'create',collection:'tasks',id,data:{id,title:quickParsed.title,description:'',projectId:null,
-      status:'todo',priority:quickParsed.priority,startDate:today,dueDate:quickParsed.dueDate,assignerId:'',assigneeId:'self',collaboratorIds:[],notes:'',
-      checklist:[],progress:0,progressMode:'auto',tripId:null,tripPhase:null,order:data.tasks.length+1,tags:normalizeTags(quickParsed.tags)}}])
-    if(saved){setQuickText('');toast(vi.dashboard.quickAdded,{label:vi.action.undo,onClick:()=>batch([{type:'delete',collection:'tasks',id}])})}
-  }
+  const requestCreate=to=>{if(readOnly)return toast(vi.auth.verifyToEdit);navigate(to)}
+  const blockedCreateProps=readOnly?{'aria-disabled':true,title:vi.auth.verifyToEdit}:{}
   const useSample=async()=>{
     const[{onboardingSample},{stringifyJsonExport,parseJsonImport,buildImportOps}]=await Promise.all([
       import('@/data/onboardingSample'),import('@/lib/dataTransfer')
@@ -115,7 +107,7 @@ function Dashboard(){
             <option value="week">{vi.dashboard.weekPeriod}</option><option value="month">{vi.dashboard.monthPeriod}</option></select>
           <Button variant="ghost" onClick={()=>setShowReport(value=>!value)}>{vi.dashboard.weeklyReport}</Button></div></header>
       {noData?<Card className="dashboard-empty-card"><EmptyState title={vi.dashboard.emptyTitle} description={vi.dashboard.emptyDescription}
-        action={<div className="dashboard-empty-actions"><Button icon={Plus} onClick={()=>navigate('/cong-viec?view=projects&new=project')}>{vi.dashboard.createFirstProject}</Button>
+        action={<div className="dashboard-empty-actions"><Button icon={Plus} {...blockedCreateProps} onClick={()=>requestCreate('/cong-viec?view=projects&new=project')}>{vi.dashboard.createFirstProject}</Button>
           <Button variant="secondary" onClick={useSample}>{vi.dashboard.useSample}</Button></div>}/></Card>:<>
       {showReport&&<Card className="dashboard-report"><div className="section-row"><h2>{vi.dashboard.weeklyReport}</h2>
         <Button onClick={copyReport}>{vi.dashboard.copy}</Button></div><pre>{report}</pre></Card>}
@@ -147,11 +139,7 @@ function Dashboard(){
     <aside className="dashboard-right" aria-label={vi.dashboard.longDate}>
       <div className="dashboard-profile"><Avatar name={name}/><span><small>{vi.dashboard.morning}</small><strong>{name}</strong></span>
         <button type="button" aria-label={vi.shell.reminders(0,summary.overdue.length)} onClick={()=>goToScope('due=overdue')}><Bell size={20}/>{summary.overdue.length>0&&<i>{summary.overdue.length}</i>}</button></div>
-      <Card className="dashboard-quick-add"><div><span className="eyebrow">{vi.dashboard.quickAdd}</span><h2>{vi.dashboard.addTask}</h2></div>
-        <div className="quick-add-line"><input aria-label={vi.dashboard.quickAdd} value={quickText} onChange={event=>setQuickText(event.target.value)}
-          onKeyDown={event=>{if(event.key==='Enter'&&!event.nativeEvent.isComposing){event.preventDefault();addQuickTask()}}} placeholder={vi.dashboard.quickPlaceholder}/>
-          <button type="button" aria-label={vi.dashboard.addTask} disabled={!quickParsed.title} onClick={addQuickTask}><Plus size={20}/></button></div><p>{vi.dashboard.quickHint}</p></Card>
-      <div className="dashboard-date-head"><span><CalendarDays size={18}/>{longDate}</span><Button onClick={()=>navigate('/cong-viec?new=task')}><Plus size={16}/>{vi.dashboard.addTask}</Button></div>
+      <div className="dashboard-date-head"><span><CalendarDays size={18}/>{longDate}</span><Button {...blockedCreateProps} onClick={()=>requestCreate('/cong-viec?new=task')}><Plus size={16}/>{vi.dashboard.addTask}</Button></div>
       <Card className="dashboard-week"><div className="section-row"><h2>{vi.dashboard.week}</h2><span>
         <button aria-label={vi.dashboard.previousWeek} onClick={()=>setWeekOffset(value=>value-1)}><ChevronLeft/></button>
         <button aria-label={vi.dashboard.nextWeek} onClick={()=>setWeekOffset(value=>value+1)}><ChevronRight/></button></span></div>

@@ -1,14 +1,12 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { useSearchParams } from 'react-router-dom'
 import { Plus, Search, SlidersHorizontal, Trash2 } from 'lucide-react'
 import { Page } from '@/app/App'
 import { Button, Chip, Drawer, LoadingState, Modal, Popover, PriorityBadge, StatusBadge } from '@/components/ui'
 import TaskForm from '@/components/task/TaskForm'
 import TagFilter from '@/components/tags/TagFilter'
-import { useActions, useDataState, useToast } from '@/hooks/useData'
+import { useActions, useAuth, useDataState, useToast } from '@/hooks/useData'
 import { PRIORITY_KEYS, STATUS_KEYS, vi } from '@/i18n/vi'
-import { todayISO } from '@/lib/dates'
-import { parseQuickAdd } from '@/lib/quickAdd'
 import KanbanView from './KanbanView'
 import ListView from './ListView'
 import ProjectsView from './ProjectsView'
@@ -28,18 +26,17 @@ export default function TasksPage() {
       update,
       batch
     } = useActions(),
-    toast = useToast()
+    toast = useToast(),
+    {readOnly}=useAuth()
   const [params, setParams] = useSearchParams(),
     [view, setView] = useState(params.get('view') || 'kanban')
-  const [editing, setEditing] = useState(params.get('new') === 'task' ? {} : null),
+  const [editing, setEditing] = useState(null),
     [confirm, setConfirm] = useState(null)
   const [projectEditing, setProjectEditing] = useState(null),
     [projectConfirm, setProjectConfirm] = useState(null)
   const [deleteTarget, setDeleteTarget] = useState(''),
-    [moveTarget, setMoveTarget] = useState(''),
-    [quickText, setQuickText] = useState('')
-  const filters = useTaskFilters(data, params, setParams),
-    quickParsed = useMemo(() => parseQuickAdd(quickText, todayISO()), [quickText])
+    [moveTarget, setMoveTarget] = useState('')
+  const filters = useTaskFilters(data, params, setParams)
   const actions = useTaskActions({
     data,
     loading,
@@ -61,14 +58,16 @@ export default function TasksPage() {
     setDeleteTarget,
     moveTarget,
     setMoveTarget,
-    quickParsed,
-    setQuickText,
     tagRegistry,
     tagFilters: filters.tagFilters,
     toggleParamValue: filters.toggleParamValue
   })
   const selectedProject = data.projects.find(project => project.id === params.get('project')),
     taskFormId = 'task-editor-form'
+  const onReadOnly=useCallback(()=>toast(vi.auth.verifyToEdit),[toast])
+  const openTask=useCallback(()=>readOnly?onReadOnly():setEditing({}),[onReadOnly,readOnly])
+  const openEditor=value=>value?.id?setEditing(value):openTask()
+  const blockedCreateProps=readOnly?{'aria-disabled':true,title:vi.auth.verifyToEdit}:{}
   const changeView = nextView => {
     setView(nextView)
     const next = new URLSearchParams(params)
@@ -76,19 +75,23 @@ export default function TasksPage() {
     setParams(next)
   }
   useEffect(() => {
-    if (params.get('new') === 'task') setEditing(current => current || {})
-    if (params.get('new') === 'project') setProjectEditing(current => current || {})
-  }, [params])
+    const target=params.get('new')
+    if (!['task','project'].includes(target))return
+    if(readOnly)onReadOnly()
+    else if(target==='task')setEditing(current=>current||{})
+    else setProjectEditing(current=>current||{})
+    const next=new URLSearchParams(params);next.delete('new');setParams(next,{replace:true})
+  }, [onReadOnly,params,readOnly,setParams])
   useEffect(() => {
     const fn = event => {
       if ((event.key === 'n' || event.key === 'N') && !['INPUT', 'TEXTAREA', 'SELECT'].includes(document.activeElement.tagName)) {
         event.preventDefault()
-        setEditing({})
+        openTask()
       }
     }
     window.addEventListener('keydown', fn)
     return () => window.removeEventListener('keydown', fn)
-  }, [])
+  }, [openTask])
   if (loading) return <Page>
 <LoadingState />
 </Page>
@@ -101,23 +104,10 @@ export default function TasksPage() {
 <button role="tab" aria-selected={view === 'list'} onClick={() => changeView('list')}>{vi.tasks.list}</button>
 <button role="tab" aria-selected={view === 'projects'} onClick={() => changeView('projects')}>{vi.tasks.projects}</button>
 </div>
-<Button icon={Plus} onClick={()=>setEditing({})}>{vi.tasks.addTask}</Button>
+<Button icon={Plus} {...blockedCreateProps} onClick={openTask}>{vi.tasks.addTask}</Button>
 </div>
 </header>
     <span className="sr-only" data-render-complete="true">{vi.generated.TasksPage_95_1}{filters.filtered.length}{vi.generated.TasksPage_96_2}</span>
-    <div className="quick-add-task">
-<label htmlFor="task-quick-add">{vi.generated.TasksPage_99_3}</label>
-<input
-  id="task-quick-add"
-  value={quickText}
-  onChange={event=>setQuickText(event.target.value)}
-  onKeyDown={actions.quickAdd}
-  placeholder={vi.generated.TasksPage_105_4}
-/>
-{quickText&&<small className="field-hint">{vi.generated.TasksPage_107_5}{quickParsed.title||vi.generated.TasksPage_108_6}
-  {quickParsed.dueDate?` · ${quickParsed.dueDate}`:''}
-  {quickParsed.tags.length?` · #${quickParsed.tags.join(' #')}`:''} · {vi.priority[quickParsed.priority]}
-</small>}</div>
     <div className="tasks-filter-chips" aria-label={vi.tasks.filters}>
 <Chip active={!filters.status.length} onClick={()=>filters.changeParam('status','')}>{vi.tasks.all}</Chip>
 {STATUS_KEYS.map(key=><Chip
@@ -187,11 +177,11 @@ export default function TasksPage() {
     {view==='kanban'&&<KanbanView
       data={data} filtered={filters.filtered} grouped={filters.grouped} hasFilters={filters.hasFilters}
       setParams={setParams} taskProps={actions.taskProps} changeStatus={actions.changeStatus}
-      dropTask={actions.dropTask} setDragging={actions.setDragging} setEditing={setEditing}
+      dropTask={actions.dropTask} setDragging={actions.setDragging} setEditing={openEditor}
     />}
     {view==='list'&&<ListView
       data={data} filtered={filters.filtered} tagRegistry={tagRegistry} tagFilters={filters.tagFilters}
-      toggleTag={actions.toggleTag} changeStatus={actions.changeStatus} setEditing={setEditing}
+      toggleTag={actions.toggleTag} changeStatus={actions.changeStatus} setEditing={openEditor}
       setConfirm={setConfirm} setParams={setParams}
     />}
     <ProjectsView
@@ -203,6 +193,7 @@ export default function TasksPage() {
       moveTarget={moveTarget} setMoveTarget={setMoveTarget} selectedProject={selectedProject}
       setEditing={setEditing} saveProject={actions.saveProject} archiveProject={actions.archiveProject}
       deleteProject={actions.deleteProject} moveProjectTasks={actions.moveProjectTasks}
+      readOnly={readOnly} onReadOnly={onReadOnly} blockedCreateProps={blockedCreateProps}
     />
     {editing && <Drawer title={editing.id ? vi.generated.TasksPage_195_23 : vi.generated.TasksPage_195_24} onClose={actions.closeEditor} actions={<>
 <Button variant="secondary" onClick={actions.closeEditor}>{vi.generated.TasksPage_196_25}</Button>

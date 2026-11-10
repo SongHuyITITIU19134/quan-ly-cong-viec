@@ -4,10 +4,11 @@ import { MemoryRouter, Route, Routes } from 'react-router-dom'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { briefingClock, DAILY_BRIEFING_STORAGE_KEY } from '@/lib/dailyBriefing'
 
-const mocks=vi.hoisted(()=>({navigate:vi.fn(),saveSettings:vi.fn(),install:vi.fn(),toast:vi.fn()}))
+const mocks=vi.hoisted(()=>({navigate:vi.fn(),saveSettings:vi.fn(),install:vi.fn(),toast:vi.fn(),resendEmail:vi.fn(),confirmEmail:vi.fn()}))
+const layoutState=vi.hoisted(()=>({mode:'local',user:null,readOnly:false,emailNeedsVerification:false}))
 const data={tasks:[{id:'t1',title:'Họp khách hàng',status:'todo',dueDate:'2020-01-01'}],projects:[{id:'p1',name:'Dự án Mới'}],trips:[],notes:[]}
 
-vi.mock('@/hooks/useData',()=>({useData:()=>({data,loading:false,error:null,setError:vi.fn(),mode:'local',user:null,logout:vi.fn(),readOnly:false,emailNeedsVerification:false,resendEmail:vi.fn(),confirmEmail:vi.fn(),importOffer:false,importBusy:false,importLocal:vi.fn(),skipImport:vi.fn(),toast:mocks.toast,settings:{theme:'system',defaultView:'dashboard',onboardingSeen:true},saveSettings:mocks.saveSettings,batch:vi.fn()})}))
+vi.mock('@/hooks/useData',()=>({useData:()=>({data,loading:false,error:null,setError:vi.fn(),...layoutState,logout:vi.fn(),resendEmail:mocks.resendEmail,confirmEmail:mocks.confirmEmail,importOffer:false,importBusy:false,importLocal:vi.fn(),skipImport:vi.fn(),toast:mocks.toast,settings:{theme:'system',defaultView:'dashboard',onboardingSeen:true},saveSettings:mocks.saveSettings,batch:vi.fn()})}))
 vi.mock('@/hooks/useTheme',()=>({useTheme:()=>({resolved:'light'})}))
 vi.mock('@/hooks/useTransitionNavigate',()=>({useTransitionNavigate:()=>mocks.navigate}))
 vi.mock('@/hooks/usePwa',()=>({usePwa:()=>({canInstall:true,install:mocks.install})}))
@@ -19,7 +20,7 @@ import CommandPalette from '@/components/layout/CommandPalette'
 const showLayout=()=>render(<MemoryRouter initialEntries={['/']}><Routes><Route element={<AppLayout/>}><Route path="/" element={<div className="page"><h1>Tổng quan</h1></div>}/></Route></Routes></MemoryRouter>)
 
 describe('bố cục và bảng lệnh',()=>{
-  beforeEach(()=>{Object.values(mocks).forEach(mock=>mock.mockReset());localStorage.setItem(DAILY_BRIEFING_STORAGE_KEY,briefingClock().date)})
+  beforeEach(()=>{Object.assign(layoutState,{mode:'local',user:null,readOnly:false,emailNeedsVerification:false});Object.values(mocks).forEach(mock=>mock.mockReset());localStorage.setItem(DAILY_BRIEFING_STORAGE_KEY,briefingClock().date)})
   afterEach(()=>{vi.useRealTimers();vi.unstubAllGlobals()})
 
   it('điều hướng, đổi giao diện và cài ứng dụng',async()=>{
@@ -79,5 +80,19 @@ describe('bố cục và bảng lệnh',()=>{
     expect(screen.getByRole('heading',{name:'Tổng quan',level:3})).toBeInTheDocument()
     expect(localStorage.getItem(DAILY_BRIEFING_STORAGE_KEY)).toBe('2026-11-08')
     expect(NotificationMock).toHaveBeenCalledOnce()
+  })
+
+  it('giữ banner xác minh và giải thích khi người dùng chỉ đọc bấm tạo',async()=>{
+    Object.assign(layoutState,{mode:'firebase',user:{email:'chua-xac-minh@example.com',emailVerified:false},readOnly:true,emailNeedsVerification:true})
+    showLayout()
+    const banner=screen.getByRole('region',{name:'Xác minh email'})
+    expect(within(banner).getByRole('button',{name:'Gửi lại email'})).toBeInTheDocument()
+    expect(within(banner).getByRole('button',{name:'Tôi đã xác minh'})).toBeInTheDocument()
+    const create=within(document.querySelector('.shell-sidebar')).getByRole('button',{name:'Tạo nhiệm vụ'})
+    expect(create).toHaveAttribute('aria-disabled','true')
+    expect(create).toHaveAttribute('title','Xác minh email để chỉnh sửa')
+    await userEvent.click(create)
+    expect(mocks.toast).toHaveBeenCalledWith('Xác minh email để chỉnh sửa')
+    expect(screen.queryByRole('dialog')).not.toBeInTheDocument()
   })
 })

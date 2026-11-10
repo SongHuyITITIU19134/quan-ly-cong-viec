@@ -10,6 +10,7 @@ vi.mock('@/hooks/useData',()=>({
   useData:()=>({data:dashboardData,update:vi.fn(),toast:vi.fn()}),
   useDataState:()=>({data:dashboardData,loading:false}),
   useActions:()=>({batch:vi.fn()}),
+  useAuth:()=>({readOnly:false}),
   useToast:()=>vi.fn(),
 }))
 vi.mock('@/app/App',()=>({Page:({children})=><main>{children}</main>,Header:()=>null}))

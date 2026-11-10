@@ -37,7 +37,7 @@
 .cloud-import-banner p { margin-top: 3px; font-size: 12px; }
 .cloud-import-banner>div:last-child { display: flex; flex: 0 0 auto; gap: 8px; }
 .cloud-import-banner button { min-height: 40px; border: 1px solid currentColor; border-radius: var(--radius-pill); padding: 0 14px; background: var(--bg); color: var(--text); font-weight: 700; }
-.verification-banner { display: flex; width: 100%; align-items: center; justify-content: space-between; gap: 16px; margin-bottom: 18px; border: 1px solid var(--line); border-radius: var(--radius-inner); padding: 12px 14px; background: var(--surface); color: var(--text); }
+.verification-banner { position: sticky; z-index: var(--z-sticky); top: 0; display: flex; width: 100%; align-items: center; justify-content: space-between; gap: 16px; margin-bottom: 18px; border: 1px solid var(--line); border-radius: var(--radius-inner); padding: 12px 14px; background: var(--surface); color: var(--text); box-shadow: var(--shadow-hard-sm); }
 .verification-banner p { margin-top: 3px; color: var(--text-2); font-size: 12px; }
 .verification-banner>div:last-child { display: flex; flex: 0 0 auto; align-items: center; gap: 8px; }
 .verification-banner button { min-height: 40px; border: 1px solid var(--line); border-radius: var(--radius-pill); padding: 0 14px; background: var(--bg); color: var(--text); font-weight: 700; }

@@ -6,10 +6,6 @@
 .task-view-tabs button { min-height:40px; border:0; border-radius:var(--radius-pill); padding:0 16px; background:transparent; color:var(--text-2); font-weight:800; }
 .task-view-tabs button[aria-selected='true'] { background:var(--ink); color:var(--bg); }
 .tasks-filter-chips { display:flex; gap:8px; margin-bottom:14px; overflow-x:auto; padding:2px 0; }
-.quick-add-task { display:grid; gap:7px; margin-bottom:14px; border-radius:var(--radius-inner); padding:12px 14px; background:var(--accent); color:var(--on-accent); }
-.quick-add-task label { font-size:11px; font-weight:800; text-transform:uppercase; }
-.quick-add-task input { min-height:44px; border:0; border-radius:var(--radius-control); padding:0 14px; background:rgb(255 255 255 / 82%); color:var(--color-ink-fixed); }
-.quick-add-task .field-hint { color:var(--on-accent); }
 .toolbar { gap: 12px; margin-bottom: var(--space-5); }
 .toolbar .search input,.toolbar>select,.filter-menu .popover-trigger { min-height:46px; border:1px solid var(--line); border-radius:var(--radius-pill); background:var(--surface); box-shadow:none; }
 .toolbar .search input { padding-left: 42px; }

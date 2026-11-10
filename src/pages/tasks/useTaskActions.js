@@ -1,10 +1,8 @@
 import { useState } from 'react'
 import { vi } from '@/i18n/vi'
-import { todayISO } from '@/lib/dates'
 import { buildDeleteOps, buildRestoreOps } from '@/lib/relations'
 import { moveTaskOps } from '@/lib/order'
 import { recurrenceCreateOp, recurrenceUndoOp } from '@/lib/recurrence'
-import { normalizeTags } from '@/tags/tagUtils'
 import { getProjectEffectiveStatus } from '@/lib/projectStatus'
 import { projectDeleteOps } from '@/lib/projects'
 export function useTaskActions({
@@ -28,8 +26,6 @@ export function useTaskActions({
   setDeleteTarget,
   moveTarget,
   setMoveTarget,
-  quickParsed,
-  setQuickText,
   tagRegistry,
   tagFilters,
   toggleParamValue
@@ -162,41 +158,6 @@ export function useTaskActions({
     }
   }
   const toggleTag = key => toggleParamValue('tags', tagFilters, key)
-  const quickAdd = async event => {
-    if (event.key !== 'Enter' || event.nativeEvent.isComposing || !quickParsed.title) return
-    event.preventDefault()
-    const id = crypto.randomUUID(),
-      saved = await batch([{
-        type: 'create',
-        collection: 'tasks',
-        id,
-        data: {
-          id,
-          title: quickParsed.title,
-          description: '',
-          projectId: null,
-          status: 'todo',
-          priority: quickParsed.priority,
-          startDate: todayISO(),
-          dueDate: quickParsed.dueDate,
-          assignerId: '',
-          assigneeId: 'self',
-          collaboratorIds: [],
-          notes: '',
-          checklist: [],
-          progress: 0,
-          progressMode: 'auto',
-          tripId: null,
-          tripPhase: null,
-          order: data.tasks.length + 1,
-          tags: normalizeTags(quickParsed.tags)
-        }
-      }])
-    if (saved) {
-      setQuickText('')
-      toast(vi.generated.useTaskActions_197_12)
-    }
-  }
   const taskProps = task => {
     const projectIndex = data.projects.findIndex(project => project.id === task.projectId)
     return {
@@ -227,7 +188,6 @@ export function useTaskActions({
     deleteProject,
     moveProjectTasks,
     toggleTag,
-    quickAdd,
     taskProps
   }
 }

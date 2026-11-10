@@ -60,12 +60,6 @@
 .dashboard-profile strong { overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
 .dashboard-profile>button { position:relative; display:grid; width:44px; height:44px; place-items:center; border:0; border-radius:50%; background:var(--fill); color:var(--text); }
 .dashboard-profile>button i { position:absolute; top:-3px; right:-3px; display:grid; min-width:19px; height:19px; place-items:center; border-radius:50%; background:var(--accent); color:var(--on-accent); font-size:9px; font-style:normal; font-weight:800; }
-.dashboard-quick-add { display:grid; gap:16px; padding:20px; background:var(--accent); color:var(--on-accent); }
-.dashboard-quick-add .eyebrow { color:inherit; }
-.quick-add-line { display:grid; grid-template-columns:minmax(0,1fr) 48px; gap:8px; }
-.quick-add-line input { min-width:0; min-height:48px; border:0; border-radius:var(--radius-control); padding:0 14px; background:rgb(255 255 255 / 78%); color:var(--color-ink-fixed); }
-.quick-add-line button { display:grid; width:48px; height:48px; place-items:center; border:0; border-radius:50%; background:var(--color-ink-fixed); color:#fff; }
-.dashboard-quick-add p { margin:0; font-size:11px; }
 .dashboard-date-head { display:flex; align-items:center; justify-content:space-between; gap:12px; }
 .dashboard-date-head>span { display:flex; min-width:0; align-items:center; gap:7px; color:var(--text-2); font-size:12px; font-weight:700; }
 .dashboard-date-head .button { flex-shrink:0; }

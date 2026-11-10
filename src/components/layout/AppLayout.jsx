@@ -121,16 +121,19 @@ export default function AppLayout(){
   useEffect(()=>{
     const params=new URLSearchParams(location.search)
     if(params.get('new')!=='1')return
-    setCreateMode('combo')
+    if(readOnly)toast(vi.auth.verifyToEdit)
+    else setCreateMode('combo')
     params.delete('new')
     navigate(`${location.pathname}${params.size?`?${params}`:''}`,{replace:true})
-  },[location.pathname,location.search,navigate])
+  },[location.pathname,location.search,navigate,readOnly,toast])
 
   const openPalette=(initial='',returnFocus=document.activeElement)=>{paletteReturnFocus.current=returnFocus;setPaletteInitial(initial);setPaletteOpen(true)}
   const submitSearch=event=>{event.preventDefault();openPalette(query.trim(),searchRef.current)}
   const closePalette=()=>{setPaletteOpen(false);paletteReturnFocus.current?.focus?.()}
   const changeTheme=()=>saveSettings({...settings,theme:resolved==='dark'?'light':'dark'})
-  const choosePalette=item=>{setPaletteOpen(false);if(item.action==='task')setCreateMode('task');else if(item.action==='theme')changeTheme();else if(item.to)navigate(item.to)}
+  const requestCreate=mode=>{if(readOnly)return toast(vi.auth.verifyToEdit);setCreateMode(mode)}
+  const blockedCreateProps=readOnly?{'aria-disabled':true,title:vi.auth.verifyToEdit}:{}
+  const choosePalette=item=>{setPaletteOpen(false);if(item.action==='task')requestCreate('task');else if(item.action==='theme')changeTheme();else if(item.to)navigate(item.to)}
   const finishOnboarding=()=>saveSettings({...settings,onboardingSeen:true})
   const enableDailyNotifications=async()=>{
     if(typeof Notification==='undefined'){toast(vi.dailyBriefing.notificationsUnsupported);return}
@@ -161,7 +164,7 @@ export default function AppLayout(){
       <NavLink className="shell-brand" to="/" aria-label={`${vi.appName} — ${vi.nav.dashboard}`} onClick={event=>{event.preventDefault();navigate('/')}}>
         <span className="shell-brand-mark"><Sparkles size={20}/></span><strong>{vi.appName}</strong>
       </NavLink>
-      {location.pathname!=='/cong-viec'&&<button className="shell-create-task" type="button" onClick={()=>setCreateMode('task')}><Plus size={19} aria-hidden="true"/><span>{vi.action.createTask}</span></button>}
+      {location.pathname!=='/cong-viec'&&<button className="shell-create-task" type="button" {...blockedCreateProps} onClick={()=>requestCreate('task')}><Plus size={19} aria-hidden="true"/><span>{vi.action.createTask}</span></button>}
       <Navigation onNavigate={navigate}/>
       <div className="shell-sidebar-bottom">
         <AppLink item={['/cai-dat',vi.nav.settings,Settings]} onNavigate={navigate}/>
@@ -210,7 +213,7 @@ export default function AppLayout(){
     <nav className="mobile-tabs" aria-label={vi.shell.navigation}>
       <AppLink item={mobileLinks[0]} onNavigate={navigate} className="mobile-tab"/>
       <AppLink item={mobileLinks[1]} onNavigate={navigate} className="mobile-tab"/>
-      <button className="mobile-create" type="button" aria-label={vi.action.create} onClick={()=>setCreateMode('combo')}><Plus size={24}/><span>{vi.action.create}</span></button>
+      <button className="mobile-create" type="button" aria-label={vi.action.create} {...blockedCreateProps} onClick={()=>requestCreate('combo')}><Plus size={24}/><span>{vi.action.create}</span></button>
       <AppLink item={mobileLinks[2]} onNavigate={navigate} className="mobile-tab"/>
       <AppLink item={mobileLinks[3]} onNavigate={navigate} className="mobile-tab"/>
     </nav>
