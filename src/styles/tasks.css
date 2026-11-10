@@ -19,6 +19,7 @@
 .column-head { padding:4px 3px 14px; }
 .column-head>strong { display:grid; min-width:30px; height:30px; place-items:center; border:0; border-radius:50%; background:var(--surface); }
 .task-card { contain:layout paint style; content-visibility:auto; contain-intrinsic-size:auto 250px; border:1px solid var(--line); border-radius:var(--radius-inner); background:var(--surface); box-shadow:none; }
+.task-card.has-project { background:color-mix(in srgb,var(--label-bg) 12%,var(--surface)); }
 .list-pagination { display:flex; align-items:center; justify-content:center; gap:12px; padding:16px; }
 .task-card:hover { border-color: var(--color-border); box-shadow: none; transform: translateY(-2px); }
 .kanban-column,.column-body,.task-card { min-width:0; max-width:100%; }
@@ -37,6 +38,7 @@
 .progress-wrap,.progress { width:100%; min-width:0; max-width:100%; }
 .progress-label strong,.task-card-foot .badge,.task-card .avatar { flex-shrink:0; }
 .project-line { min-width:0; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.project-line i { background:var(--label-bg); }
 .task-card.is-emphasis { border-color:var(--ink); background:var(--ink); color:var(--bg); }
 .task-card.is-emphasis .task-title,.task-card.is-emphasis .task-meta,.task-card.is-emphasis .project-line,.task-card.is-emphasis .progress-label { color:var(--bg); }
 .task-card.is-emphasis .task-meta,.task-card.is-emphasis .project-line,.task-card.is-emphasis .progress-label { opacity:.76; }
@@ -53,6 +55,9 @@
 .table-wrap table { border-collapse: separate; border-spacing: 0 10px; }
 .table-wrap th { position: sticky; z-index: var(--z-sticky); top: 0; border: 0; background: var(--color-paper); }
 .table-wrap td { border-top: 1px solid var(--color-border-subtle); border-bottom: 1px solid var(--color-border-subtle); background: var(--color-paper); }
+.table-wrap tr.has-project td { background:color-mix(in srgb,var(--label-bg) 12%,var(--surface)); }
+.table-wrap tr.due-overdue td:first-child { border-left:4px solid var(--danger); }
+.table-wrap td .overdue-badge { margin-left:6px; }
 .table-wrap td:first-child { border-left: 1px solid var(--color-border-subtle); border-radius: var(--radius-sm) 0 0 var(--radius-sm); }
 .table-wrap td:last-child { border-right: 1px solid var(--color-border-subtle); border-radius: 0 var(--radius-sm) var(--radius-sm) 0; }
 .table-wrap .tags-column{width:190px;max-width:190px}.table-wrap .task-tags{max-width:180px;flex-wrap:nowrap}.task-tags-mobile{display:none}
@@ -91,6 +96,7 @@
 .project-detail dd { margin:0; text-align:right; font-weight:800; }
 :root[data-theme='dark'] .task-meta .overdue { color: #ffb4a8; }
 :root[data-theme='dark'] .task-meta .due-soon { color: #ffe49b; }
+:root[data-theme='dark'] .task-card.has-project,:root[data-theme='dark'] .table-wrap tr.has-project td { background:color-mix(in srgb,var(--label-bg) 18%,var(--surface)); }
 
 @media(max-width:767px){.tasks-page-head{align-items:stretch;flex-direction:column}.tasks-head-actions{align-items:stretch;flex-direction:column}.task-view-tabs{overflow-x:auto}.task-view-tabs button{flex:1;padding-inline:10px}.tasks-head-actions>.button,.tasks-head-actions>.create-menu-trigger,.tasks-head-actions>.create-menu-trigger .popover-trigger{width:100%}.toolbar .search input,.toolbar>select,.filter-menu .popover-trigger{width:100%}.table-wrap{margin:0 -4px}.table-wrap .tags-column{display:none}.task-tags-mobile{display:flex;margin-top:5px;max-width:170px}.kanban{grid-template-columns:repeat(5,minmax(82vw,300px))}.task-card:hover,.project-solid-card:hover{transform:none}.project-toolbar{align-items:flex-start;flex-direction:column}.project-card-actions{align-items:stretch;flex-direction:column}.field-inline{align-items:stretch;flex-direction:column}.field-inline .button{width:100%}}
 @container app-content (min-width:1600px){.kanban{grid-template-columns:repeat(5,minmax(0,1fr));overflow-x:visible}.project-grid{grid-template-columns:repeat(4,minmax(0,1fr))}}

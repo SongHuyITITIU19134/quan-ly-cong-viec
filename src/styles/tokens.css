@@ -29,6 +29,10 @@
   --color-lime: #fbbf1b;
   --color-lavender: #a9a8f6;
   --color-danger-dot: #c7352a;
+  --danger: #b42318;
+  --danger-bg: #fde8e6;
+  --danger-text: #8f1d14;
+  --danger-on-ink: #ff8a80;
   --color-shadow-hard: #0e0e10;
 
   /* Semantic states: text/background pairs are WCAG AA */
@@ -150,9 +154,7 @@
   --done-bg: var(--status-done-bg);
   --paused: var(--status-paused);
   --paused-bg: var(--status-paused-bg);
-  --danger: var(--semantic-danger);
   --danger-hover: #64170b;
-  --danger-bg: var(--semantic-danger-bg);
   --due-soon: var(--semantic-warning);
   --due-soon-bg: var(--semantic-warning-bg);
   --trip: #24584b;
@@ -211,6 +213,10 @@
   --color-page-start: #0c0c0d;
   --color-page-end: #0c0c0d;
   --color-danger-dot: #ff786f;
+  --danger: #ff8a80;
+  --danger-bg: #3d1717;
+  --danger-text: #ffb4ab;
+  --danger-on-ink: #ff8a80;
   --color-shadow-hard: transparent;
   --shadow-hard: none;
   --shadow-hard-hover: none;

@@ -53,3 +53,15 @@ test('Tổng quan dùng nhãn Thêm lịch trình và mở tạo nhiệm vụ',a
   await page.getByRole('button',{name:'Thêm lịch trình'}).click()
   await expect(page.getByRole('dialog',{name:'Tạo nhiệm vụ'})).toBeVisible()
 })
+
+test('quá hạn có nhãn chữ và thẻ theo màu dự án',async({page})=>{
+  await page.goto('/cong-viec')
+  const overdue=page.locator('.task-card.due-overdue').first()
+  await expect(overdue.getByText('Quá hạn',{exact:true})).toBeVisible()
+  await expect(overdue).toHaveClass(/has-project/)
+  const tinted=await overdue.evaluate(element=>getComputedStyle(element).backgroundColor!==getComputedStyle(document.documentElement).getPropertyValue('--surface').trim())
+  expect(tinted).toBe(true)
+  await page.evaluate(()=>{const value=JSON.parse(localStorage.getItem('nhip-viec-v1'));value.tasks[0].projectId=null;localStorage.setItem('nhip-viec-v1',JSON.stringify(value))})
+  await page.reload()
+  await expect(page.getByRole('button',{name:'Chốt kế hoạch ra mắt',exact:true}).locator('xpath=ancestor::article')).not.toHaveClass(/has-project/)
+})

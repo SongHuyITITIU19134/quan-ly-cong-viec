@@ -19,13 +19,15 @@ const taskOrder=(left,right)=>(priorityRank[left.priority]??4)-(priorityRank[rig
 
 function DashboardTask({task,indexes,onToggle,onOpen,emphasis=false}){
   const project=indexes.byId.projects.get(task.projectId),contact=indexes.byId.contacts.get(task.assigneeId)
+  const due=getDueState(task),projectColor=project?.colorIndex||1
   const collaborators=(task.collaboratorIds||[]).map(id=>indexes.byId.contacts.get(id)).filter(Boolean)
   const people=[contact,...collaborators].filter(Boolean).map(person=>({id:person.id,name:person.fullName,src:person.photoURL}))
-  return <article className={`dashboard-task-card ${emphasis?'is-emphasis':''} ${task.status==='done'?'is-done':''}`}>
+  return <article className={`dashboard-task-card due-${due} ${project?`has-project label-theme-${projectColor}`:''} ${emphasis?'is-emphasis':''} ${task.status==='done'?'is-done':''}`}>
     <div className="dashboard-task-main"><button className="dashboard-task-title" type="button" onClick={onOpen}>{task.title}</button>
       <p>{task.description||vi.dashboard.noDescription}</p></div>
     <div className="dashboard-task-meta">{project&&<span className="project-chip">{project.name}</span>}<AvatarStack people={people} max={4}/>
-      <span>{task.dueDate?formatDate(task.dueDate):vi.dashboard.noDue}</span></div>
+      <span className={due==='overdue'?'overdue-date':''}>{task.dueDate?formatDate(task.dueDate):vi.dashboard.noDue}</span>
+      {due==='overdue'&&<span className="overdue-badge">{vi.tasks.overdue}</span>}</div>
     <ProgressBar value={taskProgress(task)}/>
     <button type="button" className="dashboard-task-check" aria-label={task.status==='done'?vi.completeToggle.reopen(task.title):vi.completeToggle.complete(task.title)}
       aria-pressed={task.status==='done'} onClick={onToggle}>{task.status==='done'&&<Check size={17}/>}</button>
