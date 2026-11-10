@@ -198,6 +198,7 @@ export default function TasksPage() {
       moveTarget={moveTarget} setMoveTarget={setMoveTarget} selectedProject={selectedProject}
       setEditing={setEditing} saveProject={actions.saveProject} archiveProject={actions.archiveProject}
       deleteProject={actions.deleteProject} moveProjectTasks={actions.moveProjectTasks}
+      changeStatus={actions.changeStatus} tagRegistry={tagRegistry}
       readOnly={readOnly} onReadOnly={onReadOnly} blockedCreateProps={blockedCreateProps}
     /></div>
     {editing && <Drawer title={editing.id ? vi.generated.TasksPage_195_23 : vi.generated.TasksPage_195_24} onClose={actions.closeEditor} actions={<>

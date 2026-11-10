@@ -9,7 +9,7 @@ export const vi = {
     kpiOverdue:'Quá hạn',kpiSoon:'Sắp hạn',kpiDone:'Xong trong tuần',myTasks:'Việc của tôi',recent:'Gần đây',today:'Hôm nay',upcoming:'Sắp tới',
     projects:'Dự án',previousPanel:'Bảng trước',nextPanel:'Bảng tiếp theo',panelPosition:position=>`Bảng ${position} trên 2`,
     viewAll:'Xem tất cả',longDate:'Lịch hôm nay',addTask:'Thêm lịch trình',allDay:'Cả ngày',timelineEmpty:'Hôm nay chưa có lịch.',noDescription:'Chưa có mô tả',
-    tasks:count=>`${count} việc`,week:'Tuần làm việc',previousWeek:'Tuần trước',nextWeek:'Tuần sau',noDue:'Chưa đặt hạn',recovery:'Không đọc được dữ liệu cũ. Bản gốc đã được giữ lại.',
+    tasks:count=>`${count} việc`,week:'Tuần làm việc',previousWeek:'Tuần trước',nextWeek:'Tuần sau',noDue:'Chưa đặt hạn',noProject:'Không dự án',recovery:'Không đọc được dữ liệu cũ. Bản gốc đã được giữ lại.',
     completed:'Đã hoàn thành nhiệm vụ.',reopened:'Đã mở lại nhiệm vụ.',reportCopied:'Đã sao chép báo cáo tuần.',
     emptyTitle:'Bắt đầu một nhịp làm việc mới',emptyDescription:'Tạo dự án đầu tiên hoặc dùng dữ liệu mẫu để khám phá Tổng quan.',
     createFirstProject:'Tạo dự án đầu tiên',useSample:'Dùng dữ liệu mẫu',sampleAdded:'Đã thêm dữ liệu mẫu.',
@@ -18,7 +18,7 @@ export const vi = {
     board:'Kanban',boardA11y:'Kanban',list:'Danh sách',projects:'Dự án',viewChoice:'Kiểu hiển thị công việc',filters:'Bộ lọc công việc',all:'Tất cả',
     addTask:'Thêm việc',search:'Tìm nhiệm vụ',status:'Trạng thái',priority:'Ưu tiên',project:'Dự án',sort:'Sắp xếp',reset:'Đặt lại',
     filtered:count=>`${count} nhiệm vụ đang hiển thị`,showing:(shown,total)=>`Đang hiển thị ${shown}/${total}`,previousPage:'Trang trước',nextPage:'Trang sau',
-    page:(current,total)=>`Trang ${current}/${total}`,boardLabel:'Bảng công việc',loadMore:count=>`Hiện thêm (${count})`,emptyLane:'Chưa có nhiệm vụ',moveTo:title=>`Chuyển sang… ${title}`,overdue:'Quá hạn',
+    page:(current,total)=>`Trang ${current}/${total}`,boardLabel:'Bảng công việc',loadMore:count=>`Hiện thêm (${count})`,expandLane:count=>`Xem thêm ${count} việc`,collapseLane:'Thu gọn',projectTasks:'NHIỆM VỤ',emptyLane:'Chưa có nhiệm vụ',moveTo:title=>`Chuyển sang… ${title}`,overdue:'Quá hạn',
   },
   calendar: { moreItems:' mục khác' },
   dailyBriefing: {
@@ -38,8 +38,8 @@ export const vi = {
     createTask: 'Chỉ nhiệm vụ', createProject: 'Chỉ dự án', createTrip: 'Công tác', greeting: name=>`Chào ${name}`, localImport: 'Nhập dữ liệu cục bộ',
   },
   action: { create: 'Tạo', createNew:'Tạo mới', createTask: 'Tạo nhiệm vụ', add: 'Thêm mới', save: 'Lưu thay đổi', cancel: 'Hủy', edit: 'Chỉnh sửa', remove: 'Xóa', close: 'Đóng', retry: 'Thử lại', undo: 'Hoàn tác', today: 'Hôm nay', previous: 'Trước', next: 'Sau', search: 'Tìm kiếm', reset: 'Đặt lại' },
-  status: { todo: 'Chưa bắt đầu', doing: 'Đang thực hiện', waiting: 'Chờ phản hồi', done: 'Hoàn thành', paused: 'Tạm dừng' },
-  priority: { low: 'Thấp', medium: 'Trung bình', high: 'Cao', urgent: 'Khẩn cấp' },
+  status: { todo: 'Chưa bắt đầu', doing: 'Đang thực hiện', waiting: 'Chờ phản hồi', done: 'Hoàn thành', paused: 'Tạm dừng', soon:'Sắp hạn', today:'Hôm nay', overdue:'Quá hạn' },
+  priority: { low: 'Thấp', medium: 'Trung bình', high: 'Cao', urgent: 'Gấp' },
   common: { loading: 'Đang tải dữ liệu…', error: 'Không thể tải dữ liệu', empty: 'Chưa có dữ liệu', task: 'nhiệm vụ', project: 'Dự án', due: 'Hạn', progress: 'Tiến độ', assignee: 'Phụ trách', all: 'Tất cả', tabs: 'Các thẻ' },
   mindMap: { allProjects: 'Tất cả dự án', noMatches: 'Không có nhiệm vụ khớp bộ lọc', treeMap: 'Tree-map' },
   settings: {

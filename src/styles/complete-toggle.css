@@ -36,7 +36,7 @@
 .completion-toggle--labeled .completion-toggle__icon { box-sizing: border-box; border: 2px solid currentColor; border-radius: var(--radius-pill); }
 .completion-toggle--labeled[aria-pressed='true'] .completion-toggle__icon { border-color: transparent; }
 .completion-toggle__icon svg { display: block; width: 100%; height: 100%; }
-.completion-toggle__text { font-size: 12px; font-weight: 700; line-height: 1; white-space: nowrap; }
+.completion-toggle__text { font-size: var(--fs-xs); font-weight: 700; line-height: var(--lh-tight); white-space: nowrap; }
 .completion-toggle[aria-pressed='true'] {
   border-color: var(--color-ink-fixed);
   background: var(--color-lime);
