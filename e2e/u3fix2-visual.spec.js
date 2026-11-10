@@ -38,3 +38,18 @@ test('bảng Dự án giữ lưới và biểu đồ trong một vùng cuộn',a
   })
   expect(layout).toEqual({overflow:'auto',chartBelow:true,panelWidth:true})
 })
+
+test('nút hoàn thành rỗng khi chưa xong và có dấu check khi đã xong',async({page})=>{
+  await page.goto('/')
+  const incomplete=page.getByRole('button',{name:/Đánh dấu hoàn thành:/}).first()
+  const done=page.getByRole('button',{name:/Mở lại:/}).first()
+  await expect(incomplete).toBeVisible()
+  await expect(incomplete.locator('svg')).toHaveCount(0)
+  await expect(done.locator('svg')).toHaveCount(1)
+})
+
+test('Tổng quan dùng nhãn Thêm lịch trình và mở tạo nhiệm vụ',async({page})=>{
+  await page.goto('/')
+  await page.getByRole('button',{name:'Thêm lịch trình'}).click()
+  await expect(page.getByRole('dialog',{name:'Tạo nhiệm vụ'})).toBeVisible()
+})

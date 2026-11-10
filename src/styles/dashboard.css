@@ -68,7 +68,7 @@
 .dashboard-profile>button i { position:absolute; top:-3px; right:-3px; display:grid; min-width:19px; height:19px; place-items:center; border-radius:50%; background:var(--accent); color:var(--on-accent); font-size:9px; font-style:normal; font-weight:800; }
 .dashboard-date-head { display:flex; align-items:center; justify-content:space-between; gap:12px; }
 .dashboard-date-head>span { display:flex; min-width:0; align-items:center; gap:7px; color:var(--text-2); font-size:12px; font-weight:700; }
-.dashboard-date-head .button,.dashboard-date-head .create-menu-trigger { flex-shrink:0; }
+.dashboard-date-head .button { flex-shrink:0; }
 .dashboard-week { display:grid; gap:14px; }
 .dashboard-week .section-row>span { display:flex; gap:4px; }
 .dashboard-week .section-row button { display:grid; width:40px; height:40px; place-items:center; border:0; border-radius:50%; background:var(--fill); color:var(--text); }
@@ -111,5 +111,5 @@
   .dashboard-center-panel.is-tasks .dashboard-task-list{flex:1}
   .dashboard-task-list,.dashboard-timeline .timeline-list{min-height:0;overflow:auto;overscroll-behavior:contain;padding-right:5px}
 }
-@media(max-width:767px){.dashboard-layout{gap:20px}.dashboard-welcome h1{font-size:30px}.dashboard-welcome-actions{flex-wrap:wrap}.dashboard-search{flex-basis:100%}.dashboard-welcome select{flex:1}.dashboard-kpis{grid-template-columns:1fr 1fr}.dashboard-task-card{grid-template-columns:minmax(0,1fr) 38px}.dashboard-task-meta{grid-column:1;justify-content:flex-start}.dashboard-task-card>.progress-wrap{grid-column:1}.dashboard-task-check{grid-column:2;grid-row:1/4}.dashboard-project-grid{display:flex;overflow-x:auto;scroll-snap-type:x mandatory}.dashboard-project-card{min-width:78vw;scroll-snap-align:start}.dashboard-right{grid-template-columns:minmax(0,1fr)}.dashboard-profile,.dashboard-date-head{grid-column:auto}.dashboard-task-tabs{margin-right:-14px}.dashboard-date-head{align-items:flex-start;flex-direction:column}.dashboard-date-head .create-menu-trigger,.dashboard-date-head .create-menu-trigger .popover-trigger{width:100%}}
+@media(max-width:767px){.dashboard-layout{gap:20px}.dashboard-welcome h1{font-size:30px}.dashboard-welcome-actions{flex-wrap:wrap}.dashboard-search{flex-basis:100%}.dashboard-welcome select{flex:1}.dashboard-kpis{grid-template-columns:1fr 1fr}.dashboard-task-card{grid-template-columns:minmax(0,1fr) 38px}.dashboard-task-meta{grid-column:1;justify-content:flex-start}.dashboard-task-card>.progress-wrap{grid-column:1}.dashboard-task-check{grid-column:2;grid-row:1/4}.dashboard-project-grid{display:flex;overflow-x:auto;scroll-snap-type:x mandatory}.dashboard-project-card{min-width:78vw;scroll-snap-align:start}.dashboard-right{grid-template-columns:minmax(0,1fr)}.dashboard-profile,.dashboard-date-head{grid-column:auto}.dashboard-task-tabs{margin-right:-14px}.dashboard-date-head{align-items:flex-start;flex-direction:column}.dashboard-date-head .button{width:100%}}
 @media(prefers-reduced-motion:reduce){.dashboard-kpis button,.dashboard-project-card{transition:none}}

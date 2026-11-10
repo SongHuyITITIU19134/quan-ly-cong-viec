@@ -8,7 +8,7 @@ export const vi = {
     weeklyReport:'Báo cáo tuần',copy:'Sao chép',todayPeriod:'Hôm nay',weekPeriod:'Tuần này',monthPeriod:'Tháng này',kpiToday:'Hôm nay',
     kpiOverdue:'Quá hạn',kpiSoon:'Sắp hạn',kpiDone:'Xong trong tuần',myTasks:'Việc của tôi',recent:'Gần đây',today:'Hôm nay',upcoming:'Sắp tới',
     projects:'Dự án',previousPanel:'Bảng trước',nextPanel:'Bảng tiếp theo',panelPosition:position=>`Bảng ${position} trên 2`,
-    viewAll:'Xem tất cả',longDate:'Lịch hôm nay',addTask:'Thêm việc',allDay:'Cả ngày',timelineEmpty:'Hôm nay chưa có lịch.',noDescription:'Chưa có mô tả',
+    viewAll:'Xem tất cả',longDate:'Lịch hôm nay',addTask:'Thêm lịch trình',allDay:'Cả ngày',timelineEmpty:'Hôm nay chưa có lịch.',noDescription:'Chưa có mô tả',
     tasks:count=>`${count} việc`,week:'Tuần làm việc',previousWeek:'Tuần trước',nextWeek:'Tuần sau',noDue:'Chưa đặt hạn',recovery:'Không đọc được dữ liệu cũ. Bản gốc đã được giữ lại.',
     completed:'Đã hoàn thành nhiệm vụ.',reopened:'Đã mở lại nhiệm vụ.',reportCopied:'Đã sao chép báo cáo tuần.',
     emptyTitle:'Bắt đầu một nhịp làm việc mới',emptyDescription:'Tạo dự án đầu tiên hoặc dùng dữ liệu mẫu để khám phá Tổng quan.',

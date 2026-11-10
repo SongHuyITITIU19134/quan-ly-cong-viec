@@ -49,7 +49,7 @@ test('Tổng quan rỗng tạo dự án đầu tiên',async({page})=>{
 })
 
 test('Tổng quan + Thêm việc tạo và hiển thị việc',async({page})=>{
-  const issues=await init(page);await page.goto('/');await chooseCreate(page,'Thêm việc')
+  const issues=await init(page);await page.goto('/');await page.getByRole('button',{name:'Thêm lịch trình'}).click()
   await saveTask(page,'U2c dashboard');await page.getByRole('link',{name:'Công việc'}).click()
   await expect(page.getByRole('button',{name:'U2c dashboard',exact:true})).toBeVisible();expectClean(issues)
 })

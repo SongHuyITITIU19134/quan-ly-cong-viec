@@ -22,8 +22,8 @@ test('sidebar và Tổng quan mở cùng menu ba lựa chọn',async({page},test
   await page.getByRole('button',{name:'Tạo mới'}).click();await expectChoices(page)
   await page.getByRole('menuitem',{name:'Nhiệm vụ',exact:true}).click();await expect(page.getByRole('dialog',{name:'Tạo nhiệm vụ'})).toBeVisible()
   await page.getByRole('dialog').getByRole('button',{name:'Đóng'}).click()
-  await page.getByRole('button',{name:'Thêm việc'}).click();await expectChoices(page)
-  await page.getByRole('menuitem',{name:'Dự án + nhiệm vụ'}).click();await expect(page.getByRole('dialog',{name:'Tạo dự án + nhiệm vụ'})).toBeVisible()
+  await page.getByRole('button',{name:'Thêm lịch trình'}).click()
+  await expect(page.getByRole('dialog',{name:'Tạo nhiệm vụ'})).toBeVisible()
 })
 
 test('Công việc mở cùng menu và luồng tạo dự án hiện hữu',async({page},testInfo)=>{
