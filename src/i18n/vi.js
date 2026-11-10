@@ -18,7 +18,7 @@ export const vi = {
     board:'Kanban',boardA11y:'Kanban',list:'Danh sách',projects:'Dự án',viewChoice:'Kiểu hiển thị công việc',filters:'Bộ lọc công việc',all:'Tất cả',
     addTask:'Thêm việc',search:'Tìm nhiệm vụ',status:'Trạng thái',priority:'Ưu tiên',project:'Dự án',sort:'Sắp xếp',reset:'Đặt lại',
     filtered:count=>`${count} nhiệm vụ đang hiển thị`,showing:(shown,total)=>`Đang hiển thị ${shown}/${total}`,previousPage:'Trang trước',nextPage:'Trang sau',
-    page:(current,total)=>`Trang ${current}/${total}`,boardLabel:'Bảng công việc',loadMore:count=>`Hiện thêm (${count})`,expandLane:count=>`Xem thêm ${count} việc`,collapseLane:'Thu gọn',emptyLane:'Chưa có nhiệm vụ',moveTo:title=>`Chuyển sang… ${title}`,overdue:'Quá hạn',
+    page:(current,total)=>`Trang ${current}/${total}`,boardLabel:'Bảng công việc',loadMore:count=>`Hiện thêm (${count})`,expandLane:count=>`Xem thêm ${count} việc`,collapseLane:'Thu gọn',projectTasks:'NHIỆM VỤ',emptyLane:'Chưa có nhiệm vụ',moveTo:title=>`Chuyển sang… ${title}`,overdue:'Quá hạn',
   },
   calendar: { moreItems:' mục khác' },
   dailyBriefing: {

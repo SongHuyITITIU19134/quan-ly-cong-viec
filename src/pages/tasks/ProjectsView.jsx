@@ -8,6 +8,8 @@ import { sortProjectsCompletedLast } from '@/lib/sortProjects'
 import { formatDate } from '@/lib/dates'
 import { useTransitionNavigate } from '@/hooks/useTransitionNavigate'
 import { vi } from '@/i18n/vi'
+import CompleteToggle from '@/components/ui/CompleteToggle'
+import TaskTags from '@/components/tags/TaskTags'
 export default function ProjectsView({
   active,
   editing,
@@ -30,6 +32,8 @@ export default function ProjectsView({
   archiveProject,
   deleteProject,
   moveProjectTasks,
+  changeStatus,
+  tagRegistry,
   readOnly,
   onReadOnly,
   blockedCreateProps
@@ -112,6 +116,21 @@ export default function ProjectsView({
 {projectStatus(selectedProject)==='waiting'&&selectedProject.status!=='waiting'&&<p role="note">
 <Clock3 size={16} aria-hidden="true" /> {vi.projects.autoWaiting}</p>}<p>{selectedProject.description || vi.generated.ProjectsView_106_21}</p>
 <ProgressBar value={projectProgress(data.tasks, selectedProject.id)} />
+<section className="project-task-list" aria-labelledby="project-task-list-title">
+<h3 id="project-task-list-title">{vi.tasks.projectTasks}</h3>
+{data.tasks.filter(task=>task.projectId===selectedProject.id).map(task=><div
+  className="project-task-row"
+  data-testid={`project-task-row-${task.id}`}
+  key={task.id}
+>
+<CompleteToggle checked={task.status==='done'} onChange={checked=>changeStatus(task,checked?'done':'todo')} label={task.title} />
+<div className="project-task-main"><div className="project-task-title-line" data-testid="project-task-title-line">
+<button type="button" title={task.title} onClick={()=>setEditing(task)}>{task.title}</button>
+<div className="project-task-tags" title={(task.tags||[]).join(', ')}><TaskTags tags={task.tags} registry={tagRegistry} max={2}/></div>
+<StatusBadge value={task.status}/>
+</div></div>
+</div>)}
+</section>
 <dl>
 <div>
 <dt>{vi.generated.ProjectsView_110_22}</dt>

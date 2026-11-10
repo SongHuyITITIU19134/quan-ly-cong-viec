@@ -42,7 +42,7 @@ test('chữ dài: giới hạn nhập, Kanban, chi tiết và biểu đồ',asyn
  }
  await page.evaluate(()=>{const data=JSON.parse(localStorage.getItem('nhip-viec-v1')),names=['Báo cáo quy hoạch phục vụ họp thẩm định cấp tỉnh quý 4','Triển khai hệ thống quản lý vận tải và kho hàng ABC','Công việc hành chính và tổng hợp báo cáo định kỳ'],project=data.projects[0],tasks=data.tasks;data.projects=names.map((name,index)=>({...project,id:`layout-p${index}`,name}));data.tasks=Array.from({length:13},(_,index)=>({...tasks[index%tasks.length],id:`layout-t${index}`,title:index<tasks.length?tasks[index].title:`Nhiệm vụ bố cục ${index+1}`,projectId:data.projects[index<5?0:index<10?1:2].id,status:'todo',order:index+1}));localStorage.setItem('nhip-viec-v1',JSON.stringify(data))})
  await page.reload()
- const column=page.locator('.kanban-column').first();expect(await column.locator('.task-card').count()).toBeGreaterThan(6)
+ const column=page.locator('.kanban-column').first();await column.getByRole('button',{name:/Xem thêm \d+ việc/u}).click();expect(await column.locator('.task-card').count()).toBeGreaterThan(6)
  await column.locator('.task-card').last().scrollIntoViewIfNeeded();await expect(column.locator('.task-card').last()).toBeInViewport()
  await page.goto('/')
  await page.getByRole('button',{name:'Bảng tiếp theo'}).click()
