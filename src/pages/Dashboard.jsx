@@ -123,7 +123,7 @@ function Dashboard(){
         <div className="dashboard-panel-actions"><Button variant="ghost" onClick={()=>goToScope(panelView==='tasks'?`from=${range[0]}&to=${range[1]}`:'view=projects')}>{vi.dashboard.viewAll}</Button>
           <button type="button" aria-label={vi.dashboard.previousPanel} onClick={()=>setPanelView(value=>value==='tasks'?'projects':'tasks')}><ChevronLeft/></button>
           <button type="button" aria-label={vi.dashboard.nextPanel} onClick={()=>setPanelView(value=>value==='tasks'?'projects':'tasks')}><ChevronRight/></button></div></div>
-        {panelView==='tasks'?<><div className="dashboard-task-tabs" role="tablist" aria-label={vi.dashboard.myTasks}>
+        <div className={`dashboard-panel-content is-${panelView}`} key={panelView}>{panelView==='tasks'?<><div className="dashboard-task-tabs" role="tablist" aria-label={vi.dashboard.myTasks}>
           {[['recent',vi.dashboard.recent],['today',vi.dashboard.today],['upcoming',vi.dashboard.upcoming],['overdue',vi.dashboard.overdue]].map(([value,label])=><button
             key={value} role="tab" aria-selected={taskTab===value} onClick={()=>setTaskTab(value)}>{label}<span>{taskLists[value].length}</span></button>)}
         </div><div className="dashboard-task-list">{activeTasks.length?activeTasks.map(task=><DashboardTask key={task.id} task={task} indexes={indexes}
@@ -138,7 +138,7 @@ function Dashboard(){
             :vi.dashboard.projects}>
             {projectRows.slice(0,6).map((item,index)=><div className="mini-bar-item" key={item.project.id}><span className={`mini-bar label-theme-${index%8+1}`}
               style={{width:`${Math.max(8,item.tasks.length/Math.max(1,...projectRows.map(row=>row.tasks.length))*100)}%`}}/><small title={item.project.name}>{item.project.name}</small><strong>{item.tasks.length}</strong></div>)}</div>
-        </section>}</Card></>}
+        </section>}</div></Card></>}
     </section>
     <aside className="dashboard-right" aria-label={vi.dashboard.longDate}>
       <div className="dashboard-profile"><Avatar name={name}/><span><small>{vi.dashboard.morning}</small><strong>{name}</strong></span>

@@ -30,7 +30,7 @@
 @media(max-width:1100px){.calendar-workspace{grid-template-columns:1fr}.day-agenda{position:static}}
 @media(max-width:767px){.calendar-toolbar .segmented{width:100%;display:grid;grid-template-columns:repeat(3,1fr)}.calendar-day{min-height:74px}.calendar-day.selected{transform:none}.day-overlap-icon{top:6px;right:5px;width:12px}.day-agenda{padding:14px}.agenda-row{grid-template-columns:1fr}.agenda-row label{grid-column:auto}.trip-strip{border:0}}
 @media(min-width:1024px) and (min-height:700px){
-  .main:has(.calendar-page){overflow:hidden}.main:has(.calendar-page)>.page{height:100%}
+  .main:has(.calendar-page){overflow:hidden}.main:has(.calendar-page)>.route-content,.main:has(.calendar-page)>.route-content>.page{height:100%}
   .calendar-page{display:grid;height:100%;min-height:0;grid-template-rows:auto auto minmax(0,1fr);overflow:hidden}
   .calendar-page>.page-head{min-height:0;margin-bottom:12px;padding-top:3px}.calendar-page>.page-head h1{margin-top:0}
   .calendar-toolbar{margin-bottom:12px}.calendar-workspace{height:100%;min-height:0;grid-template-columns:minmax(0,1fr) 280px;align-items:stretch}

@@ -179,7 +179,7 @@ export default function TasksPage() {
   onClick={()=>setParams({})}
 >{vi.generated.TasksPage_173_22}</Button>}</div>
     <p className="sr-only" aria-live="polite">{actions.announcement}</p>
-    {view==='kanban'&&<KanbanView
+    <div className="tasks-view-content" key={view}>{view==='kanban'&&<KanbanView
       data={data} filtered={filters.filtered} grouped={filters.grouped} hasFilters={filters.hasFilters}
       setParams={setParams} taskProps={actions.taskProps}
       dropTask={actions.dropTask} setDragging={actions.setDragging} setEditing={openEditor}
@@ -199,7 +199,7 @@ export default function TasksPage() {
       setEditing={setEditing} saveProject={actions.saveProject} archiveProject={actions.archiveProject}
       deleteProject={actions.deleteProject} moveProjectTasks={actions.moveProjectTasks}
       readOnly={readOnly} onReadOnly={onReadOnly} blockedCreateProps={blockedCreateProps}
-    />
+    /></div>
     {editing && <Drawer title={editing.id ? vi.generated.TasksPage_195_23 : vi.generated.TasksPage_195_24} onClose={actions.closeEditor} actions={<>
 <Button variant="secondary" onClick={actions.closeEditor}>{vi.generated.TasksPage_196_25}</Button>
 <Button type="submit" form={taskFormId}>{vi.generated.TasksPage_197_26}</Button>

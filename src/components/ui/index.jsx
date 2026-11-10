@@ -52,7 +52,7 @@ export function Popover({label,accessibleLabel,children,className='',panelClassN
   },[open,close,place])
   return <span className={`popover-anchor ${className}`.trim()}>
     <button ref={anchorRef} type="button" className="popover-trigger" aria-label={accessibleLabel} aria-expanded={open} aria-controls={open?id:undefined} aria-haspopup={role==='menu'?'menu':'dialog'} onClick={()=>setOpen(value=>!value)}>{label}</button>
-    {open&&createPortal(<div ref={panelRef} id={id} className={`popover-panel ${panelClassName}`.trim()} style={position} role={role} onClick={event=>{if(event.target.closest('[role="menuitem"]'))close()}}>{children}</div>,document.body)}
+    {open&&createPortal(<div ref={panelRef} id={id} className={`popover-panel ${panelClassName}`.trim()} data-align={align} style={position} role={role} onClick={event=>{if(event.target.closest('[role="menuitem"]'))close()}}>{children}</div>,document.body)}
   </span>
 }
 

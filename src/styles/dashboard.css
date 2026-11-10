@@ -30,9 +30,11 @@
 .dashboard-panel-dots i.is-active { background:var(--ink); }
 .dashboard-task-tabs { display:flex; flex:0 0 auto; gap:6px; overflow-x:auto; padding:4px; border-radius:var(--radius-pill); background:var(--fill); }
 .dashboard-task-tabs button { display:flex; min-height:40px; align-items:center; gap:7px; border:0; border-radius:var(--radius-pill); padding:0 13px; background:transparent; color:var(--text-2); white-space:nowrap; font-weight:800; }
+.dashboard-task-tabs button { transition:color var(--motion-fast) var(--ease-out-expo),background-color var(--motion-fast) var(--ease-out-expo),transform var(--motion-fast) var(--ease-out-expo); }
 .dashboard-task-tabs button[aria-selected='true'] { background:var(--ink); color:var(--bg); }
 .dashboard-task-tabs button span { display:grid; min-width:22px; height:22px; place-items:center; border-radius:50%; background:color-mix(in srgb,currentColor 12%,transparent); font-size:10px; }
 .dashboard-task-list { display:grid; min-height:0; gap:10px; }
+.dashboard-panel-content { display:flex; min-height:0; flex:1; flex-direction:column; gap:18px; animation:panel-enter var(--motion-fast) var(--ease-out-expo) both; }
 .dashboard-task-card { position:relative; display:grid; grid-template-columns:minmax(0,1fr) minmax(150px,.65fr) 34px; gap:14px; align-items:center; border:1px solid var(--line); border-radius:var(--radius-card); padding:18px; background:var(--surface); box-shadow:0 8px 28px rgb(14 14 16 / 4%); }
 .dashboard-task-card.has-project { background:color-mix(in srgb,var(--label-bg) 12%,var(--surface)); }
 .dashboard-task-card.due-overdue { border-left:4px solid var(--danger); }
@@ -113,7 +115,7 @@
 
 @media(max-width:1023px){.dashboard-layout{grid-template-columns:minmax(0,1fr)}.dashboard-right{position:static;grid-template-columns:repeat(2,minmax(0,1fr))}.dashboard-profile,.dashboard-date-head{grid-column:1/-1}}
 @media(min-width:1024px) and (min-height:700px){
-  .main:has(.dashboard-layout){overflow:hidden}.main:has(.dashboard-layout)>.page{height:100%}
+  .main:has(.dashboard-layout){overflow:hidden}.main:has(.dashboard-layout)>.route-content,.main:has(.dashboard-layout)>.route-content>.page{height:100%}
   .dashboard-layout{height:100%;min-height:0;align-items:stretch}.dashboard-center,.dashboard-right{height:100%;min-height:0;overflow:hidden}
   .dashboard-center{display:flex;flex-direction:column}.dashboard-center-panel{flex:1}.dashboard-right{position:static;grid-template-rows:auto auto auto minmax(0,1fr)}
   .dashboard-center-panel,.dashboard-timeline{min-height:0;overflow:hidden}

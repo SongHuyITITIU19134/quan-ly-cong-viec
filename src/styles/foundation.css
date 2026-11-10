@@ -16,8 +16,10 @@
 .button,.icon-button,.icon-hit { border: 0; border-radius: var(--radius-control); box-shadow: none; font-weight: var(--font-weight-bold); transition: transform var(--motion-fast) var(--ease-out-expo),background-color var(--motion-fast) var(--ease-out-expo); }
 .button { background: var(--color-ink-fixed); color: #fff; }
 .button:hover:not(:disabled),.button:active:not(:disabled) { background: var(--color-ink-fixed); color: #fff; }
-.button:hover:not(:disabled),.icon-button:hover:not(:disabled),.icon-hit:hover:not(:disabled) { transform: translate(-1px,-1px); }
-.button:active:not(:disabled),.icon-button:active:not(:disabled),.icon-hit:active:not(:disabled) { transform: translate(1px,1px); }
+.button:hover:not(:disabled),.icon-button:hover:not(:disabled),.icon-hit:hover:not(:disabled) { transform: translateY(-1px); }
+.button:active:not(:disabled),.icon-button:active:not(:disabled),.icon-hit:active:not(:disabled) { transform: scale(.98); }
+.card:hover { transform:translateY(-1px); }
+.card:active { transform:scale(.98); }
 .button.secondary { background: var(--color-paper); color: var(--color-text); }
 .button.secondary:hover:not(:disabled),.button.secondary:active:not(:disabled) { background: var(--color-surface-hover); color: var(--color-text); }
 .button.ghost { border-color: transparent; background: transparent; color: var(--color-text); box-shadow: none; }

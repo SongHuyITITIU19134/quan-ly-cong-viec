@@ -42,7 +42,7 @@
 .trip-range-short { display: none; }
 @media(max-width:767px){.trip-range-full{display:none}.trip-range-short{display:inline}}
 @media(min-width:1024px) and (min-height:700px){
-  .main:has(.trips-page){overflow:hidden}.main:has(.trips-page)>.page{height:100%}
+  .main:has(.trips-page){overflow:hidden}.main:has(.trips-page)>.route-content,.main:has(.trips-page)>.route-content>.page{height:100%}
   .trips-page{display:flex;height:100%;min-height:0;flex-direction:column;overflow:hidden}
   .trips-page>.page-head,.trips-page>.warning-banner{flex:0 0 auto}
   .trips-list-scroll{min-height:0;flex:1;overflow:auto;overscroll-behavior:contain;padding-right:8px}

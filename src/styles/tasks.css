@@ -4,8 +4,10 @@
 .tasks-head-actions { display:flex; align-items:center; gap:10px; }
 .task-view-tabs { display:flex; gap:4px; border-radius:var(--radius-pill); padding:4px; background:var(--fill); }
 .task-view-tabs button { min-height:40px; border:0; border-radius:var(--radius-pill); padding:0 16px; background:transparent; color:var(--text-2); font-weight:800; }
+.task-view-tabs button { transition:color var(--motion-fast) var(--ease-out-expo),background-color var(--motion-fast) var(--ease-out-expo),transform var(--motion-fast) var(--ease-out-expo); }
 .task-view-tabs button[aria-selected='true'] { background:var(--ink); color:var(--bg); }
 .tasks-filter-chips { display:flex; gap:8px; margin-bottom:14px; overflow-x:auto; padding:2px 0; }
+.tasks-view-content { animation:content-enter var(--motion-fast) var(--ease-out-expo) both; }
 .toolbar { gap: 12px; margin-bottom: var(--space-5); }
 .toolbar .search input,.toolbar>select,.filter-menu .popover-trigger { min-height:46px; border:1px solid var(--line); border-radius:var(--radius-pill); background:var(--surface); box-shadow:none; }
 .toolbar .search input { padding-left: 42px; }

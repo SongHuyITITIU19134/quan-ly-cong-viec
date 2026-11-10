@@ -210,7 +210,7 @@ export default function AppLayout(){
         {error&&<div className="global-error" role="alert"><span>{error}</span><button onClick={()=>setError(null)}>{vi.action.close}</button></div>}
         {emailNeedsVerification&&<section className="verification-banner" aria-label={vi.auth.verifyTitle}><div><strong>{vi.auth.verifyTitle}</strong><p>{vi.auth.verifyDescription}</p></div><div><button type="button" onClick={resendEmail}>{vi.auth.resend}</button><button type="button" onClick={confirmEmail}>{vi.auth.verified}</button></div></section>}
         {importOffer&&<section className="cloud-import-banner" aria-label={vi.shell.localImport}><div><strong>{vi.auth.importTitle}</strong><p>{vi.auth.importDescription}</p></div><div><button type="button" disabled={importBusy} onClick={skipImport}>{vi.auth.skip}</button><button type="button" disabled={importBusy} onClick={importLocal}>{importBusy?vi.auth.importing:vi.auth.import}</button></div></section>}
-        <Outlet/>
+        <div className="route-content" key={location.pathname}><Outlet/></div>
       </main>
     </div>
 

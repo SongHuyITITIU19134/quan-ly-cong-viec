@@ -65,3 +65,11 @@ test('quá hạn có nhãn chữ và thẻ theo màu dự án',async({page})=>{
   await page.reload()
   await expect(page.getByRole('button',{name:'Chốt kế hoạch ra mắt',exact:true}).locator('xpath=ancestor::article')).not.toHaveClass(/has-project/)
 })
+
+test('reduced motion tắt animation và transition',async({page})=>{
+  await page.emulateMedia({reducedMotion:'reduce'})
+  await page.goto('/cong-viec')
+  const motion=await page.locator('.route-content').evaluate(element=>({animation:getComputedStyle(element).animationName,transition:getComputedStyle(element).transitionDuration}))
+  expect(motion.animation).toBe('none')
+  expect(motion.transition).toBe('0s')
+})
