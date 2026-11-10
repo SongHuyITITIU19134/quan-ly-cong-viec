@@ -44,6 +44,16 @@ test('nút kiểm timeline hoàn thành nhiệm vụ hôm nay',async({page})=>{
   await expect.poll(()=>page.evaluate(()=>JSON.parse(localStorage.getItem('nhip-viec-v1')).tasks.find(item=>item.id==='demo-task-1').status)).toBe('done')
 })
 
+test('chevron đổi giữa Việc của tôi và Dự án',async({page})=>{
+  await expect(page.getByRole('heading',{name:'Việc của tôi'})).toBeVisible()
+  await page.getByRole('button',{name:'Bảng tiếp theo'}).click()
+  await expect(page.getByRole('heading',{name:'Dự án'})).toBeVisible()
+  await expect(page.locator('.dashboard-project-grid')).toBeVisible()
+  await expect(page.locator('.dashboard-panel-dots .is-active')).toHaveCount(1)
+  await page.getByRole('button',{name:'Bảng trước'}).click()
+  await expect(page.getByRole('heading',{name:'Việc của tôi'})).toBeVisible()
+})
+
 test('trạng thái rỗng vẫn giữ greeting và cột phải',async({page})=>{
   await expect(page.getByRole('heading',{name:/Hôm nay bạn có 0 việc/})).toBeVisible()
   await expect(page.getByRole('button',{name:'Tạo dự án đầu tiên'})).toBeVisible()

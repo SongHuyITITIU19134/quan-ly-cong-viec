@@ -35,7 +35,7 @@ function DashboardTask({task,indexes,onToggle,onOpen,emphasis=false}){
 function Dashboard(){
   const{data,loading}=useDataState(),{batch}=useActions(),{readOnly}=useAuth(),toast=useToast(),navigate=useTransitionNavigate()
   const[period,setPeriod]=useState(()=>{try{const value=localStorage.getItem('nhip-viec-period');return['today','week','month'].includes(value)?value:'week'}catch{return'week'}})
-  const[taskTab,setTaskTab]=useState('recent'),[weekOffset,setWeekOffset]=useState(0),[showReport,setShowReport]=useState(false)
+  const[taskTab,setTaskTab]=useState('recent'),[panelView,setPanelView]=useState('tasks'),[weekOffset,setWeekOffset]=useState(0),[showReport,setShowReport]=useState(false)
   const recoveryShown=useRef(false),today=todayISO()
   useEffect(()=>{try{localStorage.setItem('nhip-viec-period',period)}catch{/* Storage can be unavailable. */}},[period])
   useEffect(()=>{if(data.recoveryError&&!recoveryShown.current){recoveryShown.current=true;toast(vi.dashboard.recovery)}if(!data.recoveryError)recoveryShown.current=false},[data.recoveryError,toast])
@@ -115,26 +115,27 @@ function Dashboard(){
         <button className="is-emphasis" onClick={()=>goToScope('due=overdue')}><span>{vi.dashboard.kpiOverdue}</span><strong>{summary.overdue.length}</strong></button>
         <button onClick={()=>goToScope('due=soon')}><span>{vi.dashboard.kpiSoon}</span><strong>{summary.soon.length}</strong></button>
         <button onClick={()=>goToScope(`status=done&from=${weekRange[0]}&to=${weekRange[1]}`)}><span>{vi.dashboard.kpiDone}</span><strong>{summary.doneWeek.length}</strong></button></div>
-      <Card className="dashboard-my-tasks"><div className="section-row"><h2>{vi.dashboard.myTasks}</h2>
-        <Button variant="ghost" onClick={()=>goToScope(`from=${range[0]}&to=${range[1]}`)}>{vi.dashboard.viewAll}</Button></div>
-        <div className="dashboard-task-tabs" role="tablist" aria-label={vi.dashboard.myTasks}>
+      <Card className={`dashboard-center-panel ${panelView==='tasks'?'is-tasks':'is-projects'}`}><div className="dashboard-panel-head"><div><h2>{panelView==='tasks'?vi.dashboard.myTasks:vi.dashboard.projects}</h2>
+        <span className="dashboard-panel-dots" aria-label={vi.dashboard.panelPosition(panelView==='tasks'?1:2)}><i className={panelView==='tasks'?'is-active':''}/><i className={panelView==='projects'?'is-active':''}/></span></div>
+        <div className="dashboard-panel-actions"><Button variant="ghost" onClick={()=>goToScope(panelView==='tasks'?`from=${range[0]}&to=${range[1]}`:'view=projects')}>{vi.dashboard.viewAll}</Button>
+          <button type="button" aria-label={vi.dashboard.previousPanel} onClick={()=>setPanelView(value=>value==='tasks'?'projects':'tasks')}><ChevronLeft/></button>
+          <button type="button" aria-label={vi.dashboard.nextPanel} onClick={()=>setPanelView(value=>value==='tasks'?'projects':'tasks')}><ChevronRight/></button></div></div>
+        {panelView==='tasks'?<><div className="dashboard-task-tabs" role="tablist" aria-label={vi.dashboard.myTasks}>
           {[['recent',vi.dashboard.recent],['today',vi.dashboard.today],['upcoming',vi.dashboard.upcoming],['overdue',vi.dashboard.overdue]].map(([value,label])=><button
             key={value} role="tab" aria-selected={taskTab===value} onClick={()=>setTaskTab(value)}>{label}<span>{taskLists[value].length}</span></button>)}
         </div><div className="dashboard-task-list">{activeTasks.length?activeTasks.map(task=><DashboardTask key={task.id} task={task} indexes={indexes}
           emphasis={task.id===urgentId} onToggle={()=>toggleTask(task)} onOpen={()=>goToScope(`q=${encodeURIComponent(task.title)}`)}/>)
-          :<p className="dashboard-empty">{vi.dashboard.emptyTasks}</p>}</div></Card>
-      <section className="dashboard-projects"><div className="section-row"><h2>{vi.dashboard.projects}</h2>
-        <Button variant="ghost" onClick={()=>goToScope('view=projects')}>{vi.dashboard.viewAll}</Button></div>
-        <div className="dashboard-project-grid">{projectRows.slice(0,6).map(({project,index,tasks,progress})=><button type="button"
-          className={`dashboard-project-card label-theme-${index%8+1} ${project.id===nearestProject?'is-emphasis':''}`} key={project.id}
-          onClick={()=>goToScope(`projectId=${project.id}`)}><span className="project-card-top"><i/><small>{vi.dashboard.tasks(tasks.length)}</small></span>
-          <strong>{project.name}</strong><span>{project.dueDate?formatDate(project.dueDate):vi.dashboard.noDue}</span><ProgressBar value={progress}/></button>)}</div>
-        <div className="mini-bars" role="img" aria-label={projectRows.length
-          ?projectRows.map(item=>`${item.project.name}: ${item.tasks.length} ${vi.common.task}`).join(', ')
-          :vi.dashboard.projects}>
-          {projectRows.slice(0,6).map((item,index)=><div className="mini-bar-item" key={item.project.id}><span className={`mini-bar label-theme-${index%8+1}`}
-            style={{width:`${Math.max(8,item.tasks.length/Math.max(1,...projectRows.map(row=>row.tasks.length))*100)}%`}}/><small title={item.project.name}>{item.project.name}</small><strong>{item.tasks.length}</strong></div>)}</div>
-      </section></>}
+          :<p className="dashboard-empty">{vi.dashboard.emptyTasks}</p>}</div></>:<section className="dashboard-projects">
+          <div className="dashboard-project-grid">{projectRows.slice(0,6).map(({project,index,tasks,progress})=><button type="button"
+            className={`dashboard-project-card label-theme-${index%8+1} ${project.id===nearestProject?'is-emphasis':''}`} key={project.id}
+            onClick={()=>goToScope(`projectId=${project.id}`)}><span className="project-card-top"><i/><small>{vi.dashboard.tasks(tasks.length)}</small></span>
+            <strong>{project.name}</strong><span>{project.dueDate?formatDate(project.dueDate):vi.dashboard.noDue}</span><ProgressBar value={progress}/></button>)}</div>
+          <div className="mini-bars" role="img" aria-label={projectRows.length
+            ?projectRows.map(item=>`${item.project.name}: ${item.tasks.length} ${vi.common.task}`).join(', ')
+            :vi.dashboard.projects}>
+            {projectRows.slice(0,6).map((item,index)=><div className="mini-bar-item" key={item.project.id}><span className={`mini-bar label-theme-${index%8+1}`}
+              style={{width:`${Math.max(8,item.tasks.length/Math.max(1,...projectRows.map(row=>row.tasks.length))*100)}%`}}/><small title={item.project.name}>{item.project.name}</small><strong>{item.tasks.length}</strong></div>)}</div>
+        </section>}</Card></>}
     </section>
     <aside className="dashboard-right" aria-label={vi.dashboard.longDate}>
       <div className="dashboard-profile"><Avatar name={name}/><span><small>{vi.dashboard.morning}</small><strong>{name}</strong></span>
