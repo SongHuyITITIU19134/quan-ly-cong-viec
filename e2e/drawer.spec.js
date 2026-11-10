@@ -3,7 +3,7 @@ import { test, expect } from '@playwright/test'
 test.beforeEach(async({page})=>{await page.goto('/cong-viec');await page.evaluate(()=>{localStorage.clear();localStorage.setItem('nhip-viec-initialized','true');localStorage.setItem('nhip-viec-settings',JSON.stringify({onboardingSeen:true}))});await page.reload()})
 
 test('drawer giữ nút lưu, focus và bảo vệ thay đổi chưa lưu',async({page})=>{
-  await page.getByRole('button',{name:'Tạo nhiệm vụ'}).click()
+  await page.keyboard.press('n')
   const drawer=page.getByRole('dialog',{name:'Tạo nhiệm vụ'})
   await expect(drawer).toBeVisible()
   await expect(page.getByLabel('Tên nhiệm vụ *')).toBeFocused()

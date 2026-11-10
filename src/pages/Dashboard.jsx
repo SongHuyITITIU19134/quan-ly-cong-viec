@@ -2,7 +2,7 @@ import { memo, useEffect, useMemo, useRef, useState } from 'react'
 import { Bell, CalendarDays, Check, ChevronLeft, ChevronRight, Plus, Search } from 'lucide-react'
 import { addDays, endOfMonth, endOfWeek, startOfMonth, startOfWeek } from 'date-fns'
 import { Page } from '@/app/App'
-import { Avatar, AvatarStack, Button, Card, EmptyState, ProgressBar } from '@/components/ui'
+import { Avatar, AvatarStack, Button, Card, EmptyState, Popover, ProgressBar } from '@/components/ui'
 import { useActions, useAuth, useDataState, useToast } from '@/hooks/useData'
 import { getProjectEffectiveStatus } from '@/lib/projectStatus'
 import { getDueState } from '@/lib/tasks'
@@ -85,6 +85,7 @@ function Dashboard(){
     toast(status==='done'?vi.dashboard.completed:vi.dashboard.reopened,{label:vi.action.undo,onClick:()=>batch(undo)})
   }
   const requestCreate=to=>{if(readOnly)return toast(vi.auth.verifyToEdit);navigate(to)}
+  const openCreate=mode=>window.setTimeout(()=>window.dispatchEvent(new CustomEvent('nhip-viec-create',{detail:mode})),0)
   const blockedCreateProps=readOnly?{'aria-disabled':true,title:vi.auth.verifyToEdit}:{}
   const useSample=async()=>{
     const[{onboardingSample},{stringifyJsonExport,parseJsonImport,buildImportOps}]=await Promise.all([
@@ -140,7 +141,9 @@ function Dashboard(){
     <aside className="dashboard-right" aria-label={vi.dashboard.longDate}>
       <div className="dashboard-profile"><Avatar name={name}/><span><small>{vi.dashboard.morning}</small><strong>{name}</strong></span>
         <button type="button" aria-label={vi.shell.reminders(0,summary.overdue.length)} onClick={()=>goToScope('due=overdue')}><Bell size={20}/>{summary.overdue.length>0&&<i>{summary.overdue.length}</i>}</button></div>
-      <div className="dashboard-date-head"><span><CalendarDays size={18}/>{longDate}</span><Button {...blockedCreateProps} onClick={()=>requestCreate('/cong-viec?new=task')}><Plus size={16}/>{vi.dashboard.addTask}</Button></div>
+      <div className="dashboard-date-head"><span><CalendarDays size={18}/>{longDate}</span><Popover className="create-menu-trigger" panelClassName="create-menu-panel" accessibleLabel={vi.dashboard.addTask} label={<><Plus size={16}/><span>{vi.dashboard.addTask}</span></>}>
+        {[['project',vi.shell.projectChoice],['task',vi.shell.taskChoice],['combo',vi.shell.createCombo]].map(([value,label])=><button type="button" role="menuitem" {...blockedCreateProps} key={value} onClick={()=>openCreate(value)}>{label}</button>)}
+      </Popover></div>
       <Card className="dashboard-week"><div className="section-row"><h2>{vi.dashboard.week}</h2><span>
         <button aria-label={vi.dashboard.previousWeek} onClick={()=>setWeekOffset(value=>value-1)}><ChevronLeft/></button>
         <button aria-label={vi.dashboard.nextWeek} onClick={()=>setWeekOffset(value=>value+1)}><ChevronRight/></button></span></div>

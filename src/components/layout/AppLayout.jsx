@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { NavLink, Outlet, useLocation } from 'react-router-dom'
 import {
   Bell, CalendarCheck, CalendarDays, ContactRound, Download, GitBranch, LayoutDashboard, ListTodo, LogOut, Moon, MoreHorizontal, NotebookTabs,
@@ -68,8 +68,11 @@ export default function AppLayout(){
   const dailyBriefing=useMemo(()=>buildDailyBriefing(data,dailyBriefingState?.date||todayISO()),[data,dailyBriefingState?.date])
   const personName=user?.displayName||vi.common.assignee
   const personInitial=(user?.displayName||user?.email||'T').slice(0,1).toUpperCase()
+  const requestCreate=useCallback(mode=>{if(readOnly)return toast(vi.auth.verifyToEdit);setCreateMode(mode)},[readOnly,toast])
 
   useEffect(()=>{pruneReminderIds(localStorage,todayISO())},[])
+
+  useEffect(()=>{const open=event=>{if(['project','task','combo'].includes(event.detail))requestCreate(event.detail)};window.addEventListener('nhip-viec-create',open);return()=>window.removeEventListener('nhip-viec-create',open)},[requestCreate])
 
   useEffect(()=>{
     if(paletteOpen||!paletteReturnFocus.current)return undefined
@@ -131,7 +134,6 @@ export default function AppLayout(){
   const submitSearch=event=>{event.preventDefault();openPalette(query.trim(),searchRef.current)}
   const closePalette=()=>{setPaletteOpen(false);paletteReturnFocus.current?.focus?.()}
   const changeTheme=()=>saveSettings({...settings,theme:resolved==='dark'?'light':'dark'})
-  const requestCreate=mode=>{if(readOnly)return toast(vi.auth.verifyToEdit);setCreateMode(mode)}
   const blockedCreateProps=readOnly?{'aria-disabled':true,title:vi.auth.verifyToEdit}:{}
   const choosePalette=item=>{setPaletteOpen(false);if(item.action==='task')requestCreate('task');else if(item.action==='theme')changeTheme();else if(item.to)navigate(item.to)}
   const finishOnboarding=()=>saveSettings({...settings,onboardingSeen:true})
@@ -164,7 +166,9 @@ export default function AppLayout(){
       <NavLink className="shell-brand" to="/" aria-label={`${vi.appName} — ${vi.nav.dashboard}`} onClick={event=>{event.preventDefault();navigate('/')}}>
         <span className="shell-brand-mark"><Sparkles size={20}/></span><strong>{vi.appName}</strong>
       </NavLink>
-      {location.pathname!=='/cong-viec'&&<button className="shell-create-task" type="button" {...blockedCreateProps} onClick={()=>requestCreate('task')}><Plus size={19} aria-hidden="true"/><span>{vi.action.createTask}</span></button>}
+      {location.pathname!=='/cong-viec'&&<Popover className="shell-create-menu" panelClassName="create-menu-panel" accessibleLabel={vi.action.createNew} label={<><Plus size={19} aria-hidden="true"/><span>{vi.action.createNew}</span></>}>
+        {[['project',vi.shell.projectChoice],['task',vi.shell.taskChoice],['combo',vi.shell.createCombo]].map(([value,label])=><button type="button" role="menuitem" {...blockedCreateProps} key={value} onClick={()=>window.setTimeout(()=>requestCreate(value),0)}>{label}</button>)}
+      </Popover>}
       <Navigation onNavigate={navigate}/>
       <div className="shell-sidebar-bottom">
         <AppLink item={['/cai-dat',vi.nav.settings,Settings]} onNavigate={navigate}/>

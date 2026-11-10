@@ -27,16 +27,17 @@ const saveTask=async(page,title)=>{
   await stored(page,'tasks',title)
 }
 const expectClean=issues=>expect(issues).toEqual([])
+const chooseCreate=async(page,trigger,choice='Nhiệm vụ')=>{await page.getByRole('button',{name:trigger,exact:true}).click();await page.getByRole('menuitem',{name:choice,exact:true}).click()}
 
-test('nút Tạo nhiệm vụ ở shell tạo và hiển thị việc',async({page},testInfo)=>{
+test('nút Tạo mới ở shell tạo và hiển thị việc',async({page},testInfo)=>{
   test.skip(testInfo.project.name==='mobile-360','Shell desktop được thay bằng dock mobile')
-  const issues=await init(page);await page.goto('/');await page.getByRole('button',{name:'Tạo nhiệm vụ'}).click()
+  const issues=await init(page);await page.goto('/');await chooseCreate(page,'Tạo mới')
   await saveTask(page,'U2c shell');await expect(page.getByText('U2c shell',{exact:true})).toBeVisible();expectClean(issues)
 })
 
 test('Công việc + Thêm việc tạo và hiển thị việc',async({page})=>{
   const issues=await init(page);await page.goto('/cong-viec');await expect(page.getByRole('heading',{name:'Công việc'})).toBeVisible()
-  await page.getByRole('button',{name:'Thêm việc'}).click();await saveTask(page,'U2c tasks')
+  await chooseCreate(page,'Thêm việc');await saveTask(page,'U2c tasks')
   await expect(page.getByRole('button',{name:'U2c tasks',exact:true})).toBeVisible();expectClean(issues)
 })
 
@@ -48,8 +49,9 @@ test('Tổng quan rỗng tạo dự án đầu tiên',async({page})=>{
 })
 
 test('Tổng quan + Thêm việc tạo và hiển thị việc',async({page})=>{
-  const issues=await init(page);await page.goto('/');await page.getByRole('button',{name:'Thêm việc'}).click()
-  await saveTask(page,'U2c dashboard');await expect(page.getByRole('button',{name:'U2c dashboard',exact:true})).toBeVisible();expectClean(issues)
+  const issues=await init(page);await page.goto('/');await chooseCreate(page,'Thêm việc')
+  await saveTask(page,'U2c dashboard');await page.getByRole('link',{name:'Công việc'}).click()
+  await expect(page.getByRole('button',{name:'U2c dashboard',exact:true})).toBeVisible();expectClean(issues)
 })
 
 test('dock mobile + tạo dự án và nhiệm vụ',async({page},testInfo)=>{
@@ -75,12 +77,12 @@ test('phím N tạo và hiển thị nhiệm vụ',async({page})=>{
 
 test('lỗi lưu hiện trên drawer ở mọi viewport',async({page})=>{
   await init(page);await page.goto('/cong-viec');await expect(page.getByRole('heading',{name:'Công việc'})).toBeVisible()
-  await page.getByRole('button',{name:'Thêm việc'}).click()
+  await chooseCreate(page,'Thêm việc')
   const dialog=page.getByRole('dialog',{name:'Tạo nhiệm vụ'});await dialog.getByLabel('Tên nhiệm vụ *').fill('U2c mutation fail')
   await page.evaluate(()=>{const original=Storage.prototype.setItem;Storage.prototype.setItem=function(key,value){if(key==='nhip-viec-v1')throw new DOMException('U2c quota','QuotaExceededError');return original.call(this,key,value)}})
-  await dialog.getByRole('button',{name:'Lưu thay đổi'}).click()
+  await dialog.getByRole('button',{name:/^(Tạo|Lưu thay đổi)$/}).click()
   const toast=page.locator('.toast').filter({hasText:'Không thể lưu'});await expect(toast).toBeVisible()
   await expect(dialog).toBeVisible()
-  const layers=await page.evaluate(()=>({toast:Number(getComputedStyle(document.querySelector('.toast-stack')).zIndex),drawer:Number(getComputedStyle(document.querySelector('.drawer-layer')).zIndex)}))
-  expect(layers.toast).toBeGreaterThan(layers.drawer)
+  const layers=await page.evaluate(()=>({toast:Number(getComputedStyle(document.querySelector('.toast-stack')).zIndex),modal:Number(getComputedStyle(document.querySelector('.modal-backdrop')).zIndex)}))
+  expect(layers.toast).toBeGreaterThan(layers.modal)
 })

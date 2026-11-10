@@ -67,6 +67,7 @@ export default function TasksPage() {
   const onReadOnly=useCallback(()=>toast(vi.auth.verifyToEdit),[toast])
   const openTask=useCallback(()=>readOnly?onReadOnly():setEditing({}),[onReadOnly,readOnly])
   const openEditor=value=>value?.id?setEditing(value):openTask()
+  const openCreate=mode=>window.setTimeout(()=>window.dispatchEvent(new CustomEvent('nhip-viec-create',{detail:mode})),0)
   const blockedCreateProps=readOnly?{'aria-disabled':true,title:vi.auth.verifyToEdit}:{}
   const changeView = nextView => {
     setView(nextView)
@@ -104,7 +105,11 @@ export default function TasksPage() {
 <button role="tab" aria-selected={view === 'list'} onClick={() => changeView('list')}>{vi.tasks.list}</button>
 <button role="tab" aria-selected={view === 'projects'} onClick={() => changeView('projects')}>{vi.tasks.projects}</button>
 </div>
-<Button icon={Plus} {...blockedCreateProps} onClick={openTask}>{vi.tasks.addTask}</Button>
+<Popover className="create-menu-trigger" panelClassName="create-menu-panel" accessibleLabel={vi.tasks.addTask}
+  label={<><Plus size={16}/><span>{vi.tasks.addTask}</span></>}>
+{[['project',vi.shell.projectChoice],['task',vi.shell.taskChoice],['combo',vi.shell.createCombo]].map(([value,label])=><button
+  type="button" role="menuitem" {...blockedCreateProps} key={value} onClick={()=>openCreate(value)}>{label}</button>)}
+</Popover>
 </div>
 </header>
     <span className="sr-only" data-render-complete="true">{vi.generated.TasksPage_95_1}{filters.filtered.length}{vi.generated.TasksPage_96_2}</span>
