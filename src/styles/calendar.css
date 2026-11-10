@@ -3,7 +3,7 @@
 .calendar-toolbar .segmented button { border-radius: var(--radius-pill); padding: 0 18px; font-weight: 700; }
 .calendar-toolbar .segmented button.active { background: var(--color-ink-fixed); color: #fff; box-shadow: none; }
 .calendar-nav>button:not(.button) { border: var(--border-ink); border-radius: 50%; box-shadow: var(--shadow-hard); }
-.calendar-nav strong { min-width: 145px; font-size: 15px; }
+.calendar-nav strong { min-width: 145px; font-size: var(--fs-sm); }
 .calendar-workspace { display: grid; grid-template-columns: minmax(0,1fr) 320px; gap: var(--space-5); align-items: start; }
 .calendar-grid { border: var(--border-ink); border-radius: var(--radius-md); }
 .weekdays span { min-height: 44px; display: grid; place-items: center; background: var(--color-surface); }

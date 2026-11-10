@@ -1,5 +1,5 @@
 .tasks-page-head { display:flex; align-items:flex-start; justify-content:space-between; gap:24px; margin-bottom:18px; }
-.tasks-page-head h1 { margin:0; font-size:clamp(30px,4vw,44px); line-height:1.05; letter-spacing:-.055em; }
+.tasks-page-head h1 { margin:0; font-size:var(--fs-h1); line-height:var(--lh-tight); letter-spacing:-.04em; }
 .tasks-page-head p { margin:7px 0 0; color:var(--text-2); }
 .tasks-head-actions { display:flex; align-items:center; gap:10px; }
 .task-view-tabs { display:flex; gap:4px; border-radius:var(--radius-pill); padding:4px; background:var(--fill); }
@@ -77,7 +77,7 @@
 .popover-panel[role='menu'] button:hover { background:var(--color-surface-hover); }
 .project-card-actions,.field-inline { display:flex; align-items:center; gap:10px; }
 .field-inline select { min-width:0; flex:1; }
-.project-status { display:inline-flex; width:max-content; padding:5px 9px; border:1px solid currentColor; border-radius:999px; font-size:12px; font-weight:800; }
+.project-status { display:inline-flex; width:max-content; padding:5px 9px; border:1px solid currentColor; border-radius:999px; font-size:var(--fs-xs); font-weight:800; }
 .project-solid-card .project-status { align-items: center; gap: var(--space-1); }
 .project-solid-card.is-done { box-shadow: var(--shadow-hard-active); }
 .project-solid-card.is-done h3,.project-solid-card.is-done p,.project-solid-card.is-done .project-status { color: color-mix(in srgb,var(--color-ink-fixed) 78%,var(--label-bg)); }
@@ -99,6 +99,7 @@
 :root[data-theme='dark'] .task-meta .overdue { color: #ffb4a8; }
 :root[data-theme='dark'] .task-meta .due-soon { color: #ffe49b; }
 :root[data-theme='dark'] .task-card.has-project,:root[data-theme='dark'] .table-wrap tr.has-project td { background:color-mix(in srgb,var(--label-bg) 18%,var(--surface)); }
+:root[data-theme='dark'] .task-card.is-emphasis { border:1px solid #3a3a40; background:#000; }
 
 @media(max-width:767px){.tasks-page-head{align-items:stretch;flex-direction:column}.tasks-head-actions{align-items:stretch;flex-direction:column}.task-view-tabs{overflow-x:auto}.task-view-tabs button{flex:1;padding-inline:10px}.tasks-head-actions>.button,.tasks-head-actions>.create-menu-trigger,.tasks-head-actions>.create-menu-trigger .popover-trigger{width:100%}.toolbar .search input,.toolbar>select,.filter-menu .popover-trigger{width:100%}.table-wrap{margin:0 -4px}.table-wrap .tags-column{display:none}.task-tags-mobile{display:flex;margin-top:5px;max-width:170px}.kanban{grid-template-columns:repeat(5,minmax(82vw,300px))}.task-card:hover,.project-solid-card:hover{transform:none}.project-toolbar{align-items:flex-start;flex-direction:column}.project-card-actions{align-items:stretch;flex-direction:column}.field-inline{align-items:stretch;flex-direction:column}.field-inline .button{width:100%}}
 @container app-content (min-width:1600px){.kanban{grid-template-columns:repeat(5,minmax(0,1fr));overflow-x:visible}.project-grid{grid-template-columns:repeat(4,minmax(0,1fr))}}
