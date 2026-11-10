@@ -58,7 +58,7 @@ test('trạng thái rỗng vẫn giữ greeting và cột phải',async({page})=
   await expect(page.getByRole('heading',{name:/Hôm nay bạn có 0 việc/})).toBeVisible()
   await expect(page.getByRole('button',{name:'Tạo dự án đầu tiên'})).toBeVisible()
   await expect(page.getByRole('button',{name:'Dùng dữ liệu mẫu'})).toBeVisible()
-  await expect(page.getByRole('button',{name:'Thêm việc'})).toBeVisible()
+  await expect(page.getByRole('button',{name:'Thêm lịch trình'})).toBeVisible()
   await expect(page.locator('.week-strip')).toBeVisible()
   await expect(page.getByText('Hôm nay chưa có lịch.')).toBeVisible()
 })

@@ -81,7 +81,7 @@ body { min-width: 320px; height: 100%; overflow: hidden; background: var(--bg); 
 #palette-results button.is-active small { color: #fff; font-weight: 700; }
 .palette-help { margin: 0; border-top: 1px solid var(--line); padding: 8px 14px; color: var(--text-2); font-size: 12px; }
 .onboarding-tour { display: grid; gap: var(--space-3); }
-.onboarding-tour>.eyebrow { width: max-content; border-radius: var(--radius-pill); padding: 5px 9px; background: var(--color-lime); color: var(--color-ink-fixed); }
+.onboarding-tour>.eyebrow { width: max-content; border-radius: var(--radius-pill); padding: 5px 9px; background: var(--color-lime); color: var(--onboarding-eyebrow); }
 .onboarding-tour h2,.onboarding-tour p { margin: 0; }
 .onboarding-choices { display: flex; flex-wrap: wrap; gap: var(--space-2); margin-top: var(--space-2); }
 

@@ -5,6 +5,7 @@ test('onboarding lần đầu, dữ liệu mẫu, mở lại và xóa nhanh',asy
   await page.goto('/')
   const tour=page.getByRole('dialog',{name:'Làm quen với Nhịp việc'})
   await expect(tour.getByRole('heading',{name:'Tạo việc rõ ràng'})).toBeVisible()
+  await page.waitForTimeout(250)
   const results=await new AxeBuilder({page}).analyze()
   expect(results.violations.filter(item=>['serious','critical'].includes(item.impact))).toEqual([])
   await tour.getByRole('button',{name:'Tiếp tục'}).click()

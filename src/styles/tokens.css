@@ -7,6 +7,7 @@
   --accent: #fbbf1b;
   --on-accent: #111111;
   --accent-text: #8a5a00;
+  --onboarding-eyebrow: #3f3300;
   --ink: #0e0e10;
   --fill: #f4f4f2;
   --line: #ecece8;
@@ -194,6 +195,7 @@
 :root[data-theme='dark'] {
   color-scheme: dark;
   --accent-text: #f4c45c;
+  --onboarding-eyebrow: #111111;
   --ink: #f5f5f2;
   --fill: #212126;
   --line: #2c2c32;
