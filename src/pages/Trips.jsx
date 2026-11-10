@@ -111,10 +111,10 @@ export default function Trips() {
     toast(vi.generated.Trips_111_12,{label:vi.action.undo,onClick:()=>batch(undo)})
   }
 
-  return <Page>
+  return <Page><div className="trips-page">
     <Header title={vi.nav.trips} description={vi.generated.Trips_115_13} action={<Button icon={Plus} onClick={() => setEditing(blank)}>{vi.generated.Trips_115_14}</Button>}/>
     {overlaps.length > 0 && <div className="warning-banner" role="status"><AlertTriangle size={19}/><div><strong>{vi.generated.Trips_116_15}{overlaps.length}{vi.generated.Trips_116_16}</strong><p>{overlaps.map(([a, b]) => `${a.name} ↔ ${b.name}`).join(' · ')}</p></div></div>}
-    {!data.trips.length?<Card><EmptyState title={vi.generated.Trips_117_17} description={vi.generated.Trips_117_18} action={<Button icon={Plus} onClick={()=>setEditing(blank)}>{vi.generated.Trips_117_19}</Button>}/></Card>:Object.entries(groups).map(([key, list]) => <section className="trip-section" key={key}>
+    <div className="trips-list-scroll">{!data.trips.length?<Card><EmptyState title={vi.generated.Trips_117_17} description={vi.generated.Trips_117_18} action={<Button icon={Plus} onClick={()=>setEditing(blank)}>{vi.generated.Trips_117_19}</Button>}/></Card>:Object.entries(groups).map(([key, list]) => <section className="trip-section" key={key}>
       <h2>{{ ongoing: vi.generated.Trips_118_20, upcoming: vi.generated.Trips_118_21, past: vi.generated.Trips_118_22 }[key]} <span>{list.length}</span></h2>
       <div className="trip-grid">
         {list.map((trip,index) => {
@@ -135,7 +135,8 @@ export default function Trips() {
         })}
         {!list.length && <Card><EmptyState title={vi.generated.Trips_136_25} action={<Button icon={Plus} onClick={()=>setEditing(blank)}>{vi.generated.Trips_117_19}</Button>}/></Card>}
       </div>
-    </section>)}
+    </section>)}</div>
+    </div>
     {editing && <Drawer title={editing.id ? vi.generated.Trips_139_26 : vi.generated.Trips_139_27} onClose={() => setEditing(null)} actions={<><Button variant="secondary" onClick={()=>setEditing(null)}>{vi.generated.Trips_139_28}</Button><Button type="submit" form={tripFormId}>{vi.generated.Trips_139_29}</Button></>}><TripForm formId={tripFormId} showActions={false} trip={editing} contacts={data.contacts} projects={data.projects} onSave={save} onCancel={() => setEditing(null)}/></Drawer>}
     {selected && <Modal title={selected.name} onClose={() => setSelected(null)}>
       <div className="trip-title-row">{completionTick(selected,true)}</div>

@@ -31,6 +31,7 @@ export default function Calendar() {
     return { start: startOfWeek(startOfMonth(cursor), { weekStartsOn: 1 }), end: endOfWeek(endOfMonth(cursor), { weekStartsOn: 1 }) }
   }, [cursor, mode])
   const days = eachDayOfInterval(range)
+  const monthRows=Math.ceil(days.length/7)
   const shift = amount => {setDirection(amount>0?'next':'previous');setCursor(date => mode === 'month' ? (amount > 0 ? addMonths(date, 1) : subMonths(date, 1)) : addDays(date, amount * (mode === 'week' ? 7 : 1)))}
   const dayTasks = date => indexes.tasksByDue.get(date) || []
   const dayTrips = date => indexes.tripsByDay.get(date) || []
@@ -54,7 +55,7 @@ export default function Calendar() {
     return true
   }
 
-  return <Page>
+  return <Page><div className="calendar-page">
     <Header title={vi.nav.calendar} description={vi.generated.Calendar_58_3}/>
     {!data.tasks.length&&!data.trips.length?<Card><EmptyState title={vi.generated.Calendar_59_4} description={vi.generated.Calendar_59_5} action={<Button onClick={()=>setEditing({dueDate:selectedDay,startDate:selectedDay})}>{vi.generated.Calendar_59_6}</Button>}/></Card>:<><div className="calendar-toolbar">
       <div className="segmented" aria-label={vi.generated.Calendar_60_7}><button className={mode === 'day' ? 'active' : ''} onClick={() => setMode('day')}>{vi.generated.Calendar_60_8}</button><button className={mode === 'week' ? 'active' : ''} onClick={() => setMode('week')}>{vi.generated.Calendar_60_9}</button><button className={mode === 'month' ? 'active' : ''} onClick={() => setMode('month')}>{vi.generated.Calendar_60_10}</button></div>
@@ -62,17 +63,19 @@ export default function Calendar() {
     </div>
     <div className="calendar-workspace"><div className={`calendar-grid mode-${mode}`}>
       <div className="weekdays">{['T2', 'T3', 'T4', 'T5', 'T6', 'T7', 'CN'].map(day => <span key={day}>{day}</span>)}</div>
-      <div className={`calendar-days slide-${direction}`} key={`${mode}-${toISODate(range.start)}`}>{days.map(day => {
+      <div className={`calendar-days slide-${direction}`} style={mode==='month'?{'--calendar-rows':monthRows}:undefined} key={`${mode}-${toISODate(range.start)}`}>{days.map(day => {
         const date = toISODate(day), outside = mode === 'month' && day.getMonth() !== cursor.getMonth(), tasks = dayTasks(date), trips = dayTrips(date), overlap = findTripOverlaps(trips,date).length > 0
         return <button className={`calendar-day ${outside ? 'outside' : ''} ${date === todayISO() ? 'today' : ''} ${selectedDay === date ? 'selected' : ''} ${overlap ? 'overlap' : ''}`} key={date} onClick={() => setSelectedDay(date)} onDoubleClick={() => setEditing({ dueDate: date, startDate: date })}>
           <span className="sr-only">{formatDate(date)}, {tasks.length}{vi.generated.Calendar_68_13}{trips.length}{vi.generated.Calendar_68_14}{overlap?vi.generated.Calendar_68_15:''}. </span><span className="day-number">{format(day, 'd')}</span>{overlap&&<AlertTriangle className="day-overlap-icon" size={15} aria-hidden="true"/>}
-          {trips.map(trip => <span className={`trip-strip label-theme-${data.trips.indexOf(trip) % 8 + 1}`} key={trip.id}><Plane size={11}/>{trip.location}{tripDaySession(trip,date)&&` · ${tripDaySession(trip,date)}`}</span>)}
-          {tasks.slice(0, mode === 'month' ? 3 : 10).map(task => <span className={`calendar-task status-${task.status}`} key={task.id} onClick={event => { event.stopPropagation(); setEditing(task) }}>{task.title}</span>)}
-          {tasks.length > 3 && mode === 'month' && <small>+{tasks.length - 3}{vi.generated.Calendar_71_16}</small>}
+          {mode==='month'?<>{[...trips.map(item=>({type:'trip',item})),...tasks.map(item=>({type:'task',item}))].slice(0,2).map(({type,item})=>type==='trip'
+            ?<span className={`trip-strip label-theme-${data.trips.indexOf(item)%8+1}`} key={`trip-${item.id}`}><Plane size={11}/>{item.location}{tripDaySession(item,date)&&` · ${tripDaySession(item,date)}`}</span>
+            :<span className={`calendar-task status-${item.status}`} key={`task-${item.id}`} onClick={event=>{event.stopPropagation();setEditing(item)}}>{item.title}</span>)}
+          {tasks.length+trips.length>2&&<small>+{tasks.length+trips.length-2}{vi.calendar.moreItems}</small>}</>:<>{trips.map(trip=><span className={`trip-strip label-theme-${data.trips.indexOf(trip)%8+1}`} key={trip.id}><Plane size={11}/>{trip.location}{tripDaySession(trip,date)&&` · ${tripDaySession(trip,date)}`}</span>)}
+          {tasks.slice(0,10).map(task=><span className={`calendar-task status-${task.status}`} key={task.id} onClick={event=>{event.stopPropagation();setEditing(task)}}>{task.title}</span>)}</>}
         </button>
       })}</div>
     </div>
     <section className="day-agenda" aria-label={vi.generated.Calendar_75_17}><div className="section-row"><div><span className="eyebrow">{vi.generated.Calendar_75_17}</span><h2>{formatDate(selectedDay)}</h2></div><Button onClick={() => setEditing({ dueDate: selectedDay, startDate: selectedDay })}>{vi.generated.Calendar_75_18}</Button></div>{dayTrips(selectedDay).map(trip=><div className="agenda-row agenda-trip" key={trip.id}><span><Plane size={15}/> {trip.name} · {formatTripRange(trip)}</span></div>)}{dayTasks(selectedDay).map(task => <div className="agenda-row" key={task.id}><button onClick={() => setEditing(task)}>{task.title}</button><StatusBadge value={task.status}/><label>{vi.generated.Calendar_75_19}<input type="date" value={task.dueDate} onChange={event => move(task, event.target.value)}/></label></div>)}{!dayTasks(selectedDay).length && <p className="muted">{vi.generated.Calendar_75_20}</p>}</section></div></>}
-    {editing && <Drawer title={editing.id ? vi.generated.Calendar_76_21 : vi.generated.Calendar_76_22} onClose={() => setEditing(null)} actions={<><Button variant="secondary" onClick={()=>setEditing(null)}>{vi.generated.Calendar_76_23}</Button><Button type="submit" form={taskFormId}>{vi.generated.Calendar_76_24}</Button></>}><TaskForm formId={taskFormId} showActions={false} task={editing} projects={data.projects} contacts={data.contacts} trips={data.trips} onCancel={() => setEditing(null)} onSave={save}/></Drawer>}
+    </div>{editing && <Drawer title={editing.id ? vi.generated.Calendar_76_21 : vi.generated.Calendar_76_22} onClose={() => setEditing(null)} actions={<><Button variant="secondary" onClick={()=>setEditing(null)}>{vi.generated.Calendar_76_23}</Button><Button type="submit" form={taskFormId}>{vi.generated.Calendar_76_24}</Button></>}><TaskForm formId={taskFormId} showActions={false} task={editing} projects={data.projects} contacts={data.contacts} trips={data.trips} onCancel={() => setEditing(null)} onSave={save}/></Drawer>}
   </Page>
 }

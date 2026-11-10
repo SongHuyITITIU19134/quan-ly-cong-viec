@@ -20,6 +20,7 @@ export const vi = {
     filtered:count=>`${count} nhiệm vụ đang hiển thị`,showing:(shown,total)=>`Đang hiển thị ${shown}/${total}`,previousPage:'Trang trước',nextPage:'Trang sau',
     page:(current,total)=>`Trang ${current}/${total}`,boardLabel:'Bảng công việc',loadMore:count=>`Hiện thêm (${count})`,emptyLane:'Chưa có nhiệm vụ',moveTo:title=>`Chuyển sang… ${title}`,
   },
+  calendar: { moreItems:' mục khác' },
   dailyBriefing: {
     title:date=>`Báo cáo công việc · ${date}`,todayTasks:'Công việc hôm nay',summary:'Tổng quan',topPriorities:'Ba việc nên ưu tiên',
     priority:'Ưu tiên',task:'Công việc',project:'Dự án',due:'Hạn',status:'Trạng thái',doing:'Đang làm',overdue:'Quá hạn',dueToday:'Đến hạn hôm nay',dueSoon:'Gần đến hạn trong 3 ngày',completedToday:'Đã hoàn thành hôm nay',

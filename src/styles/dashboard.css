@@ -96,6 +96,13 @@
 .dashboard-empty-actions { display:flex; flex-wrap:wrap; justify-content:center; gap:10px; margin-top:14px; }
 .dashboard-empty-actions .button { margin-top:0; }
 
-@media(max-width:1180px){.dashboard-layout{grid-template-columns:minmax(0,1fr)}.dashboard-right{position:static;grid-template-columns:repeat(2,minmax(0,1fr))}.dashboard-profile,.dashboard-date-head{grid-column:1/-1}}
+@media(max-width:1023px){.dashboard-layout{grid-template-columns:minmax(0,1fr)}.dashboard-right{position:static;grid-template-columns:repeat(2,minmax(0,1fr))}.dashboard-profile,.dashboard-date-head{grid-column:1/-1}}
+@media(min-width:1024px) and (min-height:700px){
+  .main:has(.dashboard-layout){overflow:hidden}.main:has(.dashboard-layout)>.page{height:100%}
+  .dashboard-layout{height:100%;min-height:0;align-items:stretch}.dashboard-center,.dashboard-right{height:100%;min-height:0;overflow:hidden}
+  .dashboard-center{grid-template-rows:auto auto minmax(0,1fr)}.dashboard-right{position:static;grid-template-rows:auto auto auto minmax(0,1fr)}
+  .dashboard-my-tasks,.dashboard-timeline{min-height:0;overflow:hidden}.dashboard-my-tasks{grid-template-rows:auto auto minmax(0,1fr)}
+  .dashboard-task-list,.dashboard-timeline .timeline-list{min-height:0;overflow:auto;overscroll-behavior:contain;padding-right:5px}
+}
 @media(max-width:767px){.dashboard-layout{gap:20px}.dashboard-welcome h1{font-size:30px}.dashboard-welcome-actions{flex-wrap:wrap}.dashboard-search{flex-basis:100%}.dashboard-welcome select{flex:1}.dashboard-kpis{grid-template-columns:1fr 1fr}.dashboard-task-card{grid-template-columns:minmax(0,1fr) 38px}.dashboard-task-meta{grid-column:1;justify-content:flex-start}.dashboard-task-card>.progress-wrap{grid-column:1}.dashboard-task-check{grid-column:2;grid-row:1/4}.dashboard-project-grid{display:flex;overflow-x:auto;scroll-snap-type:x mandatory}.dashboard-project-card{min-width:78vw;scroll-snap-align:start}.dashboard-right{grid-template-columns:minmax(0,1fr)}.dashboard-profile,.dashboard-date-head{grid-column:auto}.dashboard-task-tabs{margin-right:-14px}.dashboard-date-head{align-items:flex-start;flex-direction:column}.dashboard-date-head .button{width:100%}}
 @media(prefers-reduced-motion:reduce){.dashboard-kpis button,.dashboard-project-card{transition:none}}

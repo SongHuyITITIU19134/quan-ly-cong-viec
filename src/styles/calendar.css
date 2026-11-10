@@ -28,4 +28,14 @@
 
 @media(max-width:1100px){.calendar-workspace{grid-template-columns:1fr}.day-agenda{position:static}}
 @media(max-width:767px){.calendar-toolbar .segmented{width:100%;display:grid;grid-template-columns:repeat(3,1fr)}.calendar-day{min-height:74px}.calendar-day.selected{transform:none}.day-overlap-icon{top:6px;right:5px;width:12px}.day-agenda{padding:14px}.agenda-row{grid-template-columns:1fr}.agenda-row label{grid-column:auto}.trip-strip{border:0}}
+@media(min-width:1024px) and (min-height:700px){
+  .main:has(.calendar-page){overflow:hidden}.main:has(.calendar-page)>.page{height:100%}
+  .calendar-page{display:grid;height:100%;min-height:0;grid-template-rows:auto auto minmax(0,1fr);overflow:hidden}
+  .calendar-page>.page-head{min-height:0;margin-bottom:12px;padding-top:3px}.calendar-page>.page-head h1{margin-top:0}
+  .calendar-toolbar{margin-bottom:12px}.calendar-workspace{height:100%;min-height:0;grid-template-columns:minmax(0,1fr) 280px;align-items:stretch}
+  .calendar-grid{display:grid;min-height:0;grid-template-rows:auto minmax(0,1fr)}.calendar-days{min-height:0;overflow:auto}
+  .mode-month .calendar-days{grid-template-rows:repeat(var(--calendar-rows),minmax(0,1fr));overflow:hidden}.mode-month .calendar-day{min-height:0}
+  .mode-day .calendar-days,.mode-week .calendar-days{grid-auto-rows:minmax(0,1fr)}.mode-day .calendar-day,.mode-week .calendar-day{min-height:100%;overflow:auto}
+  .day-agenda{position:static;min-height:0;overflow:auto;overscroll-behavior:contain}
+}
 @media(prefers-reduced-motion:reduce){.calendar-day{transition:none}.calendar-day.selected{transform:none}}
