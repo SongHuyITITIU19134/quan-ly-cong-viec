@@ -176,7 +176,7 @@ export default function TasksPage() {
     <p className="sr-only" aria-live="polite">{actions.announcement}</p>
     {view==='kanban'&&<KanbanView
       data={data} filtered={filters.filtered} grouped={filters.grouped} hasFilters={filters.hasFilters}
-      setParams={setParams} taskProps={actions.taskProps} changeStatus={actions.changeStatus}
+      setParams={setParams} taskProps={actions.taskProps}
       dropTask={actions.dropTask} setDragging={actions.setDragging} setEditing={openEditor}
     />}
     {view==='list'&&<ListView

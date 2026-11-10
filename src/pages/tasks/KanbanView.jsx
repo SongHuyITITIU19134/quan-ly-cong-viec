@@ -10,7 +10,6 @@ export default function KanbanView({
   hasFilters,
   setParams,
   taskProps,
-  changeStatus,
   dropTask,
   setDragging,
   setEditing
@@ -45,14 +44,6 @@ export default function KanbanView({
           dropTask(event, key, index)
         }} key={task.id}>
 <TaskCard {...taskProps(task)} />
-<label className="sr-only" htmlFor={`move-task-${task.id}`}>{vi.generated.KanbanView_48_6}{task.title}</label>
-<select id={`move-task-${task.id}`} aria-label={vi.generated.KanbanView_49_7(task.title)} value="" onChange={event => {
-            if (event.target.value) changeStatus(task, event.target.value)
-          }}>
-<option value="">{vi.generated.KanbanView_52_8}</option>
-{STATUS_KEYS.filter(status=>status!==task.status).map(status=><option key={status} value={status}>
-  {vi.status[status]}
-</option>)}</select>
 </div>)}
 {grouped[key].length>limits[key]&&<Button
   variant="secondary"
