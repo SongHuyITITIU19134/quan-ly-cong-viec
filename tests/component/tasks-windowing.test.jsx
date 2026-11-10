@@ -13,13 +13,24 @@ const tasks=Array.from({length:101},(_,index)=>({
 const groupedFor=items=>Object.fromEntries(STATUS_KEYS.map(key=>[key,items.filter(task=>task.status===key)]))
 
 describe('cửa sổ render Tasks',()=>{
-  it('Kanban giữ bộ đếm toàn bộ và mở thêm từng 40 thẻ',()=>{
+  it('Kanban mặc định 3 thẻ, mở rộng/thu gọn và giữ cửa sổ 40 thẻ',()=>{
     render(<KanbanView data={{tasks}} filtered={tasks} grouped={groupedFor(tasks)} hasFilters={false} setParams={vi.fn()} taskProps={task=>({task})} dropTask={vi.fn()} setDragging={vi.fn()} setEditing={vi.fn()}/>)
     expect(screen.getByText('101')).toBeInTheDocument()
-    expect(screen.getAllByText(/^Việc \d+$/u)).toHaveLength(40)
+    expect(screen.getAllByText(/^Việc \d+$/u)).toHaveLength(3)
     expect(screen.queryByRole('combobox',{name:/Chuyển sang/u})).not.toBeInTheDocument()
-    fireEvent.click(screen.getByRole('button',{name:'Xem thêm (còn 61)'}))
+    fireEvent.click(screen.getByRole('button',{name:'Xem thêm 37 việc'}))
+    expect(screen.getAllByText(/^Việc \d+$/u)).toHaveLength(40)
+    fireEvent.click(screen.getByRole('button',{name:'Hiện thêm (61)'}))
     expect(screen.getAllByText(/^Việc \d+$/u)).toHaveLength(80)
+    fireEvent.click(screen.getByRole('button',{name:'Thu gọn'}))
+    expect(screen.getAllByText(/^Việc \d+$/u)).toHaveLength(3)
+  })
+
+  it('thả vào lane đang thu gọn vẫn nối vào cuối lane',()=>{
+    const dropTask=vi.fn()
+    const{container}=render(<KanbanView data={{tasks}} filtered={tasks} grouped={groupedFor(tasks)} hasFilters={false} setParams={vi.fn()} taskProps={task=>({task})} dropTask={dropTask} setDragging={vi.fn()} setEditing={vi.fn()}/>)
+    fireEvent.drop(container.querySelector('.kanban-column'))
+    expect(dropTask).toHaveBeenCalledWith(expect.anything(),'todo',101)
   })
 
   it('Kanban vẫn hiện kết quả lọc nằm ngoài 40 thẻ đầu',()=>{

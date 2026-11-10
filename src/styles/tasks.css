@@ -22,6 +22,12 @@
 .column-head>strong { display:grid; min-width:30px; height:30px; place-items:center; border:0; border-radius:50%; background:var(--surface); }
 .task-card { contain:layout paint style; content-visibility:auto; contain-intrinsic-size:auto 250px; border:1px solid var(--line); border-radius:var(--radius-inner); background:var(--surface); box-shadow:none; }
 .task-card.has-project { background:color-mix(in srgb,var(--label-bg) 12%,var(--surface)); }
+.task-card.priority-urgent { --priority-wash:var(--priority-urgent); }
+.task-card.priority-high { --priority-wash:var(--priority-high); }
+.task-card.priority-highlight { background:linear-gradient(color-mix(in srgb,var(--priority-wash) 9%,transparent),color-mix(in srgb,var(--priority-wash) 9%,transparent)),var(--surface); }
+.task-card.priority-highlight.has-project { background:linear-gradient(color-mix(in srgb,var(--priority-wash) 9%,transparent),color-mix(in srgb,var(--priority-wash) 9%,transparent)),color-mix(in srgb,var(--label-bg) 12%,var(--surface)); }
+.priority-flag { position:absolute; z-index:1; top:12px; right:50px; display:inline-flex; align-items:center; gap:4px; color:var(--priority-wash); font-size:var(--fs-xs); font-weight:800; }
+.column-body>.button { width:100%; }
 .list-pagination { display:flex; align-items:center; justify-content:center; gap:12px; padding:16px; }
 .task-card:hover { border-color: var(--color-border); box-shadow: none; transform: translateY(-2px); }
 .kanban-column,.column-body,.task-card { min-width:0; max-width:100%; }
@@ -41,15 +47,6 @@
 .progress-label strong,.task-card-foot .badge,.task-card .avatar { flex-shrink:0; }
 .project-line { min-width:0; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
 .project-line i { background:var(--label-bg); }
-.task-card.is-emphasis { border-color:var(--ink); background:var(--ink); color:var(--bg); }
-.task-card.is-emphasis .task-title,.task-card.is-emphasis .task-meta,.task-card.is-emphasis .project-line,.task-card.is-emphasis .progress-label { color:var(--bg); }
-.task-card.is-emphasis .task-meta,.task-card.is-emphasis .project-line,.task-card.is-emphasis .progress-label { opacity:.76; }
-.task-card.is-emphasis .project-line { border-top-color:#343438; }
-.task-card.is-emphasis .progress { background:#343438; }
-.task-card.is-emphasis .progress>span { background:var(--accent); }
-.task-card.is-emphasis .task-menu .popover-trigger,.task-card.is-emphasis .complete-toggle { color:var(--bg); }
-.task-card.is-emphasis .badge[class*='priority-'] { color:var(--accent); }
-.task-card.is-emphasis .task-meta .overdue,.task-card.is-emphasis .task-meta .due-soon { color:var(--bg); }
 .task-full-title { min-width:0; margin:0; overflow-wrap:anywhere; white-space:pre-wrap; line-height:1.5; }
 [data-testid='task-form'] .field-hint.text-danger { color:var(--danger); }
 .task-menu-pop { border: var(--border-ink); border-radius: var(--radius-sm); box-shadow: var(--shadow-hard); }
@@ -100,7 +97,6 @@
 :root[data-theme='dark'] .task-meta .overdue { color: #ffb4a8; }
 :root[data-theme='dark'] .task-meta .due-soon { color: #ffe49b; }
 :root[data-theme='dark'] .task-card.has-project,:root[data-theme='dark'] .table-wrap tr.has-project td { background:color-mix(in srgb,var(--label-bg) 18%,var(--surface)); }
-:root[data-theme='dark'] .task-card.is-emphasis { border:1px solid #3a3a40; background:#000; }
 
 @media(max-width:767px){.tasks-page-head{align-items:stretch;flex-direction:column}.tasks-head-actions{align-items:stretch;flex-direction:column}.task-view-tabs{overflow-x:auto}.task-view-tabs button{flex:1;padding-inline:10px}.tasks-head-actions>.button,.tasks-head-actions>.create-menu-trigger,.tasks-head-actions>.create-menu-trigger .popover-trigger{width:100%}.toolbar .search input,.toolbar>select,.filter-menu .popover-trigger{width:100%}.table-wrap{margin:0 -4px}.table-wrap .tags-column{display:none}.task-tags-mobile{display:flex;margin-top:5px;max-width:170px}.kanban{grid-template-columns:repeat(5,minmax(82vw,300px))}.task-card:hover,.project-solid-card:hover{transform:none}.project-toolbar{align-items:flex-start;flex-direction:column}.project-card-actions{align-items:stretch;flex-direction:column}.field-inline{align-items:stretch;flex-direction:column}.field-inline .button{width:100%}}
 @container app-content (min-width:1600px){.kanban{grid-template-columns:repeat(5,minmax(0,1fr));overflow-x:visible}.project-grid{grid-template-columns:repeat(4,minmax(0,1fr))}}

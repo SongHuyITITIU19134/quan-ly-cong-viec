@@ -1,5 +1,5 @@
 import { memo } from 'react'
-import { CalendarClock, MoreHorizontal, Plane } from 'lucide-react'
+import { CalendarClock, Flag, MoreHorizontal, Plane } from 'lucide-react'
 import CompleteToggle from '@/components/ui/CompleteToggle'
 import { Popover, StatusBadge, PriorityBadge, ProgressBar } from '@/components/ui'
 import { formatDate } from '@/lib/dates'
@@ -11,7 +11,9 @@ import TaskTags from '@/components/tags/TaskTags'
 function TaskCard({task,project,projectIndex=0,contact,onOpen,onStatus,onToggle,tagRegistry,selectedTags,onTagToggle}){
   const due=getDueState(task)
   const projectColor=project?.colorIndex||projectIndex%8+1
-  return <article className={`task-card due-${due} ${project?`has-project label-theme-${projectColor}`:''} ${task.priority==='urgent'?'is-emphasis':''} ${task.status==='done'?'is-complete':''}`} onClick={event=>{if(!event.target.closest('button,input,a'))onOpen()}}>
+  const highlighted=['urgent','high'].includes(task.priority)
+  return <article className={`task-card due-${due} ${project?`has-project label-theme-${projectColor}`:''} ${highlighted?`priority-highlight priority-${task.priority}`:''} ${task.status==='done'?'is-complete':''}`} onClick={event=>{if(!event.target.closest('button,input,a'))onOpen()}}>
+    {highlighted&&<span className="priority-flag"><Flag size={12}/>{vi.priority[task.priority]}</span>}
     <div className="task-card-top"><PriorityBadge value={task.priority}/><Popover className="task-menu" align="end" panelClassName="task-menu-pop" accessibleLabel={vi.generated.TaskCard_15_3(task.title)} label={<MoreHorizontal size={18}/>}><strong>{vi.generated.TaskCard_15_4}</strong>{STATUS_KEYS.map(key=><button role="menuitem" key={key} onClick={()=>onStatus(key)}>{vi.status[key]}</button>)}</Popover></div>
     <div className="task-title-row"><CompleteToggle checked={task.status==='done'} onChange={onToggle} label={task.title}/><button className="task-title" onClick={onOpen} title={task.title}>{task.title}</button></div>
     <TaskTags tags={task.tags} registry={tagRegistry} selected={selectedTags} onToggle={onTagToggle}/>

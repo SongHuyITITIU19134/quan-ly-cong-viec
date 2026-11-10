@@ -30,7 +30,6 @@ describe('U3-fix3 visual polish',()=>{
   it('dark emphasis dùng nền đen và viền #3a3a40',()=>{
     const dashboard=read('src/styles/dashboard.css')
     expect(dashboard).toMatch(/\[data-theme='dark'\][^{]+is-emphasis[^}]*border:\s*1px solid #3a3a40;[^}]*background:\s*#000/)
-    expect(read('src/styles/tasks.css')).toMatch(/\[data-theme='dark'\] \.task-card\.is-emphasis\s*\{[^}]*border:\s*1px solid #3a3a40;[^}]*background:\s*#000/)
   })
 
   it('cả tám status chip đều có icon và nhãn chữ',()=>{
