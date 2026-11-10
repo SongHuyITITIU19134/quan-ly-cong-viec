@@ -29,16 +29,21 @@ export default function ProjectsView({
   saveProject,
   archiveProject,
   deleteProject,
-  moveProjectTasks
+  moveProjectTasks,
+  readOnly,
+  onReadOnly,
+  blockedCreateProps
 }) {
   const [showArchived, setShowArchived] = useState(false),
     navigate = useTransitionNavigate(),
     projectFormId = 'project-editor-form'
   const visible = data.projects.filter(project => showArchived || projectStatus(project) !== 'archived')
+  const createProject=()=>readOnly?onReadOnly():setProjectEditing({})
+  const createTask=projectId=>readOnly?onReadOnly():setEditing({projectId})
   return <>
     {active && <>
 <div className="project-toolbar">{data.projects.length > 0 && <Button
-  icon={Plus} onClick={() => setProjectEditing({})}
+  icon={Plus} {...blockedCreateProps} onClick={createProject}
 >{vi.generated.ProjectsView_40_0}</Button>}<label>
 <input type="checkbox" checked={showArchived} onChange={event => setShowArchived(event.target.checked)} />{vi.generated.ProjectsView_41_1}</label>
 </div>
@@ -83,7 +88,7 @@ export default function ProjectsView({
         })}</div>{!visible.length&&<EmptyState
           title={vi.generated.ProjectsView_82_12}
           description={vi.generated.ProjectsView_83_13}
-          action={<Button icon={Plus} onClick={()=>setProjectEditing({})}>{vi.generated.ProjectsView_84_14}</Button>}
+          action={<Button icon={Plus} {...blockedCreateProps} onClick={createProject}>{vi.generated.ProjectsView_84_14}</Button>}
         />}</>}
     {projectEditing && <Drawer
       title={projectEditing.id ? vi.generated.ProjectsView_86_15 : vi.generated.ProjectsView_86_16}
@@ -98,9 +103,7 @@ export default function ProjectsView({
 </Drawer>}
     {selectedProject && !projectEditing && !editing && <Drawer title={selectedProject.name} onClose={() => changeParam('project', '')} actions={<>
 <Button variant="secondary" onClick={() => setProjectEditing(selectedProject)}>{vi.generated.ProjectsView_96_19}</Button>
-<Button icon={Plus} onClick={() => setEditing({
-        projectId: selectedProject.id
-      })}>{vi.generated.ProjectsView_99_20}</Button>
+<Button icon={Plus} {...blockedCreateProps} onClick={()=>createTask(selectedProject.id)}>{vi.generated.ProjectsView_99_20}</Button>
 </>}>
 <div className={`project-detail label-theme-${selectedProject.colorIndex||1}`}>
 {projectStatus(selectedProject)==='waiting'

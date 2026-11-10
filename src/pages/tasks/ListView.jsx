@@ -6,6 +6,7 @@ import TaskTags from '@/components/tags/TaskTags'
 import { STATUS_KEYS, vi } from '@/i18n/vi'
 import { formatDate } from '@/lib/dates'
 import { taskProgress } from '@/lib/progress'
+import { getDueState } from '@/lib/tasks'
 export const LIST_PAGE_SIZE=100
 export default function ListView({
   data,
@@ -37,7 +38,8 @@ export default function ListView({
 </th>
 </tr>
 </thead>
-<tbody>{visible.map(task => <tr key={task.id} className={task.status === 'done' ? 'is-complete' : ''}>
+<tbody>{visible.map(task => {const due=getDueState(task),project=(data.projects||[]).find(item=>item.id===task.projectId);return <tr key={task.id}
+  className={`${task.status==='done'?'is-complete':''} ${due==='overdue'?'due-overdue':''} ${project?`has-project label-theme-${project.colorIndex||1}`:''}`}>
 <td>
 <div className="task-table-title">
 <CompleteToggle checked={task.status === 'done'} onChange={checked => changeStatus(task, checked ? 'done' : 'todo')} label={task.title} showLabel />
@@ -58,7 +60,8 @@ export default function ListView({
 <td>
 <PriorityBadge value={task.priority} />
 </td>
-<td>{formatDate(task.dueDate)}</td>
+<td><span className={due==='overdue'?'overdue-date':''}>{formatDate(task.dueDate)}</span>
+{due==='overdue'&&<span className="overdue-badge">{vi.tasks.overdue}</span>}</td>
 <td className="progress-cell">
 <ProgressBar value={taskProgress(task)} label={false} />
 <small>{taskProgress(task)}%</small>
@@ -69,7 +72,7 @@ export default function ListView({
 <Trash2 size={16} />
 </button>
 </td>
-</tr>)}</tbody>
+</tr>})}</tbody>
 </table>:<EmptyState
   title={data.tasks.length?vi.generated.ListView_74_10:vi.generated.ListView_74_11}
   description={data.tasks.length?vi.generated.ListView_75_12:vi.generated.ListView_75_13}

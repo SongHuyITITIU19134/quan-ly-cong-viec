@@ -11,7 +11,8 @@
 .popover-trigger { min-height: 44px; min-width: 130px; padding: 0 12px; border: 1px solid var(--border); border-radius: 9px; background: var(--surface); color: var(--text); display: flex; align-items: center; gap: 8px; cursor: pointer; }
 .filter-menu .popover-trigger::after { content: '▾'; margin-left: auto; color: var(--muted); }
 .popover-trigger[aria-expanded='true'] { border-color: var(--primary); outline: 3px solid color-mix(in srgb,var(--focus) 24%,transparent); }
-.popover-panel { position: fixed; z-index: var(--z-popover); overflow: auto; overscroll-behavior: contain; background: var(--surface-raised); color: var(--text); }
+.popover-panel { position: fixed; z-index: var(--z-popover); overflow: auto; overscroll-behavior: contain; background: var(--surface-raised); color: var(--text); transform-origin:top left; animation:popover-enter var(--motion-fast) var(--ease-out-expo) both; }
+.popover-panel[data-align='end'] { transform-origin:top right; }
 .filter-panel { min-width: 210px; padding: 8px; border: 1px solid var(--border); border-radius: 10px; box-shadow: var(--shadow); }
 .filter-panel fieldset { display: grid; gap: 3px; margin: 0; padding: 0; border: 0; }
 .filter-panel label { min-height: 44px; padding: 5px 7px; border-radius: 7px; display: flex; align-items: center; gap: 8px; cursor: pointer; }

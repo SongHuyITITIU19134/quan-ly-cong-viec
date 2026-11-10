@@ -16,6 +16,12 @@
 .trip-stats strong { font-size: 32px; line-height: 1; font-variant-numeric: tabular-nums; }
 .trip-card.trip-tile .progress { background: rgb(255 255 255 / 58%); }
 .trip-card.trip-tile .progress>span { background: var(--color-ink-fixed); }
+.trip-card.trip-state-ongoing { background: var(--color-ink-fixed); color: #fff; }
+.trip-card.trip-state-ongoing .trip-date,.trip-card.trip-state-ongoing p { border-color: var(--color-lime); color: #fff; }
+.trip-card.trip-state-ongoing .progress { background: rgb(255 255 255 / 22%); }
+.trip-card.trip-state-ongoing .progress>span { background: var(--color-lime); }
+.trip-card.trip-state-upcoming { border-left: 7px solid var(--color-lime); background: var(--color-paper); box-shadow: none; }
+.trip-card.trip-state-past { background: var(--color-surface-soft); box-shadow: none; opacity: .82; }
 .phase-timeline { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 10px; margin: 22px 0; }
 .phase-timeline .phase-block { position: relative; min-width: 0; margin: 0; border: 1px solid var(--color-border-subtle); border-radius: var(--radius-sm); padding: 14px; }
 .phase-timeline .phase-block:not(:last-child)::after { position: absolute; z-index: var(--z-content); top: 22px; right: -13px; content: '→'; color: var(--color-text-muted); }
@@ -35,3 +41,10 @@
 .trip-session-control label { display: inline-flex; align-items: center; gap: 6px; min-height: 44px; margin-right: 16px; }
 .trip-range-short { display: none; }
 @media(max-width:767px){.trip-range-full{display:none}.trip-range-short{display:inline}}
+@media(min-width:1024px) and (min-height:700px){
+  .main:has(.trips-page){overflow:hidden}.main:has(.trips-page)>.route-content,.main:has(.trips-page)>.route-content>.page{height:100%}
+  .trips-page{display:flex;height:100%;min-height:0;flex-direction:column;overflow:hidden}
+  .trips-page>.page-head,.trips-page>.warning-banner{flex:0 0 auto}
+  .trips-list-scroll{min-height:0;flex:1;overflow:auto;overscroll-behavior:contain;padding-right:8px}
+  .trips-list-scroll>.trip-section:first-child{margin-top:0}.trips-list-scroll>.trip-section:last-child{margin-bottom:0}
+}

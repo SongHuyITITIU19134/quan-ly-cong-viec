@@ -14,16 +14,17 @@ const groupedFor=items=>Object.fromEntries(STATUS_KEYS.map(key=>[key,items.filte
 
 describe('cửa sổ render Tasks',()=>{
   it('Kanban giữ bộ đếm toàn bộ và mở thêm từng 40 thẻ',()=>{
-    render(<KanbanView data={{tasks}} filtered={tasks} grouped={groupedFor(tasks)} hasFilters={false} setParams={vi.fn()} taskProps={task=>({task})} changeStatus={vi.fn()} dropTask={vi.fn()} setDragging={vi.fn()} setEditing={vi.fn()}/>)
+    render(<KanbanView data={{tasks}} filtered={tasks} grouped={groupedFor(tasks)} hasFilters={false} setParams={vi.fn()} taskProps={task=>({task})} dropTask={vi.fn()} setDragging={vi.fn()} setEditing={vi.fn()}/>)
     expect(screen.getByText('101')).toBeInTheDocument()
     expect(screen.getAllByText(/^Việc \d+$/u)).toHaveLength(40)
+    expect(screen.queryByRole('combobox',{name:/Chuyển sang/u})).not.toBeInTheDocument()
     fireEvent.click(screen.getByRole('button',{name:'Xem thêm (còn 61)'}))
     expect(screen.getAllByText(/^Việc \d+$/u)).toHaveLength(80)
   })
 
   it('Kanban vẫn hiện kết quả lọc nằm ngoài 40 thẻ đầu',()=>{
     const match=[tasks[100]]
-    render(<KanbanView data={{tasks}} filtered={match} grouped={groupedFor(match)} hasFilters setParams={vi.fn()} taskProps={task=>({task})} changeStatus={vi.fn()} dropTask={vi.fn()} setDragging={vi.fn()} setEditing={vi.fn()}/>)
+    render(<KanbanView data={{tasks}} filtered={match} grouped={groupedFor(match)} hasFilters setParams={vi.fn()} taskProps={task=>({task})} dropTask={vi.fn()} setDragging={vi.fn()} setEditing={vi.fn()}/>)
     expect(screen.getByText('Việc 101')).toBeInTheDocument()
     expect(screen.queryByRole('button',{name:/Xem thêm/u})).not.toBeInTheDocument()
   })

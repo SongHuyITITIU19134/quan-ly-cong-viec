@@ -7,6 +7,7 @@ import { ActionsContext } from '@/contexts/ActionsContext'
 import { AuthContext } from '@/contexts/AuthContext'
 import { ToastContext } from '@/contexts/ToastContext'
 import ToastProvider from '@/contexts/ToastProvider'
+import { vi } from '@/i18n/vi'
 import { useRepositoryConnection } from './useRepositoryConnection'
 const initialData = {
   projects: [],
@@ -64,14 +65,14 @@ function CoreDataProvider({
       setError(null)
       return result ?? true
     } catch (err) {
-      setError('Không thể lưu thay đổi. Dữ liệu cũ vẫn được giữ.')
-      toast(`Không thể lưu: ${err?.message || 'Vui lòng thử lại.'}`)
+      setError(vi.feedback.saveError)
+      toast(vi.feedback.saveFailed(err?.code,err?.message))
       return null
     }
   }, [toast])
   const mutate = useCallback(operation => {
     if (live.current.readOnly) {
-      toast('Hãy xác minh email trước khi thay đổi dữ liệu.')
+      toast(vi.auth.verifyToEdit)
       return Promise.resolve(null)
     }
     return run(operation)

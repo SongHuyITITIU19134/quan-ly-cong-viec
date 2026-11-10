@@ -13,8 +13,10 @@ const seed={
 test.beforeEach(async({page})=>{await page.addInitScript(value=>{localStorage.setItem('nhip-viec-v1',JSON.stringify(value));localStorage.setItem('nhip-viec-initialized','true')},seed);await page.goto('/')})
 test('mở ứng dụng và giữ dữ liệu tự tạo', async ({ page }) => {
   await expect(page.getByRole('heading', { name: /Chào buổi sáng/ })).toBeVisible()
+  await page.getByRole('button',{name:'Bảng tiếp theo'}).click()
   await expect(page.getByTitle('Dự án kiểm thử')).toBeVisible()
   await page.reload()
+  await page.getByRole('button',{name:'Bảng tiếp theo'}).click()
   await expect(page.getByTitle('Dự án kiểm thử')).toBeVisible()
 })
 test('tạo nhiệm vụ bằng phím N và tìm không dấu',async({page})=>{await page.getByRole('link',{name:'Công việc'}).click();await expect(page.getByRole('heading',{name:'Công việc'})).toBeVisible();await page.keyboard.press('n');await page.getByLabel('Tên nhiệm vụ *').fill('Kiểm thử nhiệm vụ mới');await page.getByRole('button',{name:'Lưu thay đổi'}).click();await expect(page.getByRole('button',{name:'Kiểm thử nhiệm vụ mới',exact:true})).toBeVisible();await page.getByLabel('Tìm nhiệm vụ').fill('quy hoach');await expect(page.getByRole('button',{name:'Hoàn thiện số liệu báo cáo quy hoạch',exact:true})).toBeVisible()})

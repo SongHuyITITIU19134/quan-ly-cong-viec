@@ -45,6 +45,7 @@ test('chữ dài: giới hạn nhập, Kanban, chi tiết và biểu đồ',asyn
  const column=page.locator('.kanban-column').first();expect(await column.locator('.task-card').count()).toBeGreaterThan(6)
  await column.locator('.task-card').last().scrollIntoViewIfNeeded();await expect(column.locator('.task-card').last()).toBeInViewport()
  await page.goto('/')
+ await page.getByRole('button',{name:'Bảng tiếp theo'}).click()
  const chart=page.locator('.mini-bars');await chart.scrollIntoViewIfNeeded()
  await expect(chart.locator('.mini-bar-item strong')).toHaveText(['5','5','3'])
  const values=await chart.locator('.mini-bar-item').evaluateAll(items=>items.map(el=>{const label=el.querySelector('small'),s=getComputedStyle(label);return {full:label.textContent===label.title,clamp:s.webkitLineClamp,height:label.clientHeight,lineHeight:parseFloat(s.lineHeight),overflow:el.scrollWidth>el.clientWidth+1}}))

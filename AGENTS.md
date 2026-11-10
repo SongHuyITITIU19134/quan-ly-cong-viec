@@ -14,3 +14,10 @@
 - Firestore: dữ liệu ở `users/{uid}/{projects,tasks,contacts,trips,meta}`. Rules ở `firestore.rules`; chỉ deploy khi được yêu cầu: `npx -y firebase-tools deploy --only firestore:rules`. Không sửa rules nếu không được yêu cầu.
 - Không đọc/in/commit `.env.local`, khóa API, token, mã xác thực. Khóa phía máy chủ (AI) không bao giờ có tiền tố `VITE_`.
 - Mỗi phiên một việc; báo cáo kết quả lint/test; không chạy `pnpm e2e` trừ khi được yêu cầu.
+## Working rules
+- Read minimum: only named files + targeted grep. Never read node_modules, pnpm-lock.yaml, docs/audit, docs/screenshots.
+- Small patches, no whole-file rewrites, no pasting long code/logs.
+- Style: no semicolons, single quotes, max-len 160. New UI strings go to src/i18n/vi.js.
+- Gates: run `pnpm gates` (and `pnpm gates:e2e` when UI changed); report failures only. For single-file edits run only that file's test.
+- One logical change = one short commit. No push, no rules deploy. Never edit a test to pass when the bug is in code.
+- Final report in Vietnamese, <= 8 lines: done / measured numbers / gates pass-fail / remaining.

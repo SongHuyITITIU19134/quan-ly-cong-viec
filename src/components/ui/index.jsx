@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useId, useLayoutEffect, useRef, useState } from 'react'
+import { forwardRef, useCallback, useEffect, useId, useLayoutEffect, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
 import { AlertCircle, ArrowDown, CheckCircle2, Circle, CircleDotDashed, Inbox, PauseCircle, Timer, TriangleAlert, X } from 'lucide-react'
 import { vi } from '@/i18n/vi'
@@ -9,11 +9,16 @@ const priorityIcons={urgent:TriangleAlert,high:TriangleAlert,medium:Timer,low:Ar
 export function Button({ children, variant = '', icon: Icon, type = 'button', ...props }) { return <button type={type} className={`button ${variant}`.trim()} {...props}>{Icon && <Icon size={17} aria-hidden="true"/>}<span>{children}</span></button> }
 export function IconButton({ label, children, ...props }) { return <button type="button" className="icon-button" aria-label={label} title={label} {...props}>{children}</button> }
 export function Card({ children, className = '', ...props }) { return <section className={`card ${className}`} {...props}>{children}</section> }
+export function Chip({children,active=false,className='',...props}) { return <button type="button" className={`chip ${active?'active':''} ${className}`.trim()} aria-pressed={active} {...props}>{children}</button> }
+export function Tabs({items,value,onChange,label=vi.common.tabs,className=''}) { return <div className={`segmented ${className}`.trim()} role="tablist" aria-label={label}>{items.map(item=>{const option=typeof item==='string'?{value:item,label:item}:item;return <button key={option.value} type="button" role="tab" aria-selected={value===option.value} className={value===option.value?'active':''} onClick={()=>onChange(option.value)}>{option.label}</button>})}</div> }
+export const Input=forwardRef(function Input({className='',...props},ref){return <input ref={ref} className={`ui-input ${className}`.trim()} {...props}/>})
+export function Avatar({src,name='',size='medium',className=''}) { const initial=(name.trim()[0]||'?').toUpperCase();return <span className={`avatar avatar-${size} ${className}`.trim()}>{src?<img src={src} alt="" referrerPolicy="no-referrer"/>:<span aria-hidden="true">{initial}</span>}<span className="sr-only">{name}</span></span> }
+export function AvatarStack({people=[],max=4,className=''}) { const shown=people.slice(0,max),extra=Math.max(0,people.length-max);return <span className={`avatar-stack ${className}`.trim()} aria-label={people.map(person=>person.name||person.displayName||'').filter(Boolean).join(', ')}>{shown.map((person,index)=><Avatar key={person.id||person.email||index} src={person.src||person.photoURL} name={person.name||person.displayName||person.email||''} size="small"/>)}{extra>0&&<span className="avatar avatar-small avatar-more" aria-label={`+${extra}`}>+{extra}</span>}</span> }
 export function Badge({ children, kind = '', icon: Icon }) { return <span className={`badge ${kind}`.trim()}>{Icon&&<span className="badge-marker" aria-hidden="true"><Icon size={15}/></span>}{children}</span> }
 export function StatusBadge({ value }) { const Icon=statusIcons[value]||Circle;return <Badge kind={`status-${value}`} icon={Icon}>{vi.status[value]}</Badge> }
 export function PriorityBadge({ value }) { const Icon=priorityIcons[value]||Circle;return <Badge kind={`priority-${value}`} icon={Icon}>{vi.priority[value]}</Badge> }
 export function ProgressBar({ value = 0, label = true }) { const safe=Math.min(100,Math.max(0,value));return <div className="progress-wrap" role="progressbar" aria-label={`${vi.common.progress}: ${safe}%`} aria-valuemin="0" aria-valuemax="100" aria-valuenow={safe}>{label&&<div className="progress-label"><span>{vi.common.progress}</span><strong>{safe}%</strong></div>}<div className="progress"><span style={{'--progress-scale':safe/100}} /></div></div> }
-export function EmptyState({ title = vi.common.empty, description = vi.generated.index_16_0, action }) { return <div className="empty"><div><span className="empty-icon"><Inbox size={30}/></span><h3>{title}</h3><p>{description}</p>{action}</div></div> }
+export function EmptyState({ title = vi.common.empty, description = vi.empty.description, action }) { return <div className="empty"><div><span className="empty-icon"><Inbox size={30}/></span><h3>{title}</h3><p>{description}</p>{action}</div></div> }
 export function LoadingState() { return <div className="empty" role="status" aria-busy="true"><div className="loading-stack"><span className="sr-only">{vi.common.loading}</span><span className="skeleton"/><span className="skeleton"/><span className="skeleton"/></div></div> }
 export function ErrorState({ retry }) { return <div className="empty" role="alert"><div><span className="empty-icon"><AlertCircle size={30}/></span><h3>{vi.common.error}</h3><Button onClick={retry}>{vi.action.retry}</Button></div></div> }
 
@@ -25,11 +30,15 @@ export function Popover({label,accessibleLabel,children,className='',panelClassN
   const place=useCallback(()=>{
     const anchor=anchorRef.current?.getBoundingClientRect(),panel=panelRef.current?.getBoundingClientRect()
     if(!anchor||!panel)return
-    const gap=8,pad=10,spaceBelow=innerHeight-anchor.bottom-gap,spaceAbove=anchor.top-gap
+    const viewport=window.visualViewport,viewportLeft=viewport?.offsetLeft||0,viewportTop=viewport?.offsetTop||0
+    const viewportWidth=viewport?.width||innerWidth,viewportHeight=viewport?.height||innerHeight
+    const viewportRight=viewportLeft+viewportWidth,viewportBottom=viewportTop+viewportHeight
+    const gap=8,pad=10,spaceBelow=viewportBottom-anchor.bottom-gap,spaceAbove=anchor.top-viewportTop-gap
     const useAbove=spaceBelow<Math.min(panel.height,240)&&spaceAbove>spaceBelow
-    const top=useAbove?Math.max(pad,anchor.top-panel.height-gap):Math.min(innerHeight-panel.height-pad,anchor.bottom+gap)
+    const top=useAbove?Math.max(viewportTop+pad,anchor.top-panel.height-gap):Math.min(viewportBottom-panel.height-pad,anchor.bottom+gap)
     const preferred=align==='end'?anchor.right-panel.width:anchor.left
-    setPosition({top:Math.max(pad,top),left:Math.min(innerWidth-panel.width-pad,Math.max(pad,preferred)),maxHeight:Math.max(120,(useAbove?spaceAbove:spaceBelow)-pad)})
+    const left=Math.min(viewportRight-panel.width-pad,Math.max(viewportLeft+pad,preferred))
+    setPosition({top:Math.max(viewportTop+pad,top),left,maxHeight:Math.max(120,(useAbove?spaceAbove:spaceBelow)-pad)})
   },[align])
   useLayoutEffect(()=>{if(open){place();requestAnimationFrame(()=>panelRef.current?.querySelector('button,input,[href],[tabindex]:not([tabindex="-1"])')?.focus())}},[open,place])
   useEffect(()=>{
@@ -43,7 +52,7 @@ export function Popover({label,accessibleLabel,children,className='',panelClassN
   },[open,close,place])
   return <span className={`popover-anchor ${className}`.trim()}>
     <button ref={anchorRef} type="button" className="popover-trigger" aria-label={accessibleLabel} aria-expanded={open} aria-controls={open?id:undefined} aria-haspopup={role==='menu'?'menu':'dialog'} onClick={()=>setOpen(value=>!value)}>{label}</button>
-    {open&&createPortal(<div ref={panelRef} id={id} className={`popover-panel ${panelClassName}`.trim()} style={position} role={role} onClick={event=>{if(event.target.closest('[role="menuitem"]'))close()}}>{children}</div>,document.body)}
+    {open&&createPortal(<div ref={panelRef} id={id} className={`popover-panel ${panelClassName}`.trim()} data-align={align} style={position} role={role} onClick={event=>{if(event.target.closest('[role="menuitem"]'))close()}}>{children}</div>,document.body)}
   </span>
 }
 

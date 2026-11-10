@@ -10,3 +10,9 @@ firebase-debug.log
 firestore-debug.log
 ui-debug.log
 docs/screenshots/
+.env*
+docs/design/reference-dashboard.jpg
+docs/design/demo-data.json
+docs/design/u2b/
+docs/design/u3/
+docs/design/u3fix/

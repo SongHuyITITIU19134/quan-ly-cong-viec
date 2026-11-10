@@ -12,7 +12,7 @@ const projectValue=(name,index,id)=>({id,name:name.trim().replace(/\s+/g,' '),de
 const taskValue=(row,projectId,order)=>({id:row.id,title:row.title.trim(),description:'',projectId:projectId||null,status:row.status,priority:'medium',startDate:todayISO(),dueDate:row.dueDate,assignerId:'',assigneeId:row.assigneeId||'self',collaboratorIds:[],notes:'',checklist:[],progress:0,progressMode:'auto',tripId:null,tripPhase:null,order,tags:row.tags})
 
 export default function CreateCombo({open,mode='combo',preselectedProjectId='',onClose}){
-  const{data,batch,tagCatalog=[],tagRegistry={c:{}},toast}=useData()
+  const{data,batch,tagCatalog=[],tagRegistry={c:{}},toast,readOnly}=useData()
   const[step,setStep]=useState(mode==='combo'?1:2)
   const[projectMode,setProjectMode]=useState(mode==='task'||preselectedProjectId?'existing':'new')
   const[selectedProjectId,setSelectedProjectId]=useState(preselectedProjectId)
@@ -39,6 +39,7 @@ export default function CreateCombo({open,mode='combo',preselectedProjectId='',o
   const next=()=>{const message=validateProject();if(message)return setError(message);setError('');setStep(2)}
   const submit=async event=>{
     event.preventDefault()
+    if(readOnly){toast(vi.auth.verifyToEdit);return}
     const projectError=mode==='task'&&!selectedProjectId?'':validateProject()
     if(projectError)return setError(projectError)
     if(tasks.some(row=>!row.title.trim()))return setError(vi.generated.CreateCombo_44_3)
@@ -61,7 +62,7 @@ export default function CreateCombo({open,mode='combo',preselectedProjectId='',o
     <div className="segmented" role="group" aria-label={vi.generated.CreateCombo_61_9}><button type="button" className={projectMode==='new'?'active':''} onClick={()=>setProjectMode('new')}>{vi.generated.CreateCombo_61_10}</button><button type="button" className={projectMode==='existing'?'active':''} onClick={()=>setProjectMode('existing')}>{vi.generated.CreateCombo_61_11}</button></div>
     {projectMode==='new'?<div className="field"><label htmlFor="combo-project-name">{vi.generated.CreateCombo_62_12}</label><input id="combo-project-name" data-autofocus maxLength={PROJECT_NAME_MAX} value={projectName} onChange={event=>{setProjectName(event.target.value);setError('')}}/><small className="field-hint">{projectName.length}/{PROJECT_NAME_MAX}</small></div>:<><div className="field"><label htmlFor="combo-project-search">{vi.generated.CreateCombo_62_13}</label><input id="combo-project-search" data-autofocus type="search" value={search} onChange={event=>setSearch(event.target.value)} placeholder={vi.generated.CreateCombo_62_14}/></div><div className="create-project-list" role="radiogroup" aria-label={vi.generated.CreateCombo_62_15}>{projects.map(project=><label key={project.id}><input type="radio" name="combo-project" checked={selectedProjectId===project.id} onChange={()=>{setSelectedProjectId(project.id);setError('')}}/><span title={project.name}>{project.name}</span></label>)}</div></>}
   </div>
-  return <Modal title={mode==='project'?vi.generated.CreateCombo_64_16:mode==='task'?vi.generated.CreateCombo_64_17:vi.generated.CreateCombo_64_18} onClose={onClose} busy={saving} actions={<><Button variant="secondary" onClick={onClose} disabled={saving}>{vi.generated.CreateCombo_64_19}</Button>{step===1?<Button onClick={next}>{vi.generated.CreateCombo_64_20}</Button>:<Button type="submit" form="create-combo-form" disabled={saving}>{saving?vi.generated.CreateCombo_64_21:vi.generated.CreateCombo_64_22}</Button>}</>}>
+  return <Modal title={mode==='project'?vi.generated.CreateCombo_64_16:mode==='task'?vi.generated.CreateCombo_64_17:vi.generated.CreateCombo_64_18} onClose={onClose} busy={saving} actions={<><Button variant="secondary" onClick={onClose} disabled={saving}>{vi.generated.CreateCombo_64_19}</Button>{step===1?<Button onClick={next}>{vi.generated.CreateCombo_64_20}</Button>:<Button type="submit" form="create-combo-form" disabled={saving} aria-disabled={readOnly||undefined} title={readOnly?vi.auth.verifyToEdit:undefined}>{saving?vi.generated.CreateCombo_64_21:vi.generated.CreateCombo_64_22}</Button>}</>}>
     <form id="create-combo-form" className="create-combo" onSubmit={submit} noValidate>
       {mode==='combo'&&<ol className="create-steps" aria-label={vi.generated.CreateCombo_66_23}><li className={step===1?'active':''}>{vi.generated.CreateCombo_66_24}</li><li className={step===2?'active':''}>{vi.generated.CreateCombo_66_25}</li></ol>}
       {(step===1||mode==='project')&&projectStep}

@@ -8,6 +8,7 @@ vi.mock('@/hooks/useData',()=>({
   useData:()=>({data:state.data,loading:false,create:noop,update:noop,remove:noop,batch:noop,toast:noop}),
   useDataState:()=>({data:state.data,loading:false}),
   useActions:()=>({create:noop,update:noop,remove:noop,batch:noop}),
+  useAuth:()=>({readOnly:false}),
   useToast:()=>noop,
 }))
 vi.mock('@/app/App',()=>({Page:({children})=><main>{children}</main>,Header:({title,description,action})=><header><h1>{title}</h1><p>{description}</p>{action}</header>}))
@@ -26,7 +27,7 @@ const show=(Component,url='/')=>render(<MemoryRouter initialEntries={[url]}><Com
 describe('trạng thái dữ liệu trống',()=>{
   beforeEach(()=>{state.data=empty})
   it.each([
-    [Dashboard,'/','Chào mừng! Hãy tạo dự án đầu tiên','Tạo'],
+    [Dashboard,'/','Bắt đầu một nhịp làm việc mới','Tạo dự án đầu tiên'],
     [Tasks,'/cong-viec','Chưa có nhiệm vụ','Tạo nhiệm vụ'],
     [Tasks,'/cong-viec?view=list','Chưa có nhiệm vụ','Tạo nhiệm vụ'],
     [Tasks,'/cong-viec?view=projects','Chưa có dự án','Tạo dự án'],

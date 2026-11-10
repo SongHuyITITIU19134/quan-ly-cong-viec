@@ -1,145 +1,164 @@
 import { memo, useEffect, useMemo, useRef, useState } from 'react'
-import { AlertTriangle, ArrowDownRight, ArrowUpRight, Check, CheckCircle2, Clock3, ListTodo, Plane, Plus } from 'lucide-react'
+import { Bell, CalendarDays, Check, ChevronLeft, ChevronRight, Plus, Search } from 'lucide-react'
 import { addDays, endOfMonth, endOfWeek, startOfMonth, startOfWeek } from 'date-fns'
-import { Page, Header } from '@/app/App'
-import { Button, Card, EmptyState, ProgressBar, StatusBadge } from '@/components/ui'
-import { useActions, useDataState, useToast } from '@/hooks/useData'
+import { Page } from '@/app/App'
+import { Avatar, AvatarStack, Button, Card, EmptyState, ProgressBar } from '@/components/ui'
+import { useActions, useAuth, useDataState, useToast } from '@/hooks/useData'
 import { getProjectEffectiveStatus } from '@/lib/projectStatus'
 import { getDueState } from '@/lib/tasks'
-import { projectProgress, withStatus } from '@/lib/progress'
-import { compareTrips, findTripOverlaps, formatTripRange } from '@/lib/trips'
+import { projectProgress, taskProgress, withStatus } from '@/lib/progress'
 import { formatDate, todayISO, toISODate } from '@/lib/dates'
-import { vi, STATUS_KEYS } from '@/i18n/vi'
-import { useCountUp } from '@/hooks/useCountUp'
+import { vi } from '@/i18n/vi'
 import { useTransitionNavigate } from '@/hooks/useTransitionNavigate'
-import { completionSeries } from '@/lib/dashboard'
-import { recurrenceCreateOp } from '@/lib/recurrence'
+import { recurrenceCreateOp, recurrenceUndoOp } from '@/lib/recurrence'
 import { weeklyReport } from '@/lib/weeklyReport'
 import { buildIndexes } from '@/lib/indexes'
 
-const STATUS_COLORS = ['var(--status-todo)', 'var(--status-doing)', 'var(--status-waiting)', 'var(--status-done)', 'var(--status-paused)']
-const donutBackground = items => {
-  const total = items.reduce((sum, item) => sum + item.value, 0)
-  if (!total) return 'var(--color-surface)'
-  let cursor = 0
-  return `conic-gradient(${items.map(item => { const start = cursor; cursor += item.value / total * 100; return `${item.color} ${start}% ${cursor}%` }).join(',')})`
+const priorityRank={urgent:0,high:1,medium:2,low:3}
+const taskOrder=(left,right)=>(priorityRank[left.priority]??4)-(priorityRank[right.priority]??4)||(left.order??0)-(right.order??0)
+
+function DashboardTask({task,indexes,onToggle,onOpen,emphasis=false}){
+  const project=indexes.byId.projects.get(task.projectId),contact=indexes.byId.contacts.get(task.assigneeId)
+  const due=getDueState(task),projectColor=project?.colorIndex||1
+  const collaborators=(task.collaboratorIds||[]).map(id=>indexes.byId.contacts.get(id)).filter(Boolean)
+  const people=[contact,...collaborators].filter(Boolean).map(person=>({id:person.id,name:person.fullName,src:person.photoURL}))
+  return <article className={`dashboard-task-card due-${due} ${project?`has-project label-theme-${projectColor}`:''} ${emphasis?'is-emphasis':''} ${task.status==='done'?'is-done':''}`}>
+    <div className="dashboard-task-main"><button className="dashboard-task-title" type="button" onClick={onOpen}>{task.title}</button>
+      <p>{task.description||vi.dashboard.noDescription}</p></div>
+    <div className="dashboard-task-meta">{project&&<span className="project-chip">{project.name}</span>}<AvatarStack people={people} max={4}/>
+      <span className={due==='overdue'?'overdue-date':''}>{task.dueDate?formatDate(task.dueDate):vi.dashboard.noDue}</span>
+      {due==='overdue'&&<span className="overdue-badge">{vi.tasks.overdue}</span>}</div>
+    <ProgressBar value={taskProgress(task)}/>
+    <button type="button" className="dashboard-task-check" aria-label={task.status==='done'?vi.completeToggle.reopen(task.title):vi.completeToggle.complete(task.title)}
+      aria-pressed={task.status==='done'} onClick={onToggle}>{task.status==='done'&&<Check size={17}/>}</button>
+  </article>
 }
 
-function CompletionChart({ values, labels }) {
-  const max=Math.max(1,...values)
-  const points=values.map((value,index)=>`${18+index*(384/(values.length-1))},${130-value/max*100}`).join(' ')
-  return <svg className="completion-chart" viewBox="0 0 420 165" role="img" aria-label={vi.generated.Dashboard_31_0(values.join(', '))}>
-    <path className="chart-guide" d="M18 130H402"/>
-    <polyline className="completion-line completion-glow" points={points}/>
-    <polyline className="completion-line" points={points}/>
-    {values.map((value,index)=><circle className={index===values.length-1?'chart-end':''} key={labels[index]} cx={18+index*(384/(values.length-1))} cy={130-value/max*100} r={index===values.length-1?5:3}/>) }
-    <text x="18" y="157">{labels[0]}</text><text x="210" y="157" textAnchor="middle">{labels[3]}</text><text x="402" y="157" textAnchor="end">{labels[6]}</text>
-  </svg>
-}
-
-function AnimatedNumber({value}){const ref=useCountUp(value);return <span className="animated-number"><span className="sr-only">{value}</span><span ref={ref} aria-hidden="true">{value}</span></span>}
-
-function Dashboard() {
-  const { data, loading } = useDataState()
-  const { batch } = useActions()
-  const toast = useToast()
-  const navigate = useTransitionNavigate()
-  const [period, setPeriod] = useState(()=>{try{const value=localStorage.getItem('nhip-viec-period');return ['today','week','month'].includes(value)?value:'week'}catch{return 'week'}})
-  const[showReport,setShowReport]=useState(false)
-  const recoveryShown=useRef(false)
+function Dashboard(){
+  const{data,loading}=useDataState(),{batch}=useActions(),{readOnly}=useAuth(),toast=useToast(),navigate=useTransitionNavigate()
+  const[period,setPeriod]=useState(()=>{try{const value=localStorage.getItem('nhip-viec-period');return['today','week','month'].includes(value)?value:'week'}catch{return'week'}})
+  const[taskTab,setTaskTab]=useState('recent'),[panelView,setPanelView]=useState('tasks'),[weekOffset,setWeekOffset]=useState(0),[showReport,setShowReport]=useState(false)
+  const recoveryShown=useRef(false),today=todayISO()
   useEffect(()=>{try{localStorage.setItem('nhip-viec-period',period)}catch{/* Storage can be unavailable. */}},[period])
-  useEffect(()=>{if(data.recoveryError&&!recoveryShown.current){recoveryShown.current=true;toast(vi.generated.Dashboard_51_1)}if(!data.recoveryError)recoveryShown.current=false},[data.recoveryError,toast])
-  const today = todayISO()
+  useEffect(()=>{if(data.recoveryError&&!recoveryShown.current){recoveryShown.current=true;toast(vi.dashboard.recovery)}if(!data.recoveryError)recoveryShown.current=false},[data.recoveryError,toast])
   const indexes=useMemo(()=>buildIndexes(data),[data.projects,data.tasks,data.contacts,data.trips,data.notes])
-  const projectRows=useMemo(()=>{
-    const rows=data.projects.map((project,index)=>{
-      const tasks=indexes.tasksByProject.get(project.id)||[]
-      return {project,index,tasks,status:getProjectEffectiveStatus(project,tasks,{loading}),progress:projectProgress(tasks,project.id)}
-    }).filter(item=>item.status!=='archived')
-    return [...rows.filter(item=>item.status!=='done'),...rows.filter(item=>item.status==='done')]
-  },[data.projects,indexes,loading])
-  const range = useMemo(() => period === 'today'
-    ? [today, today]
-    : period === 'month'
-      ? [toISODate(startOfMonth(new Date())), toISODate(endOfMonth(new Date()))]
-      : [toISODate(startOfWeek(new Date(), { weekStartsOn: 1 })), toISODate(endOfWeek(new Date(), { weekStartsOn: 1 }))], [period, today])
-  const summary = useMemo(() => {
-    const scoped = data.tasks.filter(task => task.dueDate >= range[0] && task.dueDate <= range[1])
-    const byStatus = Object.fromEntries(STATUS_KEYS.map(status => [status, data.tasks.filter(task => task.status === status)]))
-    const chartDates=Array.from({length:7},(_,index)=>toISODate(addDays(new Date(),index-6)))
-    const chartValues=completionSeries(data.tasks,chartDates)
-    const completed=scoped.filter(task=>task.status==='done').length
-    const completionRate=scoped.length?Math.round(completed/scoped.length*100):0
-    const dueSoon=data.tasks.filter(task => getDueState(task) === 'soon').length
-    const overdue=data.tasks.filter(task => getDueState(task) === 'overdue').length
-    return {
-      scoped, completed, completionRate, dueSoon, overdue, chartValues,
-      chartLabels:chartDates.map(date=>formatDate(date).slice(0,5)),
-      pie: STATUS_KEYS.map((status, index) => ({ name: vi.status[status], value: byStatus[status].length, color: STATUS_COLORS[index] })),
-      bars: projectRows.map(item => ({ name: item.project.name, value: item.tasks.length })),
-      upcoming: data.trips.filter(trip => !trip.completed && trip.endDate >= today).sort(compareTrips).slice(0, 3),
-      overlapIds: new Set(findTripOverlaps(data.trips).flat().map(trip => trip.id)),
-      todayTasks: indexes.tasksByDue.get(today) || [],
-      weekTasks: data.tasks.filter(task => task.dueDate > today && task.dueDate <= toISODate(addDays(new Date(), 7))),
+  const range=useMemo(()=>period==='today'?[today,today]:period==='month'
+    ?[toISODate(startOfMonth(new Date())),toISODate(endOfMonth(new Date()))]
+    :[toISODate(startOfWeek(new Date(),{weekStartsOn:1})),toISODate(endOfWeek(new Date(),{weekStartsOn:1}))],[period,today])
+  const weekRange=useMemo(()=>[toISODate(startOfWeek(new Date(),{weekStartsOn:1})),toISODate(endOfWeek(new Date(),{weekStartsOn:1}))],[])
+  const summary=useMemo(()=>{
+    const result={scoped:0,today:[],overdue:[],soon:[],doneWeek:[],upcoming:[],recent:[]}
+    for(const task of data.tasks){
+      if(task.dueDate>=range[0]&&task.dueDate<=range[1])result.scoped+=1
+      if(task.dueDate===today)result.today.push(task)
+      const due=getDueState(task)
+      if(due==='overdue')result.overdue.push(task)
+      if(due==='soon')result.soon.push(task)
+      if(task.status==='done'&&task.dueDate>=weekRange[0]&&task.dueDate<=weekRange[1])result.doneWeek.push(task)
+      if(task.dueDate>today&&task.status!=='done')result.upcoming.push(task)
+      if(task.status!=='done')result.recent.push(task)
     }
-  }, [data, indexes, projectRows, range, today])
-  const dayChips=useMemo(()=>Array.from({length:7},(_,index)=>{const date=toISODate(addDays(new Date(),index-2));return{date,label:['CN','T2','T3','T4','T5','T6','T7'][addDays(new Date(),index-2).getDay()]}}),[])
+    for(const list of [result.today,result.overdue,result.soon,result.upcoming,result.recent])list.sort(taskOrder)
+    return result
+  },[data.tasks,range,today,weekRange])
+  const projectRows=useMemo(()=>data.projects.map((project,index)=>{
+    const tasks=indexes.tasksByProject.get(project.id)||[]
+    return{project,index,tasks,status:getProjectEffectiveStatus(project,tasks,{loading}),progress:projectProgress(tasks,project.id)}
+  }).filter(item=>item.status!=='archived'),[data.projects,indexes,loading])
+  const nearestProject=useMemo(()=>projectRows.filter(item=>item.status!=='done'&&item.project.dueDate>=today)
+    .sort((left,right)=>left.project.dueDate.localeCompare(right.project.dueDate))[0]?.project.id,[projectRows,today])
+  const taskLists={recent:summary.recent,today:summary.today,upcoming:summary.upcoming,overdue:summary.overdue}
+  const activeTasks=taskLists[taskTab].slice(0,5),urgentId=activeTasks.find(task=>task.priority==='urgent'||getDueState(task)==='overdue')?.id
+  const nextTimelineId=summary.today.find(task=>task.status!=='done')?.id
+  const weekDays=useMemo(()=>Array.from({length:7},(_,index)=>{
+    const start=startOfWeek(addDays(new Date(),weekOffset*7),{weekStartsOn:1}),date=toISODate(addDays(start,index))
+    return{date,label:['CN','T2','T3','T4','T5','T6','T7'][addDays(start,index).getDay()]}
+  }),[weekOffset])
+  const todayTrips=useMemo(()=>data.trips.filter(trip=>trip.startDate<=today&&trip.endDate>=today),[data.trips,today])
+  const self=data.contacts.find(contact=>contact.isSelf)||data.contacts.find(contact=>contact.id==='self')
+  const name=self?.fullName||vi.common.assignee,report=useMemo(()=>weeklyReport(data,today),[data,today])
+  const noData=!data.projects.length&&!data.tasks.length&&!data.trips.length
   const goToScope=query=>navigate(`/cong-viec${query?`?${query}`:''}`)
-  const noData=!data.projects.length&&!data.tasks.length&&!data.contacts.length&&!data.trips.length
-  const report=useMemo(()=>weeklyReport(data,today),[data,today])
-  const toggleTask=task=>{const status=task.status==='done'?'todo':'done',created=status==='done'?recurrenceCreateOp(task,data.tasks):null;return batch([{type:'update',collection:'tasks',id:task.id,data:withStatus(task,status)},...(created?[created]:[])])}
-  const copyReport=async()=>{await navigator.clipboard.writeText(report);toast(vi.generated.Dashboard_91_2)}
-
-  return <Page>
-    <Header title={vi.generated.Dashboard_94_3} description={vi.generated.Dashboard_94_4(formatDate(today))} action={<Button variant="secondary" onClick={()=>setShowReport(value=>!value)}>{vi.generated.Dashboard_94_5}</Button>}/>
-    {showReport&&<Card><div className="section-row"><h2>{vi.generated.Dashboard_95_6}</h2><Button onClick={copyReport}>{vi.generated.Dashboard_95_7}</Button></div><pre className="weekly-report">{report}</pre></Card>}
-    {noData?<Card><EmptyState title={vi.generated.Dashboard_96_8} description={vi.generated.Dashboard_96_9} action={<Button icon={Plus} onClick={()=>navigate('/?new=1')}>{vi.generated.Dashboard_96_10}</Button>}/></Card>:<div className="dashboard-refresh">
-      <section className="dashboard-hero-grid">
-        <Card className="today-pulse-card">
-          <div className="section-row dashboard-card-head"><div><span className="eyebrow">{vi.generated.Dashboard_99_11}</span><h2>{vi.generated.Dashboard_99_12}</h2><p className="muted">{vi.generated.Dashboard_99_13}</p></div><div className="dashboard-head-actions"><label className="sr-only" htmlFor="dashboard-period">{vi.generated.Dashboard_99_14}</label><select className="pill hard-shadow" id="dashboard-period" value={period} onChange={event=>setPeriod(event.target.value)}><option value="today">{vi.generated.Dashboard_99_15}</option><option value="week">{vi.generated.Dashboard_99_16}</option><option value="month">{vi.generated.Dashboard_99_17}</option></select><Button variant="secondary" onClick={()=>goToScope(`from=${range[0]}&to=${range[1]}`)}>{vi.generated.Dashboard_99_18}</Button></div></div>
-          <div className="status-legend" aria-label={vi.generated.Dashboard_100_19}><span><i className="shape-half"/>{vi.generated.Dashboard_100_20}</span><span><i className="shape-check"><Check size={10}/></i>{vi.generated.Dashboard_100_21}</span><span><i className="shape-alert"><AlertTriangle size={11}/></i>{vi.generated.Dashboard_100_22}</span></div>
-          <div className="hero-kpis">
-            <button className="hero-kpi tile tile-lime" onClick={()=>goToScope('status=doing')}><ArrowUpRight aria-hidden="true"/><span>{vi.generated.Dashboard_102_23}</span><strong><AnimatedNumber value={summary.scoped.filter(task=>task.status==='doing').length}/></strong><small>{vi.generated.Dashboard_102_24}</small></button>
-            <button className="hero-kpi tile tile-lavender" onClick={()=>goToScope('status=done')}><CheckCircle2 aria-hidden="true"/><span>{vi.generated.Dashboard_103_25}</span><strong><AnimatedNumber value={summary.completed}/></strong><small>{summary.completionRate}{vi.generated.Dashboard_103_26}</small></button>
-            <button className="hero-kpi tile tile-ink" onClick={()=>goToScope('due=overdue')}><AlertTriangle aria-hidden="true"/><span>{vi.generated.Dashboard_104_27}</span><strong><AnimatedNumber value={summary.overdue}/></strong><small>{vi.generated.Dashboard_104_28}</small></button>
-          </div>
-          <div className="minor-kpis"><button onClick={()=>goToScope(`from=${range[0]}&to=${range[1]}`)}><ListTodo/><span>{vi.generated.Dashboard_106_29}</span><strong>{summary.scoped.length}</strong></button><button onClick={()=>goToScope('due=soon')}><Clock3/><span>{vi.generated.Dashboard_106_30}</span><strong>{summary.dueSoon}</strong></button></div>
-          <div className="date-chips" aria-label={vi.generated.Dashboard_107_31}>{dayChips.map(item=><button className={item.date===today?'active':''} aria-pressed={item.date===today} key={item.date} onClick={()=>goToScope(`from=${item.date}&to=${item.date}`)}><span>{item.label}</span><strong>{item.date.slice(-2)}</strong></button>)}</div>
-        </Card>
-        <Card className="completion-card tile-ink">
-          <div className="section-row"><div><span className="eyebrow">{vi.generated.Dashboard_110_32}</span><h2>{vi.generated.Dashboard_110_33}</h2></div><span className="trend-pill"><ArrowUpRight size={14}/> {summary.completionRate}%</span></div>
-          <div className="completion-number"><strong><AnimatedNumber value={summary.completed}/></strong><span>{vi.generated.Dashboard_111_34}<br/>{vi.generated.Dashboard_111_35}</span></div>
-          <CompletionChart values={summary.chartValues} labels={summary.chartLabels}/>
-          <div className="completion-minis"><div><span className="mini-columns"><i style={{'--bar':`${Math.max(18,summary.scoped.length*8)}%`}}/><i style={{'--bar':`${Math.max(14,summary.completed*14)}%`}}/></span><strong>{summary.scoped.length}</strong><small>{vi.generated.Dashboard_113_36}</small></div><div><span className="mini-columns lavender"><i style={{'--bar':`${Math.max(18,summary.completed*15)}%`}}/><i style={{'--bar':`${Math.max(12,summary.completionRate)}%`}}/></span><strong>{summary.completed}</strong><small>{vi.generated.Dashboard_113_37}</small></div></div>
-        </Card>
-      </section>
-
-      <section className="dashboard-lower-grid">
-        <Card className="project-overview-card"><div className="section-row"><div><span className="eyebrow">{vi.generated.Dashboard_118_38}</span><h2>{vi.generated.Dashboard_118_39}</h2></div><Button variant="ghost" onClick={()=>goToScope('view=projects')}>{vi.generated.Dashboard_118_40}</Button></div><div className="project-progress-list">{projectRows.map(({project,index,status,progress,tasks})=><button className={`project-progress-row label-theme-${index%8+1} ${status==='done'?'is-done':''}`} key={project.id} onClick={()=>goToScope(`projectId=${project.id}`)}><span className="project-progress-info"><i/><span className="project-progress-name">{project.name}{status==='waiting'&&<StatusBadge value="waiting"/>}{status==='done'&&<span className="project-done-label"><Check size={14} aria-hidden="true"/>{vi.dashboard.completedProject}</span>}</span><small>{tasks.length}{vi.generated.Dashboard_118_41}</small></span><ProgressBar value={progress}/></button>)}</div><div className="project-charts"><div><h3>{vi.generated.Dashboard_118_42}</h3><div className="chart chart-centered"><div className="donut-chart" role="img" aria-label={summary.pie.map(item=>`${item.name}: ${item.value}`).join(', ')} style={{background:donutBackground(summary.pie)}}><span>{data.tasks.length}</span></div></div><div className="legend">{summary.pie.map(item=><span key={item.name}><i style={{background:item.color}}/>{item.name} {item.value}</span>)}</div></div><div><h3>{vi.generated.Dashboard_118_43}</h3><div className="chart mini-bars" role="img" aria-label={summary.bars.length?summary.bars.map(item=>vi.generated.Dashboard_118_44(item.name,item.value)).join(', '):vi.generated.Dashboard_118_45}>{summary.bars.map((item,index)=><div className="mini-bar-item" key={item.name}><span className={`mini-bar label-theme-${index%8+1}`} style={{width:`${Math.max(8,item.value/Math.max(1,...summary.bars.map(bar=>bar.value))*100)}%`}}/><small title={item.name}>{item.name}</small><strong>{item.value}</strong></div>)}</div></div></div></Card>
-        <Card className="attention-card">
-          <div><span className="eyebrow">{vi.dashboard.priority}</span><h2>{vi.dashboard.attention}</h2></div>
-          <div className="focus-columns">
-            {[[vi.dashboard.todayTasks,summary.todayTasks],[vi.dashboard.nextWeekTasks,summary.weekTasks]].map(([label,tasks])=><section className="attention-column" key={label}>
-              <h3>{label} <span>{tasks.length}</span></h3>
-              {tasks.length?tasks.slice(0,5).map(task=>{
-                const due=getDueState(task),project=indexes.byId.projects.get(task.projectId)
-                return <div className={`attention-task ${task.status==='done'?'is-done':''}`} key={task.id}>
-                  <button type="button" className="completion-toggle attention-complete" aria-pressed={task.status==='done'} aria-label={vi.dashboard.completeLabel(task.title)} title={vi.dashboard.completeLabel(task.title)} draggable={false} onPointerDown={event=>event.stopPropagation()} onClick={event=>{event.stopPropagation();toggleTask(task)}}>
-                    <span className="completion-toggle__icon" aria-hidden="true">{task.status==='done'&&<Check strokeWidth={3}/>}</span>
-                  </button>
-                  <div className="attention-task-content">
-                    <span className="attention-task-title" title={task.title}>{task.title}</span>
-                    <small className="attention-task-meta"><span className={`attention-due due-${due}`}>{due==='today'?<><Clock3 size={13} aria-hidden="true"/>{vi.dashboard.dueToday} · </>:due==='overdue'?<><AlertTriangle size={13} aria-hidden="true"/>{vi.dashboard.overdue} · </>:null}{formatDate(task.dueDate)}</span>{project&&<span> · {project.name}</span>}</small>
-                  </div>
-                  <div className="attention-task-status"><StatusBadge value={task.status}/></div>
-                </div>
-              }):<p className="attention-empty">{vi.dashboard.emptyTasks}</p>}
-            </section>)}
-          </div>
-          <div className="attention-trips"><h3>{vi.generated.Dashboard_139_46}</h3><div className="upcoming-trips">{summary.upcoming.map(trip=><button className="data-row" key={trip.id} onClick={()=>navigate('/cong-tac')}><span className="trip-icon"><Plane size={17}/></span><span><strong>{trip.location}</strong><small>{formatTripRange(trip)}</small></span>{summary.overlapIds.has(trip.id)&&<AlertTriangle className="text-warning" size={17}/>}</button>)}</div>{summary.upcoming.some(trip=>summary.overlapIds.has(trip.id))&&<div className="overlap-note"><AlertTriangle size={18}/><span><strong>{vi.generated.Dashboard_139_47}</strong><small>{vi.generated.Dashboard_139_48}</small></span><ArrowDownRight size={18}/></div>}</div></Card>
-      </section>
-    </div>}
-  </Page>
+  const toggleTask=async task=>{
+    const status=task.status==='done'?'todo':'done',created=status==='done'?recurrenceCreateOp(task,data.tasks):null
+    const ops=[{type:'update',collection:'tasks',id:task.id,data:withStatus(task,status)},...(created?[created]:[])]
+    if(!await batch(ops))return
+    const undo=[{type:'update',collection:'tasks',id:task.id,data:task},...(created?[recurrenceUndoOp(created)]:[])]
+    toast(status==='done'?vi.dashboard.completed:vi.dashboard.reopened,{label:vi.action.undo,onClick:()=>batch(undo)})
+  }
+  const requestCreate=to=>{if(readOnly)return toast(vi.auth.verifyToEdit);navigate(to)}
+  const openCreate=mode=>window.setTimeout(()=>window.dispatchEvent(new CustomEvent('nhip-viec-create',{detail:mode})),0)
+  const blockedCreateProps=readOnly?{'aria-disabled':true,title:vi.auth.verifyToEdit}:{}
+  const useSample=async()=>{
+    const[{onboardingSample},{stringifyJsonExport,parseJsonImport,buildImportOps}]=await Promise.all([
+      import('@/data/onboardingSample'),import('@/lib/dataTransfer')
+    ])
+    const ops=buildImportOps(parseJsonImport(stringifyJsonExport(onboardingSample())).data,data,'skip')
+    if(ops.length&&await batch(ops))toast(vi.dashboard.sampleAdded)
+  }
+  const openPalette=()=>window.dispatchEvent(new KeyboardEvent('keydown',{key:'k',metaKey:true,bubbles:true}))
+  const copyReport=async()=>{await navigator.clipboard.writeText(report);toast(vi.dashboard.reportCopied)}
+  const longDate=new Intl.DateTimeFormat('vi-VN',{weekday:'long',day:'numeric',month:'long',year:'numeric'}).format(new Date())
+  return <Page><div className="dashboard-layout">
+    <section className="dashboard-center">
+      <header className="dashboard-welcome"><p>{vi.dashboard.greeting(name)}</p>
+        <h1>{vi.dashboard.todayCount(summary.today.filter(task=>task.status!=='done').length)}<span className="sr-only"> — {vi.dashboard.morning}</span></h1>
+        <div className="dashboard-welcome-actions"><button className="dashboard-search" type="button" onClick={openPalette}>
+          <Search size={18}/><span>{vi.dashboard.search}</span><kbd>⌘K</kbd></button>
+          <label className="sr-only" htmlFor="dashboard-period">{vi.dashboard.period}</label>
+          <select id="dashboard-period" value={period} onChange={event=>setPeriod(event.target.value)}><option value="today">{vi.dashboard.todayPeriod}</option>
+            <option value="week">{vi.dashboard.weekPeriod}</option><option value="month">{vi.dashboard.monthPeriod}</option></select>
+          <Button variant="ghost" onClick={()=>setShowReport(value=>!value)}>{vi.dashboard.weeklyReport}</Button></div></header>
+      {noData?<Card className="dashboard-empty-card"><EmptyState title={vi.dashboard.emptyTitle} description={vi.dashboard.emptyDescription}
+        action={<div className="dashboard-empty-actions"><Button icon={Plus} {...blockedCreateProps} onClick={()=>requestCreate('/cong-viec?view=projects&new=project')}>{vi.dashboard.createFirstProject}</Button>
+          <Button variant="secondary" onClick={useSample}>{vi.dashboard.useSample}</Button></div>}/></Card>:<>
+      {showReport&&<Card className="dashboard-report"><div className="section-row"><h2>{vi.dashboard.weeklyReport}</h2>
+        <Button onClick={copyReport}>{vi.dashboard.copy}</Button></div><pre>{report}</pre></Card>}
+      <div className="dashboard-kpis"><button onClick={()=>goToScope(`from=${today}&to=${today}`)}><span>{vi.dashboard.kpiToday}</span><strong>{summary.today.length}</strong></button>
+        <button className="is-emphasis" onClick={()=>goToScope('due=overdue')}><span>{vi.dashboard.kpiOverdue}</span><strong>{summary.overdue.length}</strong></button>
+        <button onClick={()=>goToScope('due=soon')}><span>{vi.dashboard.kpiSoon}</span><strong>{summary.soon.length}</strong></button>
+        <button onClick={()=>goToScope(`status=done&from=${weekRange[0]}&to=${weekRange[1]}`)}><span>{vi.dashboard.kpiDone}</span><strong>{summary.doneWeek.length}</strong></button></div>
+      <Card className={`dashboard-center-panel ${panelView==='tasks'?'is-tasks':'is-projects'}`}><div className="dashboard-panel-head"><div><h2>{panelView==='tasks'?vi.dashboard.myTasks:vi.dashboard.projects}</h2>
+        <span className="dashboard-panel-dots" aria-label={vi.dashboard.panelPosition(panelView==='tasks'?1:2)}><i className={panelView==='tasks'?'is-active':''}/><i className={panelView==='projects'?'is-active':''}/></span></div>
+        <div className="dashboard-panel-actions"><Button variant="ghost" onClick={()=>goToScope(panelView==='tasks'?`from=${range[0]}&to=${range[1]}`:'view=projects')}>{vi.dashboard.viewAll}</Button>
+          <button type="button" aria-label={vi.dashboard.previousPanel} onClick={()=>setPanelView(value=>value==='tasks'?'projects':'tasks')}><ChevronLeft/></button>
+          <button type="button" aria-label={vi.dashboard.nextPanel} onClick={()=>setPanelView(value=>value==='tasks'?'projects':'tasks')}><ChevronRight/></button></div></div>
+        <div className={`dashboard-panel-content is-${panelView}`} key={panelView}>{panelView==='tasks'?<><div className="dashboard-task-tabs" role="tablist" aria-label={vi.dashboard.myTasks}>
+          {[['recent',vi.dashboard.recent],['today',vi.dashboard.today],['upcoming',vi.dashboard.upcoming],['overdue',vi.dashboard.overdue]].map(([value,label])=><button
+            key={value} role="tab" aria-selected={taskTab===value} onClick={()=>setTaskTab(value)}>{label}<span>{taskLists[value].length}</span></button>)}
+        </div><div className="dashboard-task-list">{activeTasks.length?activeTasks.map(task=><DashboardTask key={task.id} task={task} indexes={indexes}
+          emphasis={task.id===urgentId} onToggle={()=>toggleTask(task)} onOpen={()=>goToScope(`q=${encodeURIComponent(task.title)}`)}/>)
+          :<p className="dashboard-empty">{vi.dashboard.emptyTasks}</p>}</div></>:<section className="dashboard-projects">
+          <div className="dashboard-project-grid">{projectRows.slice(0,6).map(({project,index,tasks,progress})=><button type="button"
+            className={`dashboard-project-card label-theme-${index%8+1} ${project.id===nearestProject?'is-emphasis':''}`} key={project.id}
+            onClick={()=>goToScope(`projectId=${project.id}`)}><span className="project-card-top"><i/><small>{vi.dashboard.tasks(tasks.length)}</small></span>
+            <strong>{project.name}</strong><span>{project.dueDate?formatDate(project.dueDate):vi.dashboard.noDue}</span><ProgressBar value={progress}/></button>)}</div>
+          <div className="mini-bars" role="img" aria-label={projectRows.length
+            ?projectRows.map(item=>`${item.project.name}: ${item.tasks.length} ${vi.common.task}`).join(', ')
+            :vi.dashboard.projects}>
+            {projectRows.slice(0,6).map((item,index)=><div className="mini-bar-item" key={item.project.id}><span className={`mini-bar label-theme-${index%8+1}`}
+              style={{width:`${Math.max(8,item.tasks.length/Math.max(1,...projectRows.map(row=>row.tasks.length))*100)}%`}}/><small title={item.project.name}>{item.project.name}</small><strong>{item.tasks.length}</strong></div>)}</div>
+        </section>}</div></Card></>}
+    </section>
+    <aside className="dashboard-right" aria-label={vi.dashboard.longDate}>
+      <div className="dashboard-profile"><Avatar name={name}/><span><small>{vi.dashboard.morning}</small><strong>{name}</strong></span>
+        <button type="button" aria-label={vi.shell.reminders(0,summary.overdue.length)} onClick={()=>goToScope('due=overdue')}><Bell size={20}/>{summary.overdue.length>0&&<i>{summary.overdue.length}</i>}</button></div>
+      <div className="dashboard-date-head"><span><CalendarDays size={18}/>{longDate}</span><Button icon={Plus} {...blockedCreateProps}
+        onClick={()=>openCreate('task')}>{vi.dashboard.addTask}</Button></div>
+      <Card className="dashboard-week"><div className="section-row"><h2>{vi.dashboard.week}</h2><span>
+        <button aria-label={vi.dashboard.previousWeek} onClick={()=>setWeekOffset(value=>value-1)}><ChevronLeft/></button>
+        <button aria-label={vi.dashboard.nextWeek} onClick={()=>setWeekOffset(value=>value+1)}><ChevronRight/></button></span></div>
+        <div className="week-strip">{weekDays.map(day=><button className={day.date===today?'is-today':''} key={day.date}
+          onClick={()=>goToScope(`from=${day.date}&to=${day.date}`)}><small>{day.label}</small><strong>{day.date.slice(-2)}</strong>
+          <i className={(indexes.tasksByDue.get(day.date)||[]).length?'has-tasks':''}/></button>)}</div></Card>
+      <Card className="dashboard-timeline"><h2>{vi.dashboard.longDate}</h2>{summary.today.length||todayTrips.length?<div className="timeline-list">
+        {summary.today.map(task=><article className={`timeline-item ${task.id===nextTimelineId?'is-next':''}`} key={task.id}>
+          <button aria-label={task.status==='done'?vi.completeToggle.reopen(task.title):vi.completeToggle.complete(task.title)} aria-pressed={task.status==='done'}
+            onClick={()=>toggleTask(task)}>{task.status==='done'&&<Check size={15}/>}</button><span><strong>{task.title}</strong><small>{vi.priority[task.priority]||vi.dashboard.allDay}</small></span></article>)}
+        {todayTrips.map(trip=><article className="timeline-item is-trip" key={trip.id}><span className="timeline-dot"/><span><strong>{trip.name}</strong><small>{trip.location}</small></span></article>)}</div>
+        :<p className="dashboard-empty">{vi.dashboard.timelineEmpty}</p>}</Card>
+    </aside>
+  </div></Page>
 }
 
 export default memo(Dashboard)
