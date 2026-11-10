@@ -44,6 +44,8 @@
 .dashboard-task-meta { display:flex; min-width:0; flex-wrap:wrap; align-items:center; justify-content:flex-end; gap:8px; color:var(--text-2); font-size:var(--fs-xs); }
 .project-chip { display:inline-flex; max-width:130px; align-items:center; gap:5px; overflow:hidden; border-radius:var(--radius-pill); padding:4px 8px; background:var(--fill); text-overflow:ellipsis; white-space:nowrap; }
 .project-chip::before { width:7px; height:7px; flex:0 0 7px; border-radius:50%; background:var(--label-bg); content:''; }
+.project-chip.is-empty { background:transparent; color:var(--text-2); }
+.project-chip.is-empty::before { display:none; }
 .overdue-date { color:var(--danger-text); font-weight:800; }
 .overdue-badge { display:inline-flex; width:max-content; align-items:center; border-radius:var(--radius-pill); padding:3px 7px; background:var(--danger-bg); color:var(--danger-text); font-size:var(--fs-xs); font-weight:800; }
 .dashboard-task-card>.progress-wrap { grid-column:1/3; }
@@ -99,12 +101,15 @@
 .timeline-item { position:relative; display:grid; min-width:0; grid-template-columns:34px minmax(0,1fr); align-items:center; gap:10px; border-radius:var(--radius-inner); padding:11px; background:var(--fill); }
 .timeline-item::before { position:absolute; left:-17px; width:10px; height:10px; border:3px solid var(--surface); border-radius:50%; background:var(--text-2); content:''; }
 .timeline-item>button { display:grid; width:34px; height:34px; place-items:center; border:1px solid var(--line); border-radius:50%; background:var(--surface); color:var(--text); }
-.timeline-item>span:last-child { display:grid; min-width:0; }
-.timeline-item strong { overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+.timeline-item>span:last-child { display:grid; min-width:0; gap:7px; }
+.timeline-item strong { display:-webkit-box; overflow:hidden; -webkit-box-orient:vertical; -webkit-line-clamp:2; font-size:var(--fs-base); line-height:var(--lh-tight); }
+.timeline-meta { display:flex; min-width:0; flex-wrap:wrap; align-items:center; gap:6px; }
+.timeline-meta .project-chip { max-width:150px; }
 .timeline-item small { color:var(--text-2); font-size:var(--fs-xs); }
 .timeline-item.is-next { background:var(--accent); color:var(--on-accent); }
 .timeline-item.is-next::before { background:var(--accent); }
 .timeline-item.is-next small { color:var(--on-accent); }
+.timeline-item.is-next .project-chip.is-empty { color:color-mix(in srgb,var(--on-accent) 72%,transparent); }
 .timeline-dot { width:12px; height:12px; border-radius:50%; background:var(--accent); }
 .dashboard-empty { margin:0; border:1px dashed var(--line); border-radius:var(--radius-inner); padding:18px; color:var(--text-2); text-align:center; }
 .dashboard-empty-card { overflow:hidden; border:1px solid var(--line); padding:0; background:var(--fill); box-shadow:none; }

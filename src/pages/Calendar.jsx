@@ -2,7 +2,7 @@ import { useMemo, useState } from 'react'
 import { addDays, addMonths, eachDayOfInterval, endOfMonth, endOfWeek, format, parseISO, startOfMonth, startOfWeek, subMonths } from 'date-fns'
 import { AlertTriangle, ChevronLeft, ChevronRight, Plane } from 'lucide-react'
 import { Page, Header } from '@/app/App'
-import { Button, Card, Drawer, EmptyState, StatusBadge } from '@/components/ui'
+import { Button, Card, Drawer, EmptyState, PriorityBadge, StatusBadge } from '@/components/ui'
 import TaskForm from '@/components/task/TaskForm'
 import { useActions, useDataState, useToast } from '@/hooks/useData'
 import { formatDate, todayISO, toISODate } from '@/lib/dates'
@@ -10,6 +10,9 @@ import { vi } from '@/i18n/vi'
 import { compareTrips, findTripOverlaps, formatTripRange, tripDaySession } from '@/lib/trips'
 import { buildIndexes } from '@/lib/indexes'
 import { getDueState } from '@/lib/tasks'
+
+const priorityRank={urgent:0,high:1,medium:2,low:3}
+export const calendarTimelineTaskOrder=(left,right)=>(priorityRank[left.priority]??4)-(priorityRank[right.priority]??4)||(left.order??0)-(right.order??0)||(left.title||'').localeCompare(right.title||'','vi')
 
 export default function Calendar() {
   const { data } = useDataState()
@@ -34,7 +37,7 @@ export default function Calendar() {
   const days = eachDayOfInterval(range)
   const monthRows=Math.ceil(days.length/7)
   const shift = amount => {setDirection(amount>0?'next':'previous');setCursor(date => mode === 'month' ? (amount > 0 ? addMonths(date, 1) : subMonths(date, 1)) : addDays(date, amount * (mode === 'week' ? 7 : 1)))}
-  const dayTasks = date => indexes.tasksByDue.get(date) || []
+  const dayTasks = date => [...(indexes.tasksByDue.get(date) || [])].sort(calendarTimelineTaskOrder)
   const dayTrips = date => indexes.tripsByDay.get(date) || []
   const move = async (task, date) => {
     const old = task.dueDate
@@ -55,6 +58,7 @@ export default function Calendar() {
     toast(vi.generated.Calendar_53_2)
     return true
   }
+  const selectedTasks=dayTasks(selectedDay),nextAgendaId=selectedTasks.find(task=>task.status!=='done')?.id
 
   return <Page><div className="calendar-page">
     <Header title={vi.nav.calendar} description={vi.generated.Calendar_58_3}/>
@@ -76,7 +80,7 @@ export default function Calendar() {
         </button>
       })}</div>
     </div>
-    <section className="day-agenda" aria-label={vi.generated.Calendar_75_17}><div className="section-row"><div><span className="eyebrow">{vi.generated.Calendar_75_17}</span><h2>{formatDate(selectedDay)}</h2></div><Button onClick={() => setEditing({ dueDate: selectedDay, startDate: selectedDay })}>{vi.generated.Calendar_75_18}</Button></div>{dayTrips(selectedDay).map(trip=><div className="agenda-row agenda-trip" key={trip.id}><span><Plane size={15}/> {trip.name} · {formatTripRange(trip)}</span></div>)}{dayTasks(selectedDay).map(task => <div className="agenda-row" key={task.id}><button onClick={() => setEditing(task)}>{task.title}</button><StatusBadge value={task.status}/><label>{vi.generated.Calendar_75_19}<input type="date" value={task.dueDate} onChange={event => move(task, event.target.value)}/></label></div>)}{!dayTasks(selectedDay).length && <p className="muted">{vi.generated.Calendar_75_20}</p>}</section></div></>}
+    <section className="day-agenda" aria-label={vi.generated.Calendar_75_17}><div className="section-row"><div><span className="eyebrow">{vi.generated.Calendar_75_17}</span><h2>{formatDate(selectedDay)}</h2></div><Button onClick={() => setEditing({ dueDate: selectedDay, startDate: selectedDay })}>{vi.generated.Calendar_75_18}</Button></div><div className="timeline-list">{dayTrips(selectedDay).map(trip=><div className="agenda-row agenda-trip" key={trip.id}><span><Plane size={15}/> {trip.name} · {formatTripRange(trip)}</span></div>)}{selectedTasks.map(task=>{const project=data.projects.find(item=>item.id===task.projectId),projectColor=project?.colorIndex||1;return <article className={`timeline-item ${task.id===nextAgendaId?'is-next':''} ${project?`label-theme-${projectColor}`:''}`} key={task.id}><button aria-label={vi.generated.Calendar_76_21} onClick={()=>setEditing(task)}/><span><strong>{task.title}</strong><span className="timeline-meta">{project?<span className="project-chip">{project.name}</span>:<span className="project-chip is-empty">{vi.dashboard.noProject}</span>}<PriorityBadge value={task.priority}/><StatusBadge value={task.status}/></span><label>{vi.generated.Calendar_75_19}<input type="date" value={task.dueDate} onChange={event=>move(task,event.target.value)}/></label></span></article>})}</div>{!selectedTasks.length&&<p className="muted">{vi.generated.Calendar_75_20}</p>}</section></div></>}
     </div>{editing && <Drawer title={editing.id ? vi.generated.Calendar_76_21 : vi.generated.Calendar_76_22} onClose={() => setEditing(null)} actions={<><Button variant="secondary" onClick={()=>setEditing(null)}>{vi.generated.Calendar_76_23}</Button><Button type="submit" form={taskFormId}>{vi.generated.Calendar_76_24}</Button></>}><TaskForm formId={taskFormId} showActions={false} task={editing} projects={data.projects} contacts={data.contacts} trips={data.trips} onCancel={() => setEditing(null)} onSave={save}/></Drawer>}
   </Page>
 }

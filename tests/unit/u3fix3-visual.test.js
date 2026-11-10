@@ -5,6 +5,8 @@ import { createElement } from 'react'
 import { cleanup, render, screen } from '@testing-library/react'
 import { StatusBadge } from '@/components/ui'
 import { vi } from '@/i18n/vi'
+import { timelineTaskOrder } from '@/pages/Dashboard'
+import { calendarTimelineTaskOrder } from '@/pages/Calendar'
 
 const read=file=>readFileSync(resolve(file),'utf8')
 const styles=readdirSync(resolve('src/styles')).filter(file=>file.endsWith('.css')).map(file=>read(`src/styles/${file}`)).join('\n')
@@ -38,5 +40,20 @@ describe('U3-fix3 visual polish',()=>{
       expect(container.querySelector('.badge-marker svg')).toBeInTheDocument()
       cleanup()
     }
+  })
+
+  it('timeline sắp theo ưu tiên, order rồi tiêu đề và có tên dự án',()=>{
+    const tasks=[
+      {title:'B',priority:'medium',order:1},
+      {title:'A',priority:'high',order:2},
+      {title:'C',priority:'high',order:1},
+      {title:'A',priority:'high',order:1},
+      {title:'D',priority:'urgent',order:9}
+    ]
+    const expected=['D','A','C','A','B']
+    expect([...tasks].sort(timelineTaskOrder).map(task=>task.title)).toEqual(expected)
+    expect([...tasks].sort(calendarTimelineTaskOrder).map(task=>task.title)).toEqual(expected)
+    expect(read('src/pages/Dashboard.jsx')).toMatch(/project\.name/)
+    expect(read('src/pages/Calendar.jsx')).toMatch(/project\.name/)
   })
 })
