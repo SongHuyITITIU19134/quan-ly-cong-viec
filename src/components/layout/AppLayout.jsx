@@ -185,7 +185,7 @@ export default function AppLayout(){
         <Bell size={20}/>{overdueCount+reminderCount>0&&<span className="notification-count">{overdueCount+reminderCount}</span>}
       </button>
       <button className="topbar-button" type="button" onClick={changeTheme} aria-label={resolved==='dark'?vi.shell.lightTheme:vi.shell.darkTheme} title={resolved==='dark'?vi.shell.light:vi.shell.dark}>{resolved==='dark'?<Sun size={20}/>:<Moon size={20}/>}</button>
-      <Popover className="mobile-more" panelClassName="mobile-more-panel" align="end" accessibleLabel={vi.nav.more} label={<MoreHorizontal size={20}/>}>
+      <Popover className="mobile-profile profile-menu" panelClassName="mobile-more-panel" align="end" label={profile}>
         <button type="button" role="menuitem" onClick={event=>openPalette('',event.currentTarget)}><Search size={18}/><span>{vi.action.search}</span></button>
         {moreLinks.map(item=><AppLink key={item[0]} item={item} onNavigate={navigate} className="mobile-menu-link" role="menuitem"/>)}
         <AppLink item={['/cai-dat',vi.nav.settings,Settings]} onNavigate={navigate} className="mobile-menu-link" role="menuitem"/>
@@ -204,7 +204,6 @@ export default function AppLayout(){
         <button className="topbar-button notification-button" type="button" aria-label={alertLabel} title={vi.shell.reminderTitle} onClick={()=>navigate('/cong-viec?due=overdue')}><Bell size={19}/>{overdueCount+reminderCount>0&&<span className="notification-count">{overdueCount+reminderCount}</span>}</button>
         <button className="topbar-button" type="button" onClick={changeTheme} aria-label={resolved==='dark'?vi.shell.lightTheme:vi.shell.darkTheme} title={resolved==='dark'?vi.shell.light:vi.shell.dark}>{resolved==='dark'?<Sun size={19}/>:<Moon size={19}/>}</button>
         {canInstall&&<button className="topbar-button" type="button" onClick={install} aria-label={vi.shell.install} title={vi.shell.install}><Download size={19}/></button>}
-        <Popover className="profile-menu" panelClassName="profile-menu-panel" align="end" label={profile}>{accountMenu}</Popover>
       </header>
       <main className="main" id="main-content">
         {error&&<div className="global-error" role="alert"><span>{error}</span><button onClick={()=>setError(null)}>{vi.action.close}</button></div>}

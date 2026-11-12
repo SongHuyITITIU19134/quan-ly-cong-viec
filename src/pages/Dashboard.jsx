@@ -1,8 +1,8 @@
 import { memo, useEffect, useMemo, useRef, useState } from 'react'
-import { Bell, CalendarDays, Check, ChevronLeft, ChevronRight, Plus, Search } from 'lucide-react'
+import { CalendarDays, Check, ChevronLeft, ChevronRight, Plus, Search } from 'lucide-react'
 import { addDays, endOfMonth, endOfWeek, startOfMonth, startOfWeek } from 'date-fns'
 import { Page } from '@/app/App'
-import { Avatar, AvatarStack, Button, Card, EmptyState, PriorityBadge, ProgressBar, StatusBadge } from '@/components/ui'
+import { AvatarStack, Button, Card, EmptyState, PriorityBadge, ProgressBar, StatusBadge } from '@/components/ui'
 import { useActions, useAuth, useDataState, useToast } from '@/hooks/useData'
 import { getProjectEffectiveStatus } from '@/lib/projectStatus'
 import { getDueState } from '@/lib/tasks'
@@ -13,6 +13,7 @@ import { useTransitionNavigate } from '@/hooks/useTransitionNavigate'
 import { recurrenceCreateOp, recurrenceUndoOp } from '@/lib/recurrence'
 import { weeklyReport } from '@/lib/weeklyReport'
 import { buildIndexes } from '@/lib/indexes'
+import CompletionGauge from '@/pages/dashboard/CompletionGaugeCard'
 
 const priorityRank={urgent:0,high:1,medium:2,low:3}
 const taskOrder=(left,right)=>(priorityRank[left.priority]??4)-(priorityRank[right.priority]??4)||(left.order??0)-(right.order??0)
@@ -29,7 +30,7 @@ function DashboardTask({task,indexes,onToggle,onOpen,emphasis=false}){
     <div className="dashboard-task-meta"><StatusBadge value={task.status}/>{project&&<span className="project-chip">{project.name}</span>}<AvatarStack people={people} max={4}/>
       <span className={due==='overdue'?'overdue-date':''}>{task.dueDate?formatDate(task.dueDate):vi.dashboard.noDue}</span>
       {['overdue','today','soon'].includes(due)&&<StatusBadge value={due}/>}</div>
-    <ProgressBar value={taskProgress(task)}/>
+    {task.status!=='done'&&<ProgressBar value={taskProgress(task)}/>}
     <button type="button" className="dashboard-task-check" aria-label={task.status==='done'?vi.completeToggle.reopen(task.title):vi.completeToggle.complete(task.title)}
       aria-pressed={task.status==='done'} onClick={onToggle}>{task.status==='done'&&<Check size={17}/>}</button>
   </article>
@@ -48,9 +49,9 @@ function Dashboard(){
     :[toISODate(startOfWeek(new Date(),{weekStartsOn:1})),toISODate(endOfWeek(new Date(),{weekStartsOn:1}))],[period,today])
   const weekRange=useMemo(()=>[toISODate(startOfWeek(new Date(),{weekStartsOn:1})),toISODate(endOfWeek(new Date(),{weekStartsOn:1}))],[])
   const summary=useMemo(()=>{
-    const result={scoped:0,today:[],overdue:[],soon:[],doneWeek:[],upcoming:[],recent:[]}
+    const result={scoped:0,scopedDone:0,scopedOverdue:0,today:[],overdue:[],soon:[],doneWeek:[],upcoming:[],recent:[]}
     for(const task of data.tasks){
-      if(task.dueDate>=range[0]&&task.dueDate<=range[1])result.scoped+=1
+      if(task.dueDate>=range[0]&&task.dueDate<=range[1]){result.scoped+=1;if(task.status==='done')result.scopedDone+=1;if(getDueState(task)==='overdue')result.scopedOverdue+=1}
       if(task.dueDate===today)result.today.push(task)
       const due=getDueState(task)
       if(due==='overdue')result.overdue.push(task)
@@ -134,7 +135,7 @@ function Dashboard(){
           <div className="dashboard-project-grid">{projectRows.slice(0,6).map(({project,index,tasks,progress})=><button type="button"
             className={`dashboard-project-card label-theme-${index%8+1} ${project.id===nearestProject?'is-emphasis':''}`} key={project.id}
             onClick={()=>goToScope(`projectId=${project.id}`)}><span className="project-card-top"><i/><small>{vi.dashboard.tasks(tasks.length)}</small></span>
-            <strong>{project.name}</strong><span>{project.dueDate?formatDate(project.dueDate):vi.dashboard.noDue}</span><ProgressBar value={progress}/></button>)}</div>
+            <strong title={project.name}>{project.name}</strong><span>{project.dueDate?formatDate(project.dueDate):vi.dashboard.noDue}</span><ProgressBar value={progress}/></button>)}</div>
           <div className="mini-bars" role="img" aria-label={projectRows.length
             ?projectRows.map(item=>`${item.project.name}: ${item.tasks.length} ${vi.common.task}`).join(', ')
             :vi.dashboard.projects}>
@@ -143,8 +144,7 @@ function Dashboard(){
         </section>}</div></Card></>}
     </section>
     <aside className="dashboard-right" aria-label={vi.dashboard.longDate}>
-      <div className="dashboard-profile"><Avatar name={name}/><span><small>{vi.dashboard.morning}</small><strong>{name}</strong></span>
-        <button type="button" aria-label={vi.shell.reminders(0,summary.overdue.length)} onClick={()=>goToScope('due=overdue')}><Bell size={20}/>{summary.overdue.length>0&&<i>{summary.overdue.length}</i>}</button></div>
+      <CompletionGauge done={summary.scopedDone} total={summary.scoped} overdue={summary.scopedOverdue}/>
       <div className="dashboard-date-head"><span><CalendarDays size={18}/>{longDate}</span><Button icon={Plus} {...blockedCreateProps}
         onClick={()=>openCreate('task')}>{vi.dashboard.addTask}</Button></div>
       <Card className="dashboard-week"><div className="section-row"><h2>{vi.dashboard.week}</h2><span>

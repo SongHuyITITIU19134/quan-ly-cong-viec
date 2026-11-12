@@ -23,13 +23,16 @@ describe('U3-fix3 visual polish',()=>{
     expect(styles).not.toMatch(/font-size\s*:\s*(?:[0-9]|1[0-2])px|font-size\s*:\s*0(?:[;}])/)
   })
 
-  it('dark active nav dùng nền vàng và chữ đen',()=>{
-    expect(read('src/styles/shell.css')).toMatch(/\[data-theme='dark'\] \.shell-nav-link\.active\s*\{[^}]*background:\s*var\(--accent\);[^}]*color:\s*var\(--on-accent\)/)
+  it('dark active nav dùng nền surface, icon và thanh trái màu vàng',()=>{
+    const shell=read('src/styles/shell.css')
+    expect(shell).toMatch(/\[data-theme='dark'\] \.shell-nav-link\.active\s*\{[^}]*background:var\(--surface-2\);[^}]*color:var\(--text\)/)
+    expect(shell).toMatch(/\.shell-nav-link\.active svg\s*\{\s*color:var\(--accent\)/)
+    expect(shell).toMatch(/\.shell-nav-link\.active::before\s*\{[^}]*width:3px;[^}]*background:var\(--accent\)/)
   })
 
   it('dark emphasis dùng nền đen và viền #3a3a40',()=>{
     const dashboard=read('src/styles/dashboard.css')
-    expect(dashboard).toMatch(/\[data-theme='dark'\][^{]+is-emphasis[^}]*border:\s*1px solid #3a3a40;[^}]*background:\s*#000/)
+    expect(dashboard).toMatch(/\[data-theme='dark'\][^{]+is-emphasis[^}]*border:\s*1px solid #3a3a40;[^}]*background:radial-gradient\([^}]*8%[^}]*#000/)
   })
 
   it('cả tám status chip đều có icon và nhãn chữ',()=>{

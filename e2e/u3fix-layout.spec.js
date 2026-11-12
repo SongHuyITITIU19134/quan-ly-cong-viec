@@ -30,6 +30,7 @@ test('ô tháng chỉ hiện hai mục và phần còn lại chọn đúng ngày
   await page.goto('/lich')
   const busyDay=page.locator('.calendar-day').filter({hasText:/\+\d+ mục khác/u}).first()
   await expect(busyDay.locator('.calendar-task,.trip-strip')).toHaveCount(2)
+  const selectedDate=(await busyDay.getAttribute('aria-label')).split(',')[0]
   await busyDay.getByText(/\+\d+ mục khác/u).click()
-  await expect(page.getByRole('region',{name:'Ngày đã chọn'}).getByRole('heading')).toHaveText(await busyDay.locator('.sr-only').textContent().then(value=>value.split(',')[0]))
+  await expect(page.getByRole('region',{name:'Ngày đã chọn'}).getByRole('heading')).toHaveText(selectedDate)
 })
