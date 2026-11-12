@@ -36,4 +36,20 @@ describe('U3-fix5 visual polish',()=>{
     expect(tasks).toMatch(/\.task-card\.is-complete \.task-title\s*\{[^}]*background:none;[^}]*color:var\(--text-2\);[^}]*text-decoration:none;[^}]*animation:none/)
     expect(dashboard).toMatch(/\.dashboard-task-card\.is-done \.dashboard-task-title\s*\{\s*color:var\(--text-2\)/)
   })
+
+  it('ô tháng chỉ lấy hai mục, có +N và không render nhãn trạng thái',()=>{
+    const calendar=read('src/pages/Calendar.jsx')
+    expect(calendar).toContain("].slice(0,2).map")
+    expect(calendar).toContain('className="calendar-more"')
+    expect(calendar).toContain("item.status==='done'?<Check")
+    expect(calendar).not.toMatch(/mode==='month'[\s\S]*?<StatusBadge value=\{item\.status\}/)
+  })
+
+  it('ô ngày có aria-label đầy đủ và selected dùng ring không phủ nền',()=>{
+    const calendar=read('src/pages/Calendar.jsx'),css=read('src/styles/calendar.css')
+    expect(calendar).toContain('aria-label={ariaLabel}')
+    expect(calendar).toContain("tasks.map(task=>task.title).join(', ')")
+    expect(calendar).toContain("trips.map(trip=>trip.name).join(', ')")
+    expect(css).toMatch(/\.calendar-day\.selected[^}]*background:var\(--surface\);[^}]*box-shadow:inset 0 0 0 2px var\(--ink\)/)
+  })
 })

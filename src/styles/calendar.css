@@ -9,18 +9,21 @@
 .weekdays span { min-height: 44px; display: grid; place-items: center; background: var(--color-surface); }
 .calendar-day { position: relative; min-height: 132px; border-color: var(--color-border-subtle); padding: 9px; transition: background-color var(--motion-fast) var(--ease-out-expo),transform var(--motion-fast) var(--ease-spring); }
 .calendar-day:hover { z-index: var(--z-content); background: var(--color-surface-hover); }
-.calendar-day.today { background: color-mix(in srgb,var(--color-lime) 42%,var(--color-paper)); }
+.calendar-day.today { background:var(--surface); }
 .calendar-day.today .day-number { border: 1px solid var(--color-ink-fixed); background: var(--color-lime); color: var(--color-ink-fixed); }
-.calendar-day.selected,.calendar-day.selected:hover { background: var(--color-ink-fixed); color: #fff; transform: scale(.985); }
-.calendar-day.selected .day-number { background: #fff; color: var(--color-ink-fixed); }
-.calendar-day.selected .calendar-task { border-color: #fff; }
+.calendar-day.selected,.calendar-day.selected:hover { z-index:var(--z-content); background:var(--surface); color:var(--text); box-shadow:inset 0 0 0 2px var(--ink); transform:none; }
+.calendar-day.selected.today .day-number { background:var(--accent); color:var(--on-accent); }
 .calendar-day.overlap { box-shadow: inset 0 0 0 2px var(--semantic-warning); }
+.calendar-day.selected.overlap { box-shadow:inset 0 0 0 2px var(--ink); }
 .day-overlap-icon { position: absolute; top: 13px; right: 10px; color: var(--semantic-warning); }
 .calendar-day.selected .day-overlap-icon { color: var(--palette-butter); }
-.trip-strip { border: 1px solid var(--color-ink-fixed); border-radius: 7px; color: var(--color-ink-fixed); }
-.calendar-task { border-radius: 7px; }
-.calendar-task>.badge { min-height:22px; flex:0 0 auto; padding:2px 5px; }
-.calendar-task>.badge+.calendar-task-title,.calendar-task>.badge+span { min-width:0; overflow:hidden; text-overflow:ellipsis; }
+.trip-strip { min-height:22px; border:0; border-radius:6px; background:var(--accent); color:var(--on-accent); }
+.trip-strip>span,.calendar-task>span { min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+.calendar-task { min-height:22px; border:0; border-radius:0; padding-inline:3px; background:transparent; color:var(--text); }
+.calendar-task>i { width:7px; height:7px; flex:0 0 7px; border-radius:50%; background:var(--label-bg); }
+.calendar-task>svg { flex:0 0 auto; }
+.calendar-task.is-done { color:var(--text-2); text-decoration:none; }
+.calendar-more { display:block; margin-top:3px; color:var(--text-2); font-size:var(--fs-xs); font-weight:800; white-space:nowrap; }
 .calendar-task.due-overdue { border-color:var(--status-overdue-text); }
 .day-agenda { position: sticky; top: var(--space-5); margin-top: 0; border: var(--border-ink); border-radius: var(--radius-md); padding: 20px; }
 .day-agenda>.timeline-list { margin-top:12px; }
@@ -50,3 +53,4 @@
   .day-agenda{position:static;min-height:0;overflow:auto;overscroll-behavior:contain}
 }
 @media(prefers-reduced-motion:reduce){.calendar-day{transition:none}.calendar-day.selected{transform:none}}
+:root[data-theme='dark'] .calendar-day.selected,:root[data-theme='dark'] .calendar-day.selected:hover,:root[data-theme='dark'] .calendar-day.selected.overlap { box-shadow:inset 0 0 0 2px var(--accent); }

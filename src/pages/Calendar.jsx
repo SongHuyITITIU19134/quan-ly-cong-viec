@@ -1,6 +1,6 @@
 import { useMemo, useState } from 'react'
 import { addDays, addMonths, eachDayOfInterval, endOfMonth, endOfWeek, format, parseISO, startOfMonth, startOfWeek, subMonths } from 'date-fns'
-import { AlertTriangle, ChevronLeft, ChevronRight, Plane } from 'lucide-react'
+import { AlertTriangle, Check, ChevronLeft, ChevronRight, Plane } from 'lucide-react'
 import { Page, Header } from '@/app/App'
 import { Button, Card, Drawer, EmptyState, PriorityBadge, StatusBadge } from '@/components/ui'
 import TaskForm from '@/components/task/TaskForm'
@@ -70,12 +70,13 @@ export default function Calendar() {
       <div className="weekdays">{['T2', 'T3', 'T4', 'T5', 'T6', 'T7', 'CN'].map(day => <span key={day}>{day}</span>)}</div>
       <div className={`calendar-days slide-${direction}`} style={mode==='month'?{'--calendar-rows':monthRows}:undefined} key={`${mode}-${toISODate(range.start)}`}>{days.map(day => {
         const date = toISODate(day), outside = mode === 'month' && day.getMonth() !== cursor.getMonth(), tasks = dayTasks(date), trips = dayTrips(date), overlap = findTripOverlaps(trips,date).length > 0
-        return <button className={`calendar-day ${outside ? 'outside' : ''} ${date === todayISO() ? 'today' : ''} ${selectedDay === date ? 'selected' : ''} ${overlap ? 'overlap' : ''}`} key={date} onClick={() => setSelectedDay(date)} onDoubleClick={() => setEditing({ dueDate: date, startDate: date })}>
-          <span className="sr-only">{formatDate(date)}, {tasks.length}{vi.generated.Calendar_68_13}{trips.length}{vi.generated.Calendar_68_14}{overlap?vi.generated.Calendar_68_15:''}. </span><span className="day-number">{format(day, 'd')}</span>{overlap&&<AlertTriangle className="day-overlap-icon" size={15} aria-hidden="true"/>}
+        const ariaLabel=`${formatDate(date)}, ${tasks.length}${vi.generated.Calendar_68_13}${tasks.length?`: ${tasks.map(task=>task.title).join(', ')}`:''}; ${trips.length}${vi.generated.Calendar_68_14}${trips.length?`: ${trips.map(trip=>trip.name).join(', ')}`:''}${overlap?`; ${vi.generated.Calendar_68_15}`:''}`
+        return <button aria-label={ariaLabel} className={`calendar-day ${outside ? 'outside' : ''} ${date === todayISO() ? 'today' : ''} ${selectedDay === date ? 'selected' : ''} ${overlap ? 'overlap' : ''}`} key={date} onClick={() => setSelectedDay(date)} onDoubleClick={() => setEditing({ dueDate: date, startDate: date })}>
+          <span className="day-number" aria-hidden="true">{format(day, 'd')}</span>{overlap&&<AlertTriangle className="day-overlap-icon" size={15} aria-hidden="true"/>}
           {mode==='month'?<>{[...trips.map(item=>({type:'trip',item})),...tasks.map(item=>({type:'task',item}))].slice(0,2).map(({type,item})=>type==='trip'
-            ?<span className={`trip-strip label-theme-${data.trips.indexOf(item)%8+1}`} key={`trip-${item.id}`}><Plane size={11}/>{item.location}{tripDaySession(item,date)&&` · ${tripDaySession(item,date)}`}</span>
-            :<span className={`calendar-task status-${item.status} due-${getDueState(item)}`} key={`task-${item.id}`} onClick={event=>{event.stopPropagation();setEditing(item)}}><StatusBadge value={item.status}/><span>{item.title}</span></span>)}
-          {tasks.length+trips.length>2&&<small>+{tasks.length+trips.length-2}{vi.calendar.moreItems}</small>}</>:<>{trips.map(trip=><span className={`trip-strip label-theme-${data.trips.indexOf(trip)%8+1}`} key={trip.id}><Plane size={11}/>{trip.location}{tripDaySession(trip,date)&&` · ${tripDaySession(trip,date)}`}</span>)}
+            ?<span className="trip-strip" key={`trip-${item.id}`}><Plane size={11}/><span>{item.name}</span></span>
+            :<span className={`calendar-task ${item.status==='done'?'is-done':''} label-theme-${data.projects.find(project=>project.id===item.projectId)?.colorIndex||1}`} key={`task-${item.id}`} onClick={event=>{event.stopPropagation();setEditing(item)}}>{item.status==='done'?<Check size={12}/>:<i/>}<span>{item.title}</span></span>)}
+          {tasks.length+trips.length>2&&<small className="calendar-more">+{tasks.length+trips.length-2}{vi.calendar.moreItems}</small>}</>:<>{trips.map(trip=><span className={`trip-strip label-theme-${data.trips.indexOf(trip)%8+1}`} key={trip.id}><Plane size={11}/>{trip.location}{tripDaySession(trip,date)&&` · ${tripDaySession(trip,date)}`}</span>)}
           {tasks.slice(0,10).map(task=><span className={`calendar-task status-${task.status} due-${getDueState(task)}`} key={task.id} onClick={event=>{event.stopPropagation();setEditing(task)}}><StatusBadge value={task.status}/><span>{task.title}</span></span>)}</>}
         </button>
       })}</div>
