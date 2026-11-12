@@ -19,7 +19,7 @@ function TaskCard({task,project,projectIndex=0,contact,onOpen,onStatus,onToggle,
     <TaskTags tags={task.tags} registry={tagRegistry} selected={selectedTags} onToggle={onTagToggle}/>
     <div className="task-meta"><span className={due==='overdue'?'overdue':due==='soon'||due==='today'?'due-soon':''}><CalendarClock size={14}/>{formatDate(task.dueDate)}</span>{task.tripId&&<span><Plane size={14}/>{vi.generated.TaskCard_18_5}</span>}</div>
     {['overdue','today','soon'].includes(due)&&<StatusBadge value={due}/>}
-    <ProgressBar value={taskProgress(task)}/>
+    {task.status!=='done'&&<ProgressBar value={taskProgress(task)}/>}
     <div className="task-card-foot"><StatusBadge value={task.status}/><span className="avatar" title={contact?.fullName} aria-label={vi.generated.TaskCard_21_6(contact?.fullName||vi.generated.TaskCard_assigneeEmpty)}>{contact?.fullName?.slice(0,1)||'?'}</span></div>
     {project&&<div className="project-line" title={project.name}><i/>{project.name}</div>}
   </article>

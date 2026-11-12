@@ -29,7 +29,7 @@ function DashboardTask({task,indexes,onToggle,onOpen,emphasis=false}){
     <div className="dashboard-task-meta"><StatusBadge value={task.status}/>{project&&<span className="project-chip">{project.name}</span>}<AvatarStack people={people} max={4}/>
       <span className={due==='overdue'?'overdue-date':''}>{task.dueDate?formatDate(task.dueDate):vi.dashboard.noDue}</span>
       {['overdue','today','soon'].includes(due)&&<StatusBadge value={due}/>}</div>
-    <ProgressBar value={taskProgress(task)}/>
+    {task.status!=='done'&&<ProgressBar value={taskProgress(task)}/>}
     <button type="button" className="dashboard-task-check" aria-label={task.status==='done'?vi.completeToggle.reopen(task.title):vi.completeToggle.complete(task.title)}
       aria-pressed={task.status==='done'} onClick={onToggle}>{task.status==='done'&&<Check size={17}/>}</button>
   </article>

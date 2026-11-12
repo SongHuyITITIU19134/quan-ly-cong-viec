@@ -32,6 +32,8 @@
 .task-card:hover { border-color: var(--color-border); box-shadow: none; transform: translateY(-2px); }
 .kanban-column,.column-body,.task-card { min-width:0; max-width:100%; }
 .task-card { box-sizing:border-box; width:100%; max-width:100%; min-width:0; margin-inline:0; overflow:hidden; min-height:250px; }
+.task-card.is-complete { opacity:1; }
+.task-card.is-complete .task-title { background:none; color:var(--text-2); text-decoration:none; opacity:1; animation:none; }
 .task-card > *,.task-title-row > *,.task-card-top > *,.task-card-foot > *,.progress-wrap,.progress-label { min-width:0; }
 .task-title-row { grid-template-columns:36px minmax(0,1fr); min-height:70px; }
 .task-title { -webkit-line-clamp:2; overflow-wrap:anywhere; word-break:break-word; line-height:1.5; padding-block:4px; }
