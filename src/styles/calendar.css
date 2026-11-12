@@ -27,9 +27,10 @@
 .calendar-task.due-overdue { border-color:var(--status-overdue-text); }
 .day-agenda { position: sticky; top: var(--space-5); margin-top: 0; border: var(--border-ink); border-radius: var(--radius-md); padding: 20px; }
 .day-agenda>.timeline-list { margin-top:12px; }
-.day-agenda-head { display:grid; grid-template-columns:minmax(0,1fr) auto; align-items:start; }
+.day-agenda-head { display:grid; grid-template-columns:1fr; align-items:start; }
 .day-agenda-head h2,.day-agenda-head .button { white-space:nowrap; }
 .day-agenda-head h2 { line-height:1.4; }
+.day-agenda-head .button { width:100%; }
 .day-agenda .timeline-item { grid-template-columns:34px minmax(0,1fr); }
 .day-agenda .timeline-item label { display:flex; align-items:center; justify-content:space-between; gap:8px; color:var(--text-2); font-size:var(--fs-xs); }
 .day-agenda .timeline-item input { min-height:36px; border:1px solid var(--line); border-radius:8px; background:var(--surface); color:var(--text); }

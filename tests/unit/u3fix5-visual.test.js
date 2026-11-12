@@ -33,7 +33,7 @@ describe('U3-fix5 visual polish',()=>{
 
   it('tiêu đề thẻ hoàn thành chỉ đổi màu, không còn đường gạch ngang',()=>{
     const tasks=read('src/styles/tasks.css'),dashboard=read('src/styles/dashboard.css')
-    expect(tasks).toMatch(/\.task-card\.is-complete \.task-title\s*\{[^}]*background:none;[^}]*color:var\(--text-2\);[^}]*text-decoration:none;[^}]*animation:none/)
+    expect(tasks).toMatch(/\.task-card\.is-complete \.task-title\s*\{[^}]*background:none!important;[^}]*color:var\(--text-2\);[^}]*text-decoration:none;[^}]*animation:none!important/)
     expect(dashboard).toMatch(/\.dashboard-task-card\.is-done \.dashboard-task-title\s*\{\s*color:var\(--text-2\)/)
   })
 
@@ -51,5 +51,21 @@ describe('U3-fix5 visual polish',()=>{
     expect(calendar).toContain("tasks.map(task=>task.title).join(', ')")
     expect(calendar).toContain("trips.map(trip=>trip.name).join(', ')")
     expect(css).toMatch(/\.calendar-day\.selected[^}]*background:var\(--surface\);[^}]*box-shadow:inset 0 0 0 2px var\(--ink\)/)
+  })
+
+  it('dark active nav không dùng nền vàng và có indicator vàng',()=>{
+    const shell=read('src/styles/shell.css')
+    expect(shell).toMatch(/\.shell-nav-link\.active\s*\{\s*background:var\(--surface-2\)/)
+    expect(shell).not.toMatch(/\.shell-nav-link\.active\s*\{[^}]*background:\s*var\(--accent\)/)
+    expect(shell).toMatch(/\.shell-nav-link\.active::before\s*\{[^}]*width:3px/)
+  })
+
+  it('dark tokens đúng ba lớp và các cặp chữ trạng thái đạt 4.5:1',()=>{
+    const tokens=read('src/styles/tokens.css'),dark=tokens.slice(tokens.indexOf(":root[data-theme='dark']"))
+    for(const [token,value] of Object.entries({'bg':'#0b0b0d','surface':'#141417','surface-2':'#1c1c21','fill':'#25252b','line':'#2f2f36','text':'#f5f5f2','text-2':'#a8a8b0'}))expect(dark).toContain(`--${token}: ${value}`)
+    const hex=value=>{const parts=value.match(/[\da-f]{2}/gi).map(part=>parseInt(part,16)/255).map(part=>part<=.04045?part/12.92:((part+.055)/1.055)**2.4);return .2126*parts[0]+.7152*parts[1]+.0722*parts[2]}
+    const contrast=(left,right)=>{const [bright,dim]=[hex(left),hex(right)].sort((a,b)=>b-a);return (bright+.05)/(dim+.05)}
+    const value=token=>dark.match(new RegExp(`--${token}:\\s*(#[\\da-f]{6})`,'i'))?.[1]
+    for(const name of ['todo','doing','waiting','paused','done','soon','today','overdue'])expect(contrast(value(`status-${name}-text`),value(`status-${name}-bg`))).toBeGreaterThanOrEqual(4.5)
   })
 })

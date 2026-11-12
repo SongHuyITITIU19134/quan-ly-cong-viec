@@ -69,8 +69,8 @@
 .not-found>p:not(.eyebrow) { max-width: 440px; margin: 0 0 10px; color: var(--text-2); }
 .onboarding-tour>.eyebrow { color:var(--onboarding-eyebrow); }
 .not-found .button svg { flex: 0 0 auto; }
-:root[data-theme='dark'] .card { border: 1px solid var(--line); box-shadow: none; }
-:root[data-theme='dark'] .chip[aria-pressed='true'],:root[data-theme='dark'] .chip.active { background: var(--accent); color: var(--on-accent); }
+:root[data-theme='dark'] .card { border:1px solid var(--line); background:var(--surface-2); box-shadow:inset 0 1px 0 rgb(255 255 255 / 4%); }
+:root[data-theme='dark'] .chip[aria-pressed='true'],:root[data-theme='dark'] .chip.active { background:var(--surface-2); color:var(--text); }
 @keyframes toast-progress { to { transform: scaleX(0); } }
 
 @media (prefers-reduced-motion: reduce) {

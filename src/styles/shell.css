@@ -13,12 +13,14 @@ body { min-width: 320px; height: 100%; overflow: hidden; background: var(--bg); 
 .create-menu-panel button { min-height:44px; border:0; border-radius:10px; padding:0 12px; background:transparent; color:var(--text); text-align:left; font-weight:700; }
 .create-menu-panel button:hover { background:var(--fill); }
 .shell-nav { display: grid; width: 100%; min-width: 0; gap: 6px; }
-.shell-nav-link { box-sizing: border-box; display: flex; width: 100%; min-width: 0; min-height: 48px; align-items: center; gap: 13px; border-radius: var(--radius-inner); padding: 0 14px; color: var(--text-2); font-size: var(--fs-xs); font-weight: 700; transition: background-color var(--motion-fast) var(--ease-out-expo),color var(--motion-fast) var(--ease-out-expo); }
+.shell-nav-link { position:relative; box-sizing: border-box; display: flex; width: 100%; min-width: 0; min-height: 48px; align-items: center; gap: 13px; border-radius: var(--radius-inner); padding: 0 14px; color: var(--text-2); font-size: var(--fs-xs); font-weight: 700; transition: background-color var(--motion-fast) var(--ease-out-expo),color var(--motion-fast) var(--ease-out-expo); }
 .shell-nav-link svg { flex: 0 0 20px; }
 .shell-nav-link span { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .shell-nav-link:hover { background: var(--fill); color: var(--text); }
 .shell-nav-link.active { background: var(--ink); color: var(--bg); }
-:root[data-theme='dark'] .shell-nav-link.active { background: var(--accent); color: var(--on-accent); }
+:root[data-theme='dark'] .shell-nav-link.active { background:var(--surface-2); color:var(--text); }
+:root[data-theme='dark'] .shell-nav-link.active svg { color:var(--accent); }
+:root[data-theme='dark'] .shell-nav-link.active::before { position:absolute; top:10px; bottom:10px; left:0; width:3px; border-radius:var(--radius-pill); background:var(--accent); content:''; }
 .shell-sidebar-bottom { display: grid; gap: 8px; margin-top: auto; }
 .workspace-menu,.workspace-menu .popover-trigger { width: 100%; }
 .workspace-menu .popover-trigger { display: flex; min-width: 0; min-height: 56px; align-items: center; gap: 10px; border: 1px solid var(--line); border-radius: var(--radius-inner); padding: 7px 10px; background: var(--bg); color: var(--text); text-align: left; }

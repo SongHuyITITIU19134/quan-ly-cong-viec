@@ -8,7 +8,7 @@ Light: --accent #FBBF1B; --on-accent #111; --accent-text #8A5A00 (yellow-ish TEX
 Dark: --bg #0C0C0D; --surface #17171A; --fill #212126; --line #2C2C32; --text #F5F5F2; --text-2 #A6A6AD.
 Radius: card 24, inner 16, control 14, pill 999. Card shadow: 0 8px 30px rgb(0 0 0/.06); dark: no shadow, 1px --line. Font: Manrope 500/700 (already installed). H1 28-32/700; labels 12-13/700. 4px spacing grid.
 Color rules: yellow is only a FILL (black text on it), a progress bar, a dot/border accent, or an accent on black. Never light-yellow text on white (use --accent-text). All text >= 4.5:1. No pale grey (#B0B0B0-like) text.
-EMPHASIS card = #0E0E10 fill, white text, yellow progress. Max 1 per section. Dark mode: #000 + 1px #3A3A40 border; active nav = yellow with black text.
+EMPHASIS card = #0E0E10 fill, white text, yellow progress. Max 1 per section. Dark mode: #000 + 1px #3A3A40 border; active nav = surface-2 with yellow icon and 3px left bar.
 
 ## 2. Shell
 >=1280: sidebar 248px: logo; vertical nav (lucide icon + label), active = black pill r16 white text. Items: Tổng quan, Công việc, Lịch, Công tác, Danh bạ, Sơ đồ, Sổ tay. Bottom: Cài đặt + "Không gian" chip (Local / account; menu: theme, sign out). Right panel 340px only on Tổng quan, Lịch (agenda), Công tác (detail).
@@ -34,3 +34,10 @@ Button: primary black/white text, accent yellow/black text, ghost, icon 44px. Ch
 UI ONLY. Do not touch src/lib, src/data, firestore.rules, routes, mutation logic, prop/hook names. No new dependencies (lucide icons and Manrope exist). New user-facing strings go to src/i18n/vi.js (a test scans for literals). Keep testids/roles/labels used by e2e; edit tests only when the UI intentionally changed, and say why. Keep light/dark/system, reduced motion (150-200ms transitions), targets >= 44px, aria-label on icon-only buttons.
 Gates: axe 0 serious/critical on all routes (light+dark, 360/768/1280); Lighthouse mobile >= 90/95/95; Dashboard 5000 tasks < 150ms; Tasks 5000 < 500ms; JS gzip on "/" <= 130kB.
 Code style: no semicolons, single quotes, max-len 160.
+
+## Color budget (60/30/10), light and dark
+
+- Light giữ nguyên: `--bg #FFF`, `--surface #FFF`, `--fill #F4F4F2`, `--line #ECECE8`, `--text #0E0E10`, `--text-2 #5F5F66`, `--accent #FBBF1B`.
+- Dark 60% nền trung tính: `--bg #0B0B0D`; panel dùng `--surface #141417`, card dùng `--surface-2 #1C1C21` để tạo ba mức sâu page < panel < card.
+- Dark 30% bề mặt: `--fill #25252B`, `--line #2F2F36`, `--text #F5F5F2`, `--text-2 #A8A8B0`; card có viền 1px và inset highlight 4%.
+- 10% accent giữ `--accent #FBBF1B`, chỉ dành cho CTA chính, indicator active/today/selected, progress và thẻ timeline “tiếp theo”; emphasis là `#000`, viền `#3A3A40`, glow vàng tối đa 8%.
