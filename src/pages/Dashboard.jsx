@@ -13,6 +13,7 @@ import { useTransitionNavigate } from '@/hooks/useTransitionNavigate'
 import { recurrenceCreateOp, recurrenceUndoOp } from '@/lib/recurrence'
 import { weeklyReport } from '@/lib/weeklyReport'
 import { buildIndexes } from '@/lib/indexes'
+import CompletionGauge from '@/pages/dashboard/CompletionGaugeCard'
 
 const priorityRank={urgent:0,high:1,medium:2,low:3}
 const taskOrder=(left,right)=>(priorityRank[left.priority]??4)-(priorityRank[right.priority]??4)||(left.order??0)-(right.order??0)
@@ -48,9 +49,9 @@ function Dashboard(){
     :[toISODate(startOfWeek(new Date(),{weekStartsOn:1})),toISODate(endOfWeek(new Date(),{weekStartsOn:1}))],[period,today])
   const weekRange=useMemo(()=>[toISODate(startOfWeek(new Date(),{weekStartsOn:1})),toISODate(endOfWeek(new Date(),{weekStartsOn:1}))],[])
   const summary=useMemo(()=>{
-    const result={scoped:0,today:[],overdue:[],soon:[],doneWeek:[],upcoming:[],recent:[]}
+    const result={scoped:0,scopedDone:0,scopedOverdue:0,today:[],overdue:[],soon:[],doneWeek:[],upcoming:[],recent:[]}
     for(const task of data.tasks){
-      if(task.dueDate>=range[0]&&task.dueDate<=range[1])result.scoped+=1
+      if(task.dueDate>=range[0]&&task.dueDate<=range[1]){result.scoped+=1;if(task.status==='done')result.scopedDone+=1;if(getDueState(task)==='overdue')result.scopedOverdue+=1}
       if(task.dueDate===today)result.today.push(task)
       const due=getDueState(task)
       if(due==='overdue')result.overdue.push(task)
@@ -143,6 +144,7 @@ function Dashboard(){
         </section>}</div></Card></>}
     </section>
     <aside className="dashboard-right" aria-label={vi.dashboard.longDate}>
+      <CompletionGauge done={summary.scopedDone} total={summary.scoped} overdue={summary.scopedOverdue}/>
       <div className="dashboard-date-head"><span><CalendarDays size={18}/>{longDate}</span><Button icon={Plus} {...blockedCreateProps}
         onClick={()=>openCreate('task')}>{vi.dashboard.addTask}</Button></div>
       <Card className="dashboard-week"><div className="section-row"><h2>{vi.dashboard.week}</h2><span>

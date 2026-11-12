@@ -53,6 +53,12 @@
   --status-today-bg: #fef3c7;
   --status-overdue-text: #991b1b;
   --status-overdue-bg: #fee2e2;
+  --status-due-soon: #c2410c;
+  --flame: #7c3aed;
+  --flame-mid: #a78bfa;
+  --flame-soft: #c4b5fd;
+  --flame-bg: #ede9fe;
+  --flame-text: #5b21b6;
   --semantic-danger: #7a1f10;
   --semantic-danger-bg: #ffd8cf;
   --semantic-warning: #614500;
@@ -256,6 +262,12 @@
   --status-today-bg: #422006;
   --status-overdue-text: #fecaca;
   --status-overdue-bg: #450a0a;
+  --status-due-soon: #fb923c;
+  --flame: #a78bfa;
+  --flame-mid: #c4b5fd;
+  --flame-soft: #ddd6fe;
+  --flame-bg: #2e1065;
+  --flame-text: #ddd6fe;
   --semantic-danger: #ffb4ab;
   --semantic-danger-bg: #451515;
   --semantic-warning: #ffd67a;

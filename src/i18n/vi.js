@@ -13,6 +13,7 @@ export const vi = {
     completed:'Đã hoàn thành nhiệm vụ.',reopened:'Đã mở lại nhiệm vụ.',reportCopied:'Đã sao chép báo cáo tuần.',
     emptyTitle:'Bắt đầu một nhịp làm việc mới',emptyDescription:'Tạo dự án đầu tiên hoặc dùng dữ liệu mẫu để khám phá Tổng quan.',
     createFirstProject:'Tạo dự án đầu tiên',useSample:'Dùng dữ liệu mẫu',sampleAdded:'Đã thêm dữ liệu mẫu.',
+    completion:{title:'Tiến độ hoàn thành',states:{empty:'Chưa có việc trong khoảng này',danger:'Cần tăng tốc',warn:'Cần cố gắng',ok:'Đang ổn',good:'Tốt',achieved:'Đạt mục tiêu'},warning:(remaining,overdue)=>`Còn ${remaining} việc chưa xong, ${overdue} quá hạn`,aria:(done,total,percent,state)=>`Hoàn thành ${done} trên ${total} việc, ${percent} phần trăm, ${state}`},
   },
   tasks: {
     board:'Kanban',boardA11y:'Kanban',list:'Danh sách',projects:'Dự án',viewChoice:'Kiểu hiển thị công việc',filters:'Bộ lọc công việc',all:'Tất cả',
