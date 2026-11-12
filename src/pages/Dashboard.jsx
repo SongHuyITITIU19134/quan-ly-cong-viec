@@ -1,8 +1,8 @@
 import { memo, useEffect, useMemo, useRef, useState } from 'react'
-import { Bell, CalendarDays, Check, ChevronLeft, ChevronRight, Plus, Search } from 'lucide-react'
+import { CalendarDays, Check, ChevronLeft, ChevronRight, Plus, Search } from 'lucide-react'
 import { addDays, endOfMonth, endOfWeek, startOfMonth, startOfWeek } from 'date-fns'
 import { Page } from '@/app/App'
-import { Avatar, AvatarStack, Button, Card, EmptyState, PriorityBadge, ProgressBar, StatusBadge } from '@/components/ui'
+import { AvatarStack, Button, Card, EmptyState, PriorityBadge, ProgressBar, StatusBadge } from '@/components/ui'
 import { useActions, useAuth, useDataState, useToast } from '@/hooks/useData'
 import { getProjectEffectiveStatus } from '@/lib/projectStatus'
 import { getDueState } from '@/lib/tasks'
@@ -143,8 +143,6 @@ function Dashboard(){
         </section>}</div></Card></>}
     </section>
     <aside className="dashboard-right" aria-label={vi.dashboard.longDate}>
-      <div className="dashboard-profile"><Avatar name={name}/><span><small>{vi.dashboard.morning}</small><strong>{name}</strong></span>
-        <button type="button" aria-label={vi.shell.reminders(0,summary.overdue.length)} onClick={()=>goToScope('due=overdue')}><Bell size={20}/>{summary.overdue.length>0&&<i>{summary.overdue.length}</i>}</button></div>
       <div className="dashboard-date-head"><span><CalendarDays size={18}/>{longDate}</span><Button icon={Plus} {...blockedCreateProps}
         onClick={()=>openCreate('task')}>{vi.dashboard.addTask}</Button></div>
       <Card className="dashboard-week"><div className="section-row"><h2>{vi.dashboard.week}</h2><span>

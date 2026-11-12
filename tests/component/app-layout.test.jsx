@@ -35,6 +35,13 @@ describe('bố cục và bảng lệnh',()=>{
     expect(mocks.install).toHaveBeenCalledOnce()
   })
 
+  it('chỉ giữ một điểm vào tài khoản theo từng breakpoint',()=>{
+    showLayout()
+    expect(document.querySelector('.shell-topbar .profile-menu')).not.toBeInTheDocument()
+    expect(document.querySelector('.shell-sidebar .workspace-menu')).toBeInTheDocument()
+    expect(document.querySelector('.mobile-header .mobile-profile')).toBeInTheDocument()
+  })
+
   it('Ctrl+K tìm không dấu, chọn route và trả focus khi Escape',async()=>{
     showLayout()
     const trigger=screen.getByLabelText('Tìm kiếm toàn cục')
