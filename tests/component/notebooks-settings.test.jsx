@@ -22,6 +22,7 @@ describe('trang sổ tay và cài đặt',()=>{
   })
   it('thêm nhanh và mở ghi chú trong chi tiết sổ',async()=>{
     show(<Notebooks/>,'/so-tay/b1');expect(screen.getByRole('heading',{name:'Sổ dự án'})).toBeInTheDocument()
+    expect(screen.getByRole('button',{name:'Sửa: Biên bản họp'})).toHaveTextContent('Sửa')
     const quick=screen.getByLabelText('Thêm nhanh ghi chú');await userEvent.type(quick,'Việc mới{Enter}')
     expect(mocks.batch).toHaveBeenCalledWith([expect.objectContaining({type:'create',collection:'notes',data:expect.objectContaining({title:'Việc mới',notebookId:'b1'})})])
     await userEvent.click(screen.getByRole('button',{name:/^Biên bản họp/}));expect(screen.getByRole('dialog',{name:'Sửa'})).toBeInTheDocument()

@@ -24,6 +24,9 @@
 .calendar-task.due-overdue { border-color:var(--status-overdue-text); }
 .day-agenda { position: sticky; top: var(--space-5); margin-top: 0; border: var(--border-ink); border-radius: var(--radius-md); padding: 20px; }
 .day-agenda>.timeline-list { margin-top:12px; }
+.day-agenda-head { display:grid; grid-template-columns:minmax(0,1fr) auto; align-items:start; }
+.day-agenda-head h2,.day-agenda-head .button { white-space:nowrap; }
+.day-agenda-head h2 { line-height:1.4; }
 .day-agenda .timeline-item { grid-template-columns:34px minmax(0,1fr); }
 .day-agenda .timeline-item label { display:flex; align-items:center; justify-content:space-between; gap:8px; color:var(--text-2); font-size:var(--fs-xs); }
 .day-agenda .timeline-item input { min-height:36px; border:1px solid var(--line); border-radius:8px; background:var(--surface); color:var(--text); }
@@ -35,7 +38,7 @@
 .agenda-row.agenda-trip { border-color: var(--color-ink-fixed); background: var(--color-lime); color: var(--color-ink-fixed); font-weight: 700; }
 
 @media(max-width:1100px){.calendar-workspace{grid-template-columns:1fr}.day-agenda{position:static}}
-@media(max-width:767px){.calendar-toolbar .segmented{width:100%;display:grid;grid-template-columns:repeat(3,1fr)}.calendar-day{min-height:74px}.calendar-day.selected{transform:none}.day-overlap-icon{top:6px;right:5px;width:12px}.day-agenda{padding:14px}.agenda-row{grid-template-columns:1fr}.agenda-row label{grid-column:auto}.trip-strip{border:0}}
+@media(max-width:767px){.calendar-toolbar .segmented{width:100%;display:grid;grid-template-columns:repeat(3,1fr)}.calendar-day{min-height:74px}.calendar-day.selected{transform:none}.day-overlap-icon{top:6px;right:5px;width:12px}.day-agenda{padding:14px}.day-agenda-head{grid-template-columns:1fr}.day-agenda-head .button{width:100%}.agenda-row{grid-template-columns:1fr}.agenda-row label{grid-column:auto}.trip-strip{border:0}}
 @media(min-width:1024px) and (min-height:700px){
   .main:has(.calendar-page){overflow:hidden}.main:has(.calendar-page)>.route-content,.main:has(.calendar-page)>.route-content>.page{height:100%}
   .calendar-page{display:grid;height:100%;min-height:0;grid-template-rows:auto auto minmax(0,1fr);overflow:hidden}

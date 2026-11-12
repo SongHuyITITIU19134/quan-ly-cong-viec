@@ -66,7 +66,7 @@
 .dashboard-project-card:hover { border-color:var(--ink); }
 .project-card-top { display:flex; align-items:center; justify-content:space-between; gap:10px; color:var(--text-2); }
 .project-card-top i { width:10px; height:10px; border-radius:50%; background:var(--label-bg); }
-.dashboard-project-card>strong { overflow:hidden; font-size:var(--fs-md); text-overflow:ellipsis; white-space:nowrap; }
+.dashboard-project-card>strong { min-height:1.4em; overflow:hidden; font-size:var(--fs-md); line-height:1.4; text-overflow:ellipsis; white-space:nowrap; }
 .dashboard-project-card>span:not(.project-card-top) { color:var(--text-2); font-size:var(--fs-xs); }
 .dashboard-project-card.is-emphasis { background:var(--ink); color:var(--bg); }
 .dashboard-project-card.is-emphasis .project-card-top,.dashboard-project-card.is-emphasis>span { color:var(--bg); opacity:.78; }

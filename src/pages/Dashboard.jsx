@@ -134,7 +134,7 @@ function Dashboard(){
           <div className="dashboard-project-grid">{projectRows.slice(0,6).map(({project,index,tasks,progress})=><button type="button"
             className={`dashboard-project-card label-theme-${index%8+1} ${project.id===nearestProject?'is-emphasis':''}`} key={project.id}
             onClick={()=>goToScope(`projectId=${project.id}`)}><span className="project-card-top"><i/><small>{vi.dashboard.tasks(tasks.length)}</small></span>
-            <strong>{project.name}</strong><span>{project.dueDate?formatDate(project.dueDate):vi.dashboard.noDue}</span><ProgressBar value={progress}/></button>)}</div>
+            <strong title={project.name}>{project.name}</strong><span>{project.dueDate?formatDate(project.dueDate):vi.dashboard.noDue}</span><ProgressBar value={progress}/></button>)}</div>
           <div className="mini-bars" role="img" aria-label={projectRows.length
             ?projectRows.map(item=>`${item.project.name}: ${item.tasks.length} ${vi.common.task}`).join(', ')
             :vi.dashboard.projects}>
