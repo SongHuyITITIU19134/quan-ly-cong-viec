@@ -129,6 +129,15 @@
 .timeline-item.is-next small { color:var(--on-accent); }
 .timeline-item.is-next .project-chip.is-empty { color:color-mix(in srgb,var(--on-accent) 72%,transparent); }
 .timeline-dot { width:12px; height:12px; border-radius:50%; background:var(--accent); }
+.working-timeline { gap:14px; }
+.working-timeline-group { display:grid; min-width:0; gap:8px; }
+.working-timeline-group h3 { position:sticky; z-index:1; top:0; margin:0; padding:3px 0; background:var(--surface); color:var(--text-2); font-size:var(--fs-sm); line-height:var(--lh-base); }
+.working-timeline .timeline-item { align-items:start; }
+.working-timeline .timeline-item>button,.timeline-empty-circle { width:34px; height:34px; }
+.timeline-empty-circle { display:block; border:1px solid var(--line); border-radius:50%; background:var(--surface); }
+.working-view-all { display:block; min-height:44px; align-content:center; color:var(--text); font-weight:700; text-align:center; }
+.working-timeline .timeline-meta .badge { flex-shrink:0; }
+
 .dashboard-empty { margin:0; border:1px dashed var(--line); border-radius:var(--radius-inner); padding:18px; color:var(--text-2); text-align:center; }
 .dashboard-empty-card { overflow:hidden; border:1px solid var(--line); padding:0; background:var(--fill); box-shadow:none; }
 .dashboard-empty-card:hover { border-color:var(--line); }
