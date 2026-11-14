@@ -23,7 +23,7 @@ export const vi = {
   },
   calendar: { moreItems:' mục khác' },
   dailyBriefing: {
-    title:date=>`Báo cáo công việc · ${date}`,todayTasks:'Công việc hôm nay',summary:'Tổng quan',topPriorities:'Ba việc nên ưu tiên',
+    title:date=>`Báo cáo công việc · ${date}`,todayTasks:'Nhiệm vụ đang làm',summary:'Tổng quan',topPriorities:'Ba việc nên ưu tiên',
     priority:'Ưu tiên',task:'Công việc',project:'Dự án',due:'Hạn',status:'Trạng thái',doing:'Đang làm',overdue:'Quá hạn',dueToday:'Đến hạn hôm nay',dueSoon:'Gần đến hạn trong 3 ngày',completedToday:'Đã hoàn thành hôm nay',
     states:{overdue:'Quá hạn',today:'Đến hạn hôm nay',doing:'Đang làm'},empty:'Hôm nay chưa có công việc đến hạn.',noPriorities:'Không có việc cần ưu tiên.',
     ready:'Báo cáo công việc hôm nay đã sẵn sàng.',unavailable:'Không thể truy cập dữ liệu Nhịp việc',enableNotifications:'Bật thông báo hằng ngày',notificationsEnabled:'Đã bật thông báo hằng ngày.',notificationsDenied:'Trình duyệt chưa cho phép gửi thông báo.',notificationsUnsupported:'Trình duyệt không hỗ trợ thông báo.',

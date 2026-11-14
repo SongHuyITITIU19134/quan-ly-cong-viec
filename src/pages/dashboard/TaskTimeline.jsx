@@ -1,4 +1,4 @@
-import { Check, Plane } from 'lucide-react'
+import { CalendarDays, Check, Plane } from 'lucide-react'
 import { PriorityBadge, StatusBadge } from '@/components/ui'
 import { formatDate } from '@/lib/dates'
 import { getDueState } from '@/lib/tasks'
@@ -43,7 +43,8 @@ export default function TaskTimeline({ mode = 'working', tasks, projects, today,
             : <span className="timeline-empty-circle" aria-hidden="true"/>}
           <span><strong>{task.title}</strong><span className="timeline-meta">
             {project ? <span className="project-chip">{project.name}</span> : <span className="project-chip is-empty">{vi.dashboard.noProject}</span>}
-            <PriorityBadge value={task.priority}/><StatusBadge value={task.status}/>{due && <StatusBadge value={due}/>}</span>
+            <PriorityBadge value={task.priority}/><StatusBadge value={task.status}/>{due ? <StatusBadge value={due}/>
+              : <span className="badge status-todo"><CalendarDays size={15} aria-hidden="true"/>{task.dueDate ? formatDate(task.dueDate) : vi.dashboard.groupNoDue}</span>}</span>
             {compact && task.dueDate && <small>{formatDate(task.dueDate)}</small>}</span></article>
       })}</section>)}
   </div>
