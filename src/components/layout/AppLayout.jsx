@@ -223,6 +223,6 @@ export default function AppLayout(){
     <CreateCombo open={Boolean(createMode)} mode={createMode||'combo'} preselectedProjectId={new URLSearchParams(location.search).get('project')||new URLSearchParams(location.search).get('projectId')||''} onClose={()=>setCreateMode(null)}/>
     {!loading&&!readOnly&&settings.onboardingSeen!==true&&<OnboardingTour onFinish={finishOnboarding} onSample={useSample}/>} 
     <CommandPalette open={paletteOpen} data={data} initialQuery={paletteInitial} onClose={closePalette} onChoose={choosePalette}/>
-    {dailyBriefingState&&<DailyBriefingDialog briefing={dailyBriefing} date={dailyBriefingState.date} unavailable={dailyBriefingState.unavailable} onClose={()=>setDailyBriefingState(null)} onEnableNotifications={enableDailyNotifications} canEnableNotifications={typeof Notification!=='undefined'&&Notification.permission==='default'}/>}
+    {dailyBriefingState&&<DailyBriefingDialog briefing={dailyBriefing} data={data} date={dailyBriefingState.date} unavailable={dailyBriefingState.unavailable} onClose={()=>setDailyBriefingState(null)} onEnableNotifications={enableDailyNotifications} canEnableNotifications={typeof Notification!=='undefined'&&Notification.permission==='default'}/>}
   </div>
 }

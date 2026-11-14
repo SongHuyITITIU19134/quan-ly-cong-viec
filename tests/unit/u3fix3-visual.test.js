@@ -56,6 +56,6 @@ describe('U3-fix3 visual polish',()=>{
     expect([...tasks].sort(timelineTaskOrder).map(task=>task.title)).toEqual(expected)
     expect([...tasks].sort(calendarTimelineTaskOrder).map(task=>task.title)).toEqual(expected)
     expect(read('src/pages/Dashboard.jsx')).toMatch(/project\.name/)
-    expect(read('src/pages/Calendar.jsx')).toMatch(/project\.name/)
+    expect(read('src/pages/dashboard/TaskTimeline.jsx')).toMatch(/project\.name/)
   })
 })

@@ -2,7 +2,7 @@ import { memo, useEffect, useMemo, useRef, useState } from 'react'
 import { CalendarDays, Check, ChevronLeft, ChevronRight, Plus, Search } from 'lucide-react'
 import { addDays, endOfMonth, endOfWeek, startOfMonth, startOfWeek } from 'date-fns'
 import { Page } from '@/app/App'
-import { AvatarStack, Button, Card, EmptyState, PriorityBadge, ProgressBar, StatusBadge } from '@/components/ui'
+import { AvatarStack, Button, Card, EmptyState, ProgressBar, StatusBadge } from '@/components/ui'
 import { useActions, useAuth, useDataState, useToast } from '@/hooks/useData'
 import { getProjectEffectiveStatus } from '@/lib/projectStatus'
 import { getDueState } from '@/lib/tasks'
@@ -14,6 +14,8 @@ import { recurrenceCreateOp, recurrenceUndoOp } from '@/lib/recurrence'
 import { weeklyReport } from '@/lib/weeklyReport'
 import { buildIndexes } from '@/lib/indexes'
 import CompletionGauge from '@/pages/dashboard/CompletionGaugeCard'
+import TaskTimeline from '@/pages/dashboard/TaskTimeline'
+import { selectWorkingTasks } from '@/pages/dashboard/workingTasks'
 
 const priorityRank={urgent:0,high:1,medium:2,low:3}
 const taskOrder=(left,right)=>(priorityRank[left.priority]??4)-(priorityRank[right.priority]??4)||(left.order??0)-(right.order??0)
@@ -72,12 +74,12 @@ function Dashboard(){
     .sort((left,right)=>left.project.dueDate.localeCompare(right.project.dueDate))[0]?.project.id,[projectRows,today])
   const taskLists={recent:summary.recent,today:summary.today,upcoming:summary.upcoming,overdue:summary.overdue}
   const activeTasks=taskLists[taskTab].slice(0,5),urgentId=activeTasks.find(task=>task.priority==='urgent'||getDueState(task)==='overdue')?.id
-  const nextTimelineId=summary.today.find(task=>task.status!=='done')?.id
+  const workingTasks=useMemo(()=>selectWorkingTasks(data,today),[data,today])
+  const nextTimelineId=workingTasks.find(task=>task.status!=='done')?.id
   const weekDays=useMemo(()=>Array.from({length:7},(_,index)=>{
     const start=startOfWeek(addDays(new Date(),weekOffset*7),{weekStartsOn:1}),date=toISODate(addDays(start,index))
     return{date,label:['CN','T2','T3','T4','T5','T6','T7'][addDays(start,index).getDay()]}
   }),[weekOffset])
-  const todayTrips=useMemo(()=>data.trips.filter(trip=>trip.startDate<=today&&trip.endDate>=today),[data.trips,today])
   const self=data.contacts.find(contact=>contact.isSelf)||data.contacts.find(contact=>contact.id==='self')
   const name=self?.fullName||vi.common.assignee,report=useMemo(()=>weeklyReport(data,today),[data,today])
   const noData=!data.projects.length&&!data.tasks.length&&!data.trips.length
@@ -153,14 +155,10 @@ function Dashboard(){
         <div className="week-strip">{weekDays.map(day=><button className={day.date===today?'is-today':''} key={day.date}
           onClick={()=>goToScope(`from=${day.date}&to=${day.date}`)}><small>{day.label}</small><strong>{day.date.slice(-2)}</strong>
           <i className={(indexes.tasksByDue.get(day.date)||[]).length?'has-tasks':''}/></button>)}</div></Card>
-      <Card className="dashboard-timeline"><h2>{vi.dashboard.longDate}</h2>{summary.today.length||todayTrips.length?<div className="timeline-list">
-        {summary.today.map(task=>{const project=indexes.byId.projects.get(task.projectId),projectColor=project?.colorIndex||1;return <article className={`timeline-item ${task.id===nextTimelineId?'is-next':''} ${project?`label-theme-${projectColor}`:''}`} key={task.id}>
-          <button aria-label={task.status==='done'?vi.completeToggle.reopen(task.title):vi.completeToggle.complete(task.title)} aria-pressed={task.status==='done'}
-          onClick={()=>toggleTask(task)}>{task.status==='done'&&<Check size={15}/>}</button><span><strong>{task.title}</strong><span className="timeline-meta">
-            {project?<span className="project-chip">{project.name}</span>:<span className="project-chip is-empty">{vi.dashboard.noProject}</span>}
-            <PriorityBadge value={task.priority}/><StatusBadge value={task.status}/></span></span></article>})}
-        {todayTrips.map(trip=><article className="timeline-item is-trip" key={trip.id}><span className="timeline-dot"/><span><strong>{trip.name}</strong><small>{trip.location}</small></span></article>)}</div>
-        :<p className="dashboard-empty">{vi.dashboard.timelineEmpty}</p>}</Card>
+      <Card className="dashboard-timeline"><h2>{vi.dashboard.longDate}</h2>{workingTasks.length ? <>
+        <TaskTimeline tasks={workingTasks} projects={data.projects} today={today} nextId={nextTimelineId} onToggle={toggleTask}/>
+        {workingTasks.length > 30 && <a className="working-view-all" href="/cong-viec">{vi.dashboard.viewAll}</a>}</>
+        : <p className="dashboard-empty">{vi.dashboard.timelineEmpty}</p>}</Card>
     </aside>
   </div></Page>
 }

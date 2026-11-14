@@ -39,7 +39,7 @@ test('dải tuần chuyển tuần trước và tuần sau',async({page})=>{
 })
 
 test('nút kiểm timeline hoàn thành nhiệm vụ hôm nay',async({page})=>{
-  const timeline=page.getByRole('complementary',{name:'Lịch hôm nay'})
+  const timeline=page.getByRole('complementary',{name:'Nhiệm vụ đang làm'})
   await timeline.getByRole('button',{name:'Đánh dấu hoàn thành: Chốt kế hoạch ra mắt'}).click()
   await expect.poll(()=>page.evaluate(()=>JSON.parse(localStorage.getItem('nhip-viec-v1')).tasks.find(item=>item.id==='demo-task-1').status)).toBe('done')
 })
@@ -60,7 +60,7 @@ test('trạng thái rỗng vẫn giữ greeting và cột phải',async({page})=
   await expect(page.getByRole('button',{name:'Dùng dữ liệu mẫu'})).toBeVisible()
   await expect(page.getByRole('button',{name:'Thêm lịch trình'})).toBeVisible()
   await expect(page.locator('.week-strip')).toBeVisible()
-  await expect(page.getByText('Hôm nay chưa có lịch.')).toBeVisible()
+  await expect(page.getByText('Chưa có nhiệm vụ đang làm trong lúc này.')).toBeVisible()
 })
 
 test('demo JSON nhập được qua luồng Cài đặt',async({page})=>{

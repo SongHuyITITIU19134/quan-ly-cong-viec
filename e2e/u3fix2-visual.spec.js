@@ -39,9 +39,10 @@ test('bảng Dự án giữ lưới và biểu đồ trong một vùng cuộn',a
 test('nút hoàn thành rỗng khi chưa xong và có dấu check khi đã xong',async({page})=>{
   await page.goto('/')
   const incomplete=page.getByRole('button',{name:/Đánh dấu hoàn thành:/}).first()
-  const done=page.getByRole('button',{name:/Mở lại:/}).first()
   await expect(incomplete).toBeVisible()
   await expect(incomplete.locator('svg')).toHaveCount(0)
+  await page.getByRole('tab',{name:/Hôm nay/}).click()
+  const done=page.locator('.dashboard-task-list').getByRole('button',{name:/Mở lại:/}).first()
   await expect(done.locator('svg')).toHaveCount(1)
 })
 
